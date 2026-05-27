@@ -51,7 +51,7 @@ gix hook pre-push
 Example interaction:
 
 ```text
-gix: Found 2 issues (example: null-check, commit message policy).
+gix: Found 2 issues (example: null check, commit message policy).
 gix: Apply patch and add commit "fixup! ..."? [Y/n]
 ```
 
