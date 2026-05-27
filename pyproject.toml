@@ -3,7 +3,7 @@ requires = ["hatchling>=1.18"]
 build-backend = "hatchling.build"
 
 [project]
-name = "gix"
+name = "gix-git"
 version = "0.1.1"
 description = "Local AI layer for git: orchestrates policies & plugins between commit and push."
 readme = "README.md"

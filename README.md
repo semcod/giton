@@ -79,7 +79,7 @@ gix: Apply patch and add commit "fixup! ..."? [Y/n]
 ## Install
 
 ```bash
-pip install -e .
+pip install gix-git
 ```
 
 ## Quick start
