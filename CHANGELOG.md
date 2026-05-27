@@ -54,6 +54,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-05-27
+
+### Docs
+- Update README.md
+- Update examples/plugins/README.md
+
+### Test
+- Update tests/test_plugin_runner.py
+
+### Other
+- Update examples/plugins/test_plugin_lifecycle.py
+
 ## [0.1.7] - 2026-05-27
 
 ### Docs

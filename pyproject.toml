@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "giton"
-version = "0.1.7"
+version = "0.1.8"
 description = "Local AI layer for git: orchestrates policies & plugins between commit and push."
 readme = "README.md"
 requires-python = ">=3.10"
