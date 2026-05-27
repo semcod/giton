@@ -1,4 +1,4 @@
-"""Smoke tests for gix."""
+"""Smoke tests for giton."""
 from __future__ import annotations
 
 import os
@@ -8,16 +8,16 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from gix import catalog
-from gix.cli import app
-from gix.config import (
+from giton import catalog
+from giton.cli import app
+from giton.config import (
     PluginRecord,
     USER_PLUGINS_FILE,
     load_plugins,
     save_plugins,
     upsert_plugin,
 )
-from gix.hooks import install as install_hooks
+from giton.hooks import install as install_hooks
 
 
 @pytest.fixture(autouse=True)
@@ -25,10 +25,10 @@ def isolated_xdg(tmp_path, monkeypatch):
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "xdg"))
     # reload module-level path
     import importlib
-    from gix import config
+    from giton import config
     importlib.reload(config)
     # also reload anything that imported these
-    from gix import plugins, catalog as cat, runner
+    from giton import plugins, catalog as cat, runner
     importlib.reload(plugins)
     yield
 
@@ -48,7 +48,7 @@ def test_catalog_categories_grouped():
 def test_plugin_persistence(tmp_path, monkeypatch):
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "xdg"))
     import importlib
-    from gix import config
+    from giton import config
     importlib.reload(config)
     rec = PluginRecord(name="demo", command="echo hello", triggers=["pre-commit"])
     config.upsert_plugin(rec)
@@ -60,7 +60,7 @@ def test_cli_help_runs():
     runner = CliRunner()
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
-    assert "gix" in result.stdout
+    assert "giton" in result.stdout
 
 
 def test_cli_plugin_catalog_runs():
@@ -82,4 +82,4 @@ def test_hook_install_in_temp_repo(tmp_path, monkeypatch):
     assert {"pre-commit", "post-commit", "pre-push"} <= names
     for p in written:
         assert os.access(p, os.X_OK)
-        assert "gix hook" in p.read_text()
+        assert "giton hook" in p.read_text()

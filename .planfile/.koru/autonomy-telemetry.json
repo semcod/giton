@@ -1,0 +1,76 @@
+{
+  "cumulative": {
+    "autopilot_idle_streak_skips": 0,
+    "scan_after_idle_runs": 0,
+    "scan_after_idle_tickets_applied": 0
+  },
+  "cycle": 3,
+  "knobs": {
+    "autopilot_skip_drive_idle_streak": 0,
+    "scan_after_idle_min_interval_seconds": 60.0,
+    "scan_after_idle_queue": true
+  },
+  "last_cycle": {
+    "autopilot_chat_activity_last_event": "drive.ack",
+    "autopilot_skipped_chat_activity": true,
+    "autopilot_skipped_idle_streak": false,
+    "environment_profile": {
+      "control": {
+        "can_confirm_submit": false,
+        "family": "ide_control",
+        "interface_id": "plugin_socket_jetbrains",
+        "operator_recovery": [
+          "reconnect_plugin",
+          "restart_ide"
+        ],
+        "transport": "unix_socket_ndjson",
+        "verification_mode": "plugin_ack",
+        "write_mode": "plugin_drive"
+      },
+      "decision_key": "os=wayland|ide=jetbrains|llm=ide_chat|control=plugin_socket_jetbrains|verify=plugin_ack",
+      "ide": {
+        "config_path": null,
+        "extensions_metadata_path": null,
+        "id": "jetbrains",
+        "keyboard_fallback_default": true,
+        "label": "JetBrains IDE",
+        "plugin_supported": false,
+        "strict_plugin_ack_required": false,
+        "submit_key": "ctrl+Return",
+        "trusted_publisher_required": false
+      },
+      "llm": {
+        "model": null,
+        "provider": "ide_chat",
+        "source": "default"
+      },
+      "os": {
+        "display_server": "wayland",
+        "platform": "linux",
+        "preferred_keyboard_interface": "os_injector_wtype",
+        "session": "wayland",
+        "system": "Linux"
+      },
+      "project": "/home/tom/github/semcod/gix",
+      "schema": "koru.environment-profile/v1"
+    },
+    "scan_after_idle_applied": 0,
+    "scan_after_idle_run": false,
+    "scan_after_idle_skipped_rate_limit": false
+  },
+  "recent_decisions": [
+    {
+      "action": "no_op",
+      "at": "2026-05-27T17:16:35+00:00",
+      "blocked_by": "chat_activity",
+      "cycle": 3,
+      "decided": "skip:chat_activity",
+      "evidence": "blocked_by=chat_activity, diagnostics=skipped, wup=skipped, chat_event=drive.ack",
+      "next_step": "wait for chat cooldown to expire",
+      "observed": "queue=waiting_input ticket=PLF-001 streak=2",
+      "skip_because": "last chat event: drive.ack",
+      "skip_code": "chat_activity"
+    }
+  ],
+  "updated_at": "2026-05-27T17:16:35.409024+00:00"
+}

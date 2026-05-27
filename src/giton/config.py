@@ -1,4 +1,4 @@
-"""User and repository config for gix."""
+"""User and repository config for giton."""
 from __future__ import annotations
 
 import json
@@ -12,9 +12,9 @@ def _xdg_config_home() -> Path:
     return Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
 
 
-USER_CONFIG_DIR = _xdg_config_home() / "gix"
+USER_CONFIG_DIR = _xdg_config_home() / "giton"
 USER_PLUGINS_FILE = USER_CONFIG_DIR / "plugins.json"
-REPO_CONFIG_PATH = ".gix/config.yaml"
+REPO_CONFIG_PATH = ".giton/config.yaml"
 
 
 @dataclass

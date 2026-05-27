@@ -28,7 +28,7 @@ class GitContext:
     upstream_range: str = ""
 
     def diff_file(self) -> Path:
-        f = self.root / ".gix" / "last_diff.patch"
+        f = self.root / ".giton" / "last_diff.patch"
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(self.staged_diff)
         return f

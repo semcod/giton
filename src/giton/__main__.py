@@ -1,4 +1,4 @@
-from gix.cli import app
+from giton.cli import app
 
 if __name__ == "__main__":
     app()

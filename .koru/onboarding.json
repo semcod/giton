@@ -1,0 +1,12 @@
+{
+  "created_ticket_id": "PLF-001",
+  "created_ticket_title": "Architektura: wprowadź CQRS + Event Sourcing",
+  "project": "/home/tom/github/semcod/gix",
+  "schema": "koru.onboarding/v1",
+  "selected_ide": "jetbrains",
+  "strategy_path": [
+    "architecture",
+    "cqrs_es"
+  ],
+  "updated_at": "2026-05-27T17:14:45.956788+00:00"
+}

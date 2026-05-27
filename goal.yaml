@@ -1,5 +1,5 @@
 # goal.yaml - Goal configuration file
-# Generated: 2026-05-27 19:12:18
+# Generated: 2026-05-27 19:41:46
 # Documentation: https://github.com/wronai/goal#configuration
 #
 # This file configures Goal's behavior for:
@@ -13,7 +13,7 @@
 
 version: '1.0'
 project:
-  name: gix
+  name: giton
   type:
   - python
   description: 'Local AI layer for git: orchestrates policies & plugins between commit
@@ -21,8 +21,9 @@ project:
 versioning:
   strategy: semver
   files:
+  - VERSION
   - pyproject.toml:version
-  - src/gix/__init__.py:__version__
+  - venv/lib/python3.13/site-packages/pip/__init__.py:__version__
   bump_rules:
     patch: 10
     minor: 50
@@ -224,7 +225,7 @@ strategies:
   python:
     test: pytest tests/ -v
     build: python -m build
-    publish: twine upload dist/gix-{version}*
+    publish: twine upload dist/giton-{version}*
     publish_enabled: true
     dependencies:
       file: requirements.txt
@@ -232,7 +233,7 @@ strategies:
   nodejs:
     test: npm test
     build: npm run build
-    publish: npm publish
+    publish: twine upload dist/giton-{version}*
     publish_enabled: true
     dependencies:
       file: package-lock.json
@@ -240,7 +241,7 @@ strategies:
   rust:
     test: cargo test
     build: cargo build --release
-    publish: cargo publish
+    publish: twine upload dist/giton-{version}*
     publish_enabled: true
     dependencies:
       file: Cargo.lock

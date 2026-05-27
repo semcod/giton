@@ -9,8 +9,8 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 
-from gix import catalog
-from gix.config import (
+from giton import catalog
+from giton.config import (
     PluginRecord,
     load_plugins,
     remove_plugin,
@@ -78,7 +78,7 @@ def uninstall(name: str) -> bool:
 
 def show_table() -> None:
     plugins = load_plugins()
-    table = Table(title="gix plugins", show_lines=False)
+    table = Table(title="giton plugins", show_lines=False)
     table.add_column("name", style="bold")
     table.add_column("category")
     table.add_column("triggers")
@@ -95,13 +95,13 @@ def show_table() -> None:
             status,
         )
     if not plugins:
-        console.print("[dim]No plugins registered. Try: gix plugin install-defaults[/dim]")
+        console.print("[dim]No plugins registered. Try: giton plugin install-defaults[/dim]")
     else:
         console.print(table)
 
 
 def show_catalog() -> None:
-    table = Table(title="gix catalog (available plugins)")
+    table = Table(title="giton catalog (available plugins)")
     table.add_column("name", style="bold")
     table.add_column("category")
     table.add_column("default", justify="center")

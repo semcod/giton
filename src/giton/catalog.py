@@ -2,14 +2,14 @@
 
 Defaults bundle three local-ecosystem plugins that are most useful in a
 day-to-day commit -> push loop. Extra entries are grouped into categories
-so the user can quickly install more via `gix plugin install <name>` or
-`gix plugin add-category <category>`.
+so the user can quickly install more via `giton plugin install <name>` or
+`giton plugin add-category <category>`.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from gix.config import PluginRecord
+from giton.config import PluginRecord
 
 
 @dataclass(frozen=True)
@@ -18,7 +18,7 @@ class CatalogEntry:
     pip_local_path: str | None = None  # sibling repo path under semcod/
 
 
-# --- Defaults: three plugins activated by `gix init` ---------------------
+# --- Defaults: three plugins activated by `giton init` ---------------------
 DEFAULT_PLUGIN_NAMES: tuple[str, ...] = ("pyqual", "vallm", "pretest")
 
 

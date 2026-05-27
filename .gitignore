@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+.idea/.name
+.idea/giton.iml
 .env.example
 .idea/gix.iml
 .idea/inspectionProfiles/Project_Default.xml

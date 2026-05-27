@@ -1,4 +1,4 @@
-"""Interactive `gix shell` REPL.
+"""Interactive `giton shell` REPL.
 
 Lightweight, dependency-free (uses builtin `input`). Provides shortcuts for
 the most common operations: managing plugins, running hooks, inspecting
@@ -12,14 +12,14 @@ from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 
-from gix import catalog, plugins as plug
-from gix.context import collect, repo_root
-from gix.hooks import install as install_hooks
-from gix.runner import run_trigger
+from giton import catalog, plugins as plug
+from giton.context import collect, repo_root
+from giton.hooks import install as install_hooks
+from giton.runner import run_trigger
 
 console = Console()
 
-BANNER = """[bold cyan]gix[/bold cyan] interactive shell — local AI layer for git
+BANNER = """[bold cyan]giton[/bold cyan] interactive shell — local AI layer for git
 type [bold]help[/bold] for commands, [bold]exit[/bold] to quit
 """
 
@@ -46,7 +46,7 @@ HELP = """\
 
 
 def _set_enabled(name: str, value: bool) -> None:
-    from gix.config import load_plugins, save_plugins
+    from giton.config import load_plugins, save_plugins
     plugins = load_plugins()
     found = False
     for p in plugins:
@@ -71,7 +71,7 @@ def _cmd_status() -> None:
             f"[bold]last[/bold]   {ctx.last_commit_subject or '(no commits yet)'}\n"
             f"[bold]staged[/bold] {len(ctx.staged_paths)} file(s)"
             + ("\n  " + "\n  ".join(ctx.staged_paths) if ctx.staged_paths else ""),
-            title="gix status",
+            title="giton status",
         )
     )
 
@@ -156,7 +156,7 @@ def run() -> None:
     console.print(Panel(BANNER, border_style="cyan"))
     while True:
         try:
-            line = input("gix> ")
+            line = input("giton> ")
         except (EOFError, KeyboardInterrupt):
             console.print()
             break

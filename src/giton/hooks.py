@@ -1,4 +1,4 @@
-"""Install / uninstall git hooks that delegate to `gix hook <name>`."""
+"""Install / uninstall git hooks that delegate to `giton hook <name>`."""
 from __future__ import annotations
 
 import os
@@ -8,8 +8,8 @@ from pathlib import Path
 HOOKS = ("pre-commit", "post-commit", "pre-push")
 
 HOOK_TEMPLATE = """#!/bin/sh
-# Installed by gix — delegates to: gix hook {name}
-exec gix hook {name} "$@"
+# Installed by giton — delegates to: giton hook {name}
+exec giton hook {name} "$@"
 """
 
 
@@ -25,7 +25,7 @@ def install(repo_root: Path) -> list[Path]:
     for hook in HOOKS:
         target = hd / hook
         if target.exists():
-            backup = target.with_suffix(target.suffix + ".gix-backup")
+            backup = target.with_suffix(target.suffix + ".giton-backup")
             if not backup.exists():
                 target.rename(backup)
         target.write_text(HOOK_TEMPLATE.format(name=hook))
@@ -39,9 +39,9 @@ def uninstall(repo_root: Path) -> list[Path]:
     removed: list[Path] = []
     for hook in HOOKS:
         target = hd / hook
-        if target.exists() and "gix hook" in target.read_text():
+        if target.exists() and "giton hook" in target.read_text():
             target.unlink()
-            backup = target.with_suffix(target.suffix + ".gix-backup")
+            backup = target.with_suffix(target.suffix + ".giton-backup")
             if backup.exists():
                 backup.rename(target)
             removed.append(target)

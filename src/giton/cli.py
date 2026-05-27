@@ -1,4 +1,4 @@
-"""gix CLI — Typer entry point."""
+"""giton CLI — Typer entry point."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -6,15 +6,15 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-from gix import __version__, plugins as plug, shell as gix_shell
-from gix.context import collect, repo_root
-from gix.hooks import install as install_hooks, uninstall as uninstall_hooks
-from gix.runner import run_trigger
+from giton import __version__, plugins as plug, shell as giton_shell
+from giton.context import collect, repo_root
+from giton.hooks import install as install_hooks, uninstall as uninstall_hooks
+from giton.runner import run_trigger
 
 app = typer.Typer(
     add_completion=False,
     no_args_is_help=True,
-    help="gix — local AI layer for git, between commit and push.",
+    help="giton — local AI layer for git, between commit and push.",
 )
 plugin_app = typer.Typer(no_args_is_help=True, help="Manage plugins")
 hook_app = typer.Typer(no_args_is_help=True, help="Run hook logic (used by .git/hooks)")
@@ -24,13 +24,16 @@ app.add_typer(hook_app, name="hook")
 console = Console()
 
 
-@app.callback(invoke_without_command=False)
+@app.callback(invoke_without_command=True)
 def _root(
+    ctx: typer.Context,
     version: bool = typer.Option(False, "--version", help="Show version and exit."),
 ):
     if version:
-        console.print(f"gix {__version__}")
+        console.print(f"giton {__version__}")
         raise typer.Exit()
+    if ctx.invoked_subcommand is None:
+        typer.echo(ctx.get_help())
 
 
 # --- top-level commands -----------------------------------------------------
@@ -42,7 +45,7 @@ def init(
         help="Also install the 3 default plugins.",
     ),
 ):
-    """Install gix git hooks in the current repository."""
+    """Install giton git hooks in the current repository."""
     root = repo_root()
     if not root:
         console.print("[red]not inside a git repository[/red]")
@@ -55,19 +58,19 @@ def init(
         console.print("\n[bold]Installing default plugins…[/bold]")
         plug.install_defaults()
     console.print(
-        "\n[dim]Tip: open the interactive shell with `gix shell`.[/dim]"
+        "\n[dim]Tip: open the interactive shell with `giton shell`.[/dim]"
     )
 
 
 @app.command()
 def uninit():
-    """Remove gix hooks from the current repository (restore backups)."""
+    """Remove giton hooks from the current repository (restore backups)."""
     root = repo_root()
     if not root:
         console.print("[red]not inside a git repository[/red]")
         raise typer.Exit(1)
     removed = uninstall_hooks(root)
-    console.print(f"[green]removed {len(removed)} gix hook(s)[/green]")
+    console.print(f"[green]removed {len(removed)} giton hook(s)[/green]")
 
 
 @app.command()
@@ -86,8 +89,8 @@ def status():
 
 @app.command()
 def shell():
-    """Launch the interactive gix shell."""
-    gix_shell.run()
+    """Launch the interactive giton shell."""
+    giton_shell.run()
 
 
 @app.command()

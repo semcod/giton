@@ -1,21 +1,19 @@
-# gix
+# giton
 
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.1-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.02-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-2.0h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.2-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.41-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.0h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $0.0243 (5 commits)
-- 👤 **Human dev:** ~$200 (2.0h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $0.4093 (6 commits)
+- 👤 **Human dev:** ~$300 (3.0h @ $100/h, 30min dedup)
 
 Generated on 2026-05-27 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
 ---
 
-
-
-`gix` is a local AI layer for Git that works between `commit` and `push`.
+`giton` is a local AI layer for Git that works between `commit` and `push`.
 It helps standardize commits, propose safe code fixes, and orchestrate external tools via plugins.
 
 ## Does something like this already exist?
@@ -45,29 +43,29 @@ What is still missing is one local operator that:
 
 ## MVP usage example
 
-After `gix init`, hooks are installed and run automatically from Git lifecycle events.
+After `giton init`, hooks are installed and run automatically from Git lifecycle events.
 The commands below show equivalent manual execution for demonstration/debugging.
 
 ```bash
 # 1) initialize hooks in the repository
-gix init
+giton init
 
 # 2) user makes a normal commit
 git add -p
 git commit -m "update stuff"
 
 # 3) equivalent manual run: post-commit hook logic
-gix hook post-commit
+giton hook post-commit
 
 # 4) equivalent manual run: pre-push hook logic
-gix hook pre-push
+giton hook pre-push
 ```
 
 Example interaction:
 
 ```text
-gix: Found 2 issues (example: null check, commit message policy).
-gix: Apply patch and add commit "fixup! ..."? [Y/n]
+giton: Found 2 issues (example: null check, commit message policy).
+giton: Apply patch and add commit "fixup! ..."? [Y/n]
 ```
 
 ## MVP plan
@@ -79,17 +77,17 @@ gix: Apply patch and add commit "fixup! ..."? [Y/n]
 ## Install
 
 ```bash
-pip install gix-git
+pip install giton
 ```
 
 ## Quick start
 
 ```bash
-gix init                 # install git hooks + 3 default plugins
-gix shell                # interactive REPL
-gix plugin catalog       # browse all available plugins
-gix plugin install domd  # install a specific extension
-gix plugin install-category lang:python   # install everything for a language
+giton init                # install git hooks + 3 default plugins
+giton shell               # interactive REPL
+giton plugin catalog      # browse all available plugins
+giton plugin install domd # install a specific extension
+giton plugin install-category lang:python   # install everything for a language
 ```
 
 ### Default plugins
@@ -114,18 +112,18 @@ groups at once:
 - **integrations:** `integration:mcp`
 
 ```bash
-gix plugin install-category task:autofix
+giton plugin install-category task:autofix
 ```
 
 ### Interactive shell
 
 ```text
-$ gix shell
-gix> help
-gix> install-defaults
-gix> hook pre-commit
-gix> catalog
-gix> install prefact
+$ giton shell
+giton> help
+giton> install-defaults
+giton> hook pre-commit
+giton> catalog
+giton> install prefact
 ```
 
 ### Plugin contract

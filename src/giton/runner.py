@@ -8,8 +8,8 @@ from pathlib import Path
 
 from rich.console import Console
 
-from gix.config import PluginRecord, load_plugins
-from gix.context import GitContext, collect
+from giton.config import PluginRecord, load_plugins
+from giton.context import GitContext, collect
 
 console = Console()
 
@@ -37,12 +37,12 @@ def _format_command(cmd: str, ctx: GitContext) -> str:
 def run_trigger(trigger: str, cwd: Path | None = None) -> list[PluginResult]:
     ctx = collect(cwd)
     if ctx is None:
-        console.print("[yellow]gix: not inside a git repository[/yellow]")
+        console.print("[yellow]giton: not inside a git repository[/yellow]")
         return []
 
     plugins = [p for p in load_plugins() if p.enabled and trigger in p.triggers]
     if not plugins:
-        console.print(f"[dim]gix: no plugins registered for {trigger}[/dim]")
+        console.print(f"[dim]giton: no plugins registered for {trigger}[/dim]")
         return []
 
     results: list[PluginResult] = []
@@ -54,7 +54,7 @@ def run_trigger(trigger: str, cwd: Path | None = None) -> list[PluginResult]:
 def _run_plugin(plugin: PluginRecord, ctx: GitContext) -> PluginResult:
     if plugin.exec_type != "cli":
         console.print(
-            f"[yellow]gix: exec_type '{plugin.exec_type}' not yet "
+            f"[yellow]giton: exec_type '{plugin.exec_type}' not yet "
             f"implemented for plugin {plugin.name}[/yellow]"
         )
         return PluginResult(plugin.name, 0, "", "skipped")
@@ -71,7 +71,7 @@ def _run_plugin(plugin: PluginRecord, ctx: GitContext) -> PluginResult:
         )
     except FileNotFoundError:
         console.print(
-            f"[red]gix: plugin '{plugin.name}' not installed "
+            f"[red]giton: plugin '{plugin.name}' not installed "
             f"(command: {cmd_str.split()[0]})[/red]"
         )
         return PluginResult(plugin.name, 127, "", "command not found")

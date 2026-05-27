@@ -3,9 +3,9 @@ w zwiazku z tym, ze wykonuje dużo prac refakotryzacyjnych za pomocą algorytmó
 chciałbym stworzyć paczkę, która by integrowała się z lokalnym git, i podczas tworzenia commit w wartswie pomiedzy commit a push prowadziła interakcje z userem i np zgłąszała błędy, poprawiała i tworzyła kolejne git commit nad tym co stworzył user, patchując to co on wczesniej stworzył i poprawiając aktualny stan repo oeraz commity, aby na wartswie kodu i commits była ustandaryzowana komunikacja, aby user mógł tworzy zmiany i mieć wsparcuie ze strony algorytmóſ z AI
 dodatkowo chciałbym aby mozliwa była integracja kolejnych pluginów za pomocą MCP/api rest/cli shell, protobuff itd
 aby mozna vbyło łatwo integrować z innymi rozwiazaniami na tej wartwwie, stworz przykłąd użycia, czy coś takeigo już istnieje? jaki kierunek prooponuejssz dla  tego roziważąnia?
-nazwijmy hje roboczo gix
+nazwijmy hje roboczo giton
 
-To, co opisujesz jako „gix”, jest sensownym i dość unikalnym połączeniem: lokalny „AI‑operator” nad gitem pomiędzy `commit` a `push`, który może poprawiać kod, standaryzować commity i integrować się przez MCP/REST/CLI z innymi agentami. Najbliższe istniejące rzeczy to AI‑commit, narzędzia typu git‑rewrite‑commits, Git Hex MCP, git‑commit‑mcp‑server czy ogólne AI‑git‑hooki, ale żadne z nich nie robi dokładnie tego, co opisujesz (ciągłe patchowanie commitów+repo z możliwością orkiestracji przez inne systemy).[^1][^2][^3][^4]
+To, co opisujesz jako „giton”, jest sensownym i dość unikalnym połączeniem: lokalny „AI‑operator” nad gitem pomiędzy `commit` a `push`, który może poprawiać kod, standaryzować commity i integrować się przez MCP/REST/CLI z innymi agentami. Najbliższe istniejące rzeczy to AI‑commit, narzędzia typu git‑rewrite‑commits, Git Hex MCP, git‑commit‑mcp‑server czy ogólne AI‑git‑hooki, ale żadne z nich nie robi dokładnie tego, co opisujesz (ciągłe patchowanie commitów+repo z możliwością orkiestracji przez inne systemy).[^1][^2][^3][^4]
 
 ***
 
@@ -21,13 +21,13 @@ To najbliższe temu, co mówisz o MCP, ale jego zakres to głównie commit messa
 To bardziej „git history refactoring toolkit” dla agentów, ale bez warstwy interakcji z userem na każdym `commit`/`push` i bez Twojego scenariusza „AI poprawia commity użytkownika”.
 - **Ogólne AI‑git‑hooki / CodeAnt etc.** – przykładowe pre‑commit / pre‑push hooki uruchamiające AI do skanowania sekretów, jakości czy commit message, jako lokalne skrypty w `.git/hooks` albo przez Husky/Lefthook.[^11][^12][^13][^1]
 
-Twoje gix byłby bliżej miksu: **AI‑Commit + Git Hex + git‑commit‑mcp‑server**, ale z mocnym naciskiem na refaktoryzację kodu, standaryzację commitów i pluginową orkiestrację (MCP/REST/CLI/protobuf).
+Twoje giton byłby bliżej miksu: **AI‑Commit + Git Hex + git‑commit‑mcp‑server**, ale z mocnym naciskiem na refaktoryzację kodu, standaryzację commitów i pluginową orkiestrację (MCP/REST/CLI/protobuf).
 
 ***
 
-## Kierunek dla gix – cele i założenia
+## Kierunek dla giton – cele i założenia
 
-Proponowałbym zdefiniować gix tak:
+Proponowałbym zdefiniować giton tak:
 
 1. **Warstwa pomiędzy `commit` a `push`**
     - Interponuje się na `pre-commit`, `post-commit`, `pre-push`.
@@ -37,35 +37,35 @@ Proponowałbym zdefiniować gix tak:
     - Zasady/konwencje są lokalne (policy w repo), zgodnie z Twoim podejściem local‑first.
 3. **Standardyzacja kodu i commitów**
     - Polityki: konwencja nazw commitów, minimalne pokrycie testami, zakaz określonych anty‑wzorca (np. brak `console.log`, brak WIP commitów), itp.[^12][^14]
-    - Gix może generować fixup commity typu `fixup! feat: ...` i na `pre-push` zredukować je do czystej historii.
+    - Giton może generować fixup commity typu `fixup! feat: ...` i na `pre-push` zredukować je do czystej historii.
 4. **Silna rozbudowa przez pluginy**
     - Pluginy jako osobne procesy/serwisy: MCP servers, REST API, cli/shell, protobuff (np. gRPC‑based serwisy).
-    - Dzięki temu gix może korzystać z istniejących rzeczy typu Git Hex MCP czy git‑commit‑mcp‑server, zamiast samemu robić wszystko.[^8][^3]
+    - Dzięki temu giton może korzystać z istniejących rzeczy typu Git Hex MCP czy git‑commit‑mcp‑server, zamiast samemu robić wszystko.[^8][^3]
 
 ***
 
-## Proponowana architektura gix (Python)
+## Proponowana architektura giton (Python)
 
 Warstwy (patrząc na Twoje inne projekty, np. koru/lane):
 
-1. **gix-core (libka Python)**
+1. **giton-core (libka Python)**
     - Odpowiada za:
         - Dostęp do gita (na start `subprocess` na `git`, później ewentualnie `pygit2`/`dulwich`).
         - Analizę `git status`, staged diffów, krótkiej historii (np. ostatnie N commitów).
         - Operacje: `commit --fixup`, `rebase --autosquash`, `amend`, tworzenie branchy roboczych, backup refs.
-2. **gix-policy**
+2. **giton-policy**
     - Definicje zasad w YAML/JSON/MD (local‑first, konwencje commitów, limity rozmiaru diff, wymagane testy, itp.).
     - Mały engine w Pythonie, który ocenia commit/diff vs policies i generuje „findings” + „todo dla AI”.
-3. **gix-agent**
+3. **giton-agent**
     - Warstwa rozmowy z LLM (multi‑provider, w duchu lane): schema wyjściowa (np. lista patchy, opis commitów, plan fixupów).
     - Tutaj możesz później wpiąć swój mini‑DSL / SUMD‑style manifest jako kontekst.
-4. **gix-cli**
+4. **giton-cli**
     - Polecenia w stylu:
-        - `gix pre-commit` – odpala checki i, ewentualnie, generuje patch/commit.
-        - `gix post-commit` – sprawdza świeży commit, ewentualnie proponuje fixup.
-        - `gix pre-push` – staging: rebase autosquash, poprawa commit messages, finalny check.
+        - `giton pre-commit` – odpala checki i, ewentualnie, generuje patch/commit.
+        - `giton post-commit` – sprawdza świeży commit, ewentualnie proponuje fixup.
+        - `giton pre-push` – staging: rebase autosquash, poprawa commit messages, finalny check.
     - Prosty interaktywny TUI (Rich) z pytaniami: „Zastosować patch?”, „Dodać commit fixup?”, „Przepisać historię?”.
-5. **gix‑plugin API**
+5. **giton‑plugin API**
     - Każdy plugin ma prosty kontrakt:
         - input: JSON opis stanu repo/diffu + context + policy findings.
         - output: lista działań (patch, nowy commit, komentarz, warn).
@@ -86,23 +86,23 @@ Minimalne MVP może wyglądać tak:
 W repo:
 
 ```sh
-# instalacja gix globalnie albo w venv
-pip install gix   # roboczo
+# instalacja giton globalnie albo w venv
+pip install giton   # roboczo
 
-# włącz gix w tym repo
-gix init
+# włącz giton w tym repo
+giton init
 ```
 
-`gix init`:
+`giton init`:
 
-- Tworzy `.git/hooks/pre-commit`, `.git/hooks/post-commit`, `.git/hooks/pre-push` jako małe skrypty odpalające `gix` (np. `gix hook pre-commit`).[^1][^13]
+- Tworzy `.git/hooks/pre-commit`, `.git/hooks/post-commit`, `.git/hooks/pre-push` jako małe skrypty odpalające `giton` (np. `giton hook pre-commit`).[^1][^13]
 - Ewentualnie integruje się z Husky/Lefthook, jeśli projekt już ich używa.[^13][^11]
 
 Przykładowy `pre-commit`:
 
 ```sh
 #!/bin/sh
-gix hook pre-commit || exit 1
+giton hook pre-commit || exit 1
 ```
 
 
@@ -112,14 +112,14 @@ Scenariusz:
 
 1. Użytkownik pisze kod, robi `git add -p`.
 2. Uruchamia `git commit`.
-3. `pre-commit` wywołuje `gix hook pre-commit`:
-    - gix zbiera staged diff.
+3. `pre-commit` wywołuje `giton hook pre-commit`:
+    - giton zbiera staged diff.
     - Uruchamia pluginy (lint, tests, local checks).
     - Jeśli coś jest nie tak:
         - albo od razu fail (exit 1),
-        - albo pyta w interfejsie: „Mogę wygenerować patch z poprawkami X/Y/Z – zastosować i dodać commit `gix:fix`?”.
+        - albo pyta w interfejsie: „Mogę wygenerować patch z poprawkami X/Y/Z – zastosować i dodać commit `giton:fix`?”.
 4. Jeśli user się zgodzi:
-    - gix stosuje patch (`git apply`),
+    - giton stosuje patch (`git apply`),
     - tworzy fixup commit (`git commit --no-verify --message "fixup! feat: ..."`),
     - kończy hook z exit 0 (commit usera przechodzi).
 
@@ -127,7 +127,7 @@ Scenariusz:
 
 Przed `git push`:
 
-- gix może:
+- giton może:
     - sprawdzić historię branchy od ostatniego push (`git log @{upstream}..HEAD`).
     - zapytać: „Zmień WIP commit + fixupy w czystą, ładną historię wg konwencji?”
     - użyć AI (przez plugin MCP typu git‑commit‑mcp‑server lub lokalnie) do wygenerowania dobrych commit messages.[^4][^2][^8]
@@ -147,19 +147,19 @@ git add -p
 git commit -m "wip"
 ```
 
-2. `gix` w `post-commit`:
+2. `giton` w `post-commit`:
     - Widzi „wip” + duży diff.
     - Uruchamia politykę: „WIP commit niedozwolony, zaproponuj rozbicie + opis”.
-    - LLM (przez gix‑agent) proponuje:
+    - LLM (przez giton‑agent) proponuje:
         - plan rozbicia na `feat: ...`, `refactor: ...`, `test: ...`
         - i serię patchy/commitów.
     - Pyta: „Chcesz rozbić ten commit zgodnie z planem?”.
 3. Jeśli potwierdzisz:
-    - gix robi `git reset HEAD~1` (cofa WIP).
+    - giton robi `git reset HEAD~1` (cofa WIP).
     - Stosuje serię patchy + `git commit --no-verify -m "feat: ..."` itd.
     - Na końcu masz czystą serię commitów, zgodną z polityką.
 4. Na `git push`:
-    - gix jeszcze raz robi lekki check (np. styl commitów, brak zmian w plikach zakazanych).
+    - giton jeszcze raz robi lekki check (np. styl commitów, brak zmian w plikach zakazanych).
     - Jeśli jest OK – przepuszcza push.
 
 ***
@@ -168,26 +168,26 @@ git commit -m "wip"
 
 Patrząc na Twoje inne projekty:
 
-- **gix jako MCP server**
+- **giton jako MCP server**
     - Udostępniasz narzędzia typu:
-        - `gix_list_status` – stan repo i ostatnie commity.
-        - `gix_propose_commits` – na bazie diffu generuje plan commitów.
-        - `gix_apply_plan` – wykonuje plan commitów / rebase / fixupy.
-    - Dzięki temu inne systemy (koru, lane, IDE z MCP) mogą sterować gixem jak „git‑operator”.
-- **gix jako klient innych MCP**
-    - Pluginy MCP, które gix woła: `git-commit-mcp-server` do commit messages + changelog, Git Hex do rebasingu itd.[^8][^3]
+        - `giton_list_status` – stan repo i ostatnie commity.
+        - `giton_propose_commits` – na bazie diffu generuje plan commitów.
+        - `giton_apply_plan` – wykonuje plan commitów / rebase / fixupy.
+    - Dzięki temu inne systemy (koru, lane, IDE z MCP) mogą sterować gitonem jak „git‑operator”.
+- **giton jako klient innych MCP**
+    - Pluginy MCP, które giton woła: `git-commit-mcp-server` do commit messages + changelog, Git Hex do rebasingu itd.[^8][^3]
 - **REST / CLI / protobuf**
-    - REST/gRPC możesz dodać jako opcjonalny backend, jeśli w przyszłości chcesz mieć zdalny „gix‑daemon” obsługujący wiele repo.
+    - REST/gRPC możesz dodać jako opcjonalny backend, jeśli w przyszłości chcesz mieć zdalny „giton‑daemon” obsługujący wiele repo.
     - Na start lokalny CLI + MCP wystarczą.
 
 ***
 
-## Proponowany plan dla MVP gix
+## Proponowany plan dla MVP giton
 
 Żeby nie utopić się w możliwości:
 
 1. **MVP 1 – tylko commit layer**
-    - gix‑core + gix‑cli.
+    - giton‑core + giton‑cli.
     - Hooki `pre-commit` i `post-commit`.
     - Prosty policy (YAML) i jeden plugin: lokalny LLM albo Twój standardowy provider (BYOK).
     - Funkcje:
@@ -200,9 +200,9 @@ Patrząc na Twoje inne projekty:
 3. **MVP 3 – pluginy zewnętrzne i MCP**
     - Definiujesz stable plugin API (JSON in/out),
     - piszesz jeden plugin MCP do git‑commit‑mcp‑server (commit messages + changelog),
-    - opcjonalnie udostępniasz gix także jako MCP server.
+    - opcjonalnie udostępniasz giton także jako MCP server.
 
-To zapewnia, że gix nie będzie „kolejnym generatorem commit messages”, tylko **lokalnym operatorem gita z AI**, który:
+To zapewnia, że giton nie będzie „kolejnym generatorem commit messages”, tylko **lokalnym operatorem gita z AI**, który:
 
 - zna polityki projektu,
 - działa w pętli `commit → auto‑poprawki → pre-push`,
@@ -255,7 +255,7 @@ Częściowo. Istniejące narzędzia rozwiązują fragmenty tego problemu:
 
 **Jujutsu (jj)** — nowy system VCS z zaawansowanym modelem historii, ale bez AI i bez warstwy integracji.
 
-Nikt nie zrobił spójnej warstwy pomiędzy `commit` a `push`, która interaktywnie poprawia kod, patchuje commity i standaryzuje komunikację — i właśnie na tym polega oryginalność `gix`.
+Nikt nie zrobił spójnej warstwy pomiędzy `commit` a `push`, która interaktywnie poprawia kod, patchuje commity i standaryzuje komunikację — i właśnie na tym polega oryginalność `giton`.
 
 ## Proponowana architektura## Kierunek techniczny — co proponuję
 
@@ -263,7 +263,7 @@ Nikt nie zrobił spójnej warstwy pomiędzy `commit` a `push`, która interaktyw
 
 **Protokół pluginów** — MCP jako pierwsza klasa, ponieważ Anthropic SDK go wspiera natywnie i pozwala na dwukierunkową komunikację. REST jako fallback dla prostszych integracji. Protobuf dla pluginów wymagających wydajnego przesyłania dużych diffów.
 
-**Model historii commitów** — zamiast klasycznego `git commit --amend` (który przepisuje SHA i psuje współpracę), `gix` powinien tworzyć `fixup!` commity, które użytkownik przed pushowaniem może interaktywnie zdecydować czy squashować. To bezpieczniejszy pattern.
+**Model historii commitów** — zamiast klasycznego `git commit --amend` (który przepisuje SHA i psuje współpracę), `giton` powinien tworzyć `fixup!` commity, które użytkownik przed pushowaniem może interaktywnie zdecydować czy squashować. To bezpieczniejszy pattern.
 
 ## Przykład użycia
 
@@ -271,8 +271,8 @@ Nikt nie zrobił spójnej warstwy pomiędzy `commit` a `push`, która interaktyw
 # użytkownik tworzy commit jak zwykle
 git commit -m "fix login bug"
 
-# gix przejmuje kontrolę automatycznie
-╭─ gix ─────────────────────────────────────────────────────╮
+# giton przejmuje kontrolę automatycznie
+╭─ giton ─────────────────────────────────────────────────────╮
 │  Znaleziono 2 problemy w tym commicie:                     │
 │                                                            │
 │  ① auth/login.ts:47 — niesprawdzony null (TypeScript)      │
@@ -294,4 +294,4 @@ git commit -m "fix login bug"
 
 Zaczął bym od minimalnego rdzenia: hook interceptor + Anthropic API do analizy diffa + interaktywny prompt. Bez pluginów — to wystarczy żeby zwalidować, czy flow działa w praktyce na prawdziwych commitach. Potem dokładasz plugin registry i MCP.
 
-Chcesz, żebym stworzył szkielet projektu `gix` jako działające repo — `package.json`, hook installer, podstawowy pipeline i interfejs pluginów?
+Chcesz, żebym stworzył szkielet projektu `giton` jako działające repo — `package.json`, hook installer, podstawowy pipeline i interfejs pluginów?
