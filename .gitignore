@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+.idea/misc.xml
 .idea/.name
 .idea/giton.iml
 .env.example
