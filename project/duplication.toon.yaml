@@ -1,28 +1,28 @@
-# redup/duplication | 3 groups | 16f 1923L | 2026-05-27
+# redup/duplication | 3 groups | 18f 2094L | 2026-05-27
 
 SUMMARY:
-  files_scanned: 16
-  total_lines:   1923
+  files_scanned: 18
+  total_lines:   2094
   dup_groups:    3
   dup_fragments: 8
   saved_lines:   17
-  scan_ms:       1927
+  scan_ms:       2207
 
 HOTSPOTS[1] (files with most duplication):
-  src/giton/cli.py  dup=28L  groups=3  frags=8  (1.5%)
+  src/giton/cli.py  dup=28L  groups=3  frags=8  (1.3%)
 
 DUPLICATES[3] (ranked by impact):
   [c83a3afee3e88a5c]   STRU  shell  L=3 N=4 saved=9 sim=1.00
-      src/giton/cli.py:103-105  (shell)
-      src/giton/cli.py:122-124  (plugin_list)
-      src/giton/cli.py:128-130  (plugin_catalog)
-      src/giton/cli.py:140-142  (plugin_install_defaults)
+      src/giton/cli.py:105-107  (shell)
+      src/giton/cli.py:124-126  (plugin_list)
+      src/giton/cli.py:130-132  (plugin_catalog)
+      src/giton/cli.py:142-144  (plugin_install_defaults)
   [53a68daa2f26aa3a]   STRU  hook_pre_commit  L=5 N=2 saved=5 sim=1.00
-      src/giton/cli.py:161-165  (hook_pre_commit)
-      src/giton/cli.py:219-223  (hook_pre_push)
+      src/giton/cli.py:163-167  (hook_pre_commit)
+      src/giton/cli.py:222-226  (hook_pre_push)
   [b67a4e80d3d0d106]   STRU  plugin_install  L=3 N=2 saved=3 sim=1.00
-      src/giton/cli.py:134-136  (plugin_install)
-      src/giton/cli.py:153-155  (plugin_remove)
+      src/giton/cli.py:136-138  (plugin_install)
+      src/giton/cli.py:155-157  (plugin_remove)
 
 REFACTOR[3] (ranked by priority):
   [1] ○ extract_function   → src/giton/utils/shell.py

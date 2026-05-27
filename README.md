@@ -3,11 +3,11 @@
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.8-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.96-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.4h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.11-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.98-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.5h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $0.9599 (11 commits)
-- 👤 **Human dev:** ~$339 (3.4h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $0.9799 (12 commits)
+- 👤 **Human dev:** ~$345 (3.5h @ $100/h, 30min dedup)
 
 Generated on 2026-05-27 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
@@ -171,6 +171,241 @@ gix/
 └── CHANGELOG.md         # Version history
 ```
 
+## Use Cases
+
+### 1. Standardizing Commit Messages
+
+Giton automatically validates commit messages against Conventional Commits spec:
+
+```bash
+# ❌ Blocked - doesn't follow conventional commits
+git commit -m "fix bug"
+
+# ✅ Allowed - follows conventional commits
+git commit -m "fix(auth): handle null session token"
+```
+
+### 2. Preventing Secrets in Code
+
+Giton scans staged files for sensitive data before commit:
+
+```bash
+# ❌ Blocked - AWS key detected
+git add config.py
+git commit -m "add config"
+# giton: Found AWS key in config.py:4
+```
+
+### 3. Code Quality Gates
+
+Automatically run linting and type checking before commits:
+
+```bash
+# With pyqual plugin installed
+git commit -m "feat: add feature"
+# giton: Running pyqual gates...
+# giton: Type errors found in src/main.py:15
+```
+
+### 4. Safe History Cleanup
+
+Use fixup commits and autosquash to clean up history before push:
+
+```bash
+# Create a fixup commit
+giton fixup --target HEAD~1
+
+# Clean up history before push
+giton history clean --base main
+```
+
+### 5. Pre-push Validation
+
+Run tests and generate test coverage before pushing:
+
+```bash
+# With testless plugin installed
+git push origin feature-branch
+# giton: Running testless scan...
+# giton: All tests passed (42/42)
+```
+
+## Getting Started
+
+### Step 1: Install
+
+```bash
+pip install giton
+```
+
+### Step 2: Initialize in Your Repository
+
+```bash
+cd your-project
+giton init
+```
+
+This installs git hooks and default plugins (`pyqual`, `vallm`, `testless`).
+
+### Step 3: Configure (Optional)
+
+Create `.giton/config.yaml` to customize policies:
+
+```yaml
+policies:
+  conventional_commits:
+    max_subject_length: 100
+  no_wip_commits:
+    enabled: false  # allow WIP commits during development
+hooks:
+  pre-commit:
+    fail_on_policy: true
+```
+
+### Step 4: Start Working
+
+```bash
+# Work as usual - giton will check automatically
+git add .
+git commit -m "feat: add new feature"
+
+# Check status
+giton status
+
+# View available plugins
+giton plugin catalog
+
+# Install additional plugins
+giton plugin install mypy
+```
+
+## Daily Workflow
+
+A typical development day with giton:
+
+```bash
+# Morning: start working
+git checkout -b feature/new-api
+
+# During development: commit frequently
+git add src/api.py
+git commit -m "wip: add endpoint"  # blocked by no_wip_commits policy
+git commit -m "feat(api): add endpoint"  # allowed
+
+# After review: fix issues
+git add src/api.py
+giton fixup --target HEAD~1  # create fixup commit
+
+# Before push: clean up history
+giton history clean --base main
+
+# Push
+git push origin feature/new-api
+```
+
+## Working with Multiple Plugins
+
+Giton supports installing and running multiple plugins across different triggers. Here's how to set up a comprehensive plugin ecosystem:
+
+### Install by Category
+
+Install all plugins for a specific category at once:
+
+```bash
+# Install all Python-related plugins
+giton plugin install-category lang:python
+
+# Install all autofix plugins
+giton plugin install-category task:autofix
+
+# Install all security plugins
+giton plugin install-category task:security
+```
+
+### View Installed Plugins
+
+```bash
+giton plugin list
+```
+
+Output shows all plugins with their triggers and status:
+
+```
+┏━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ name    ┃ category      ┃ triggers    ┃ command            ┃ status          ┃
+┡━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ pyqual  │ lang:python   │ pre-commit  │ pyqual run         │ enabled / cmd:✓ │
+│ prefact │ task:autofix  │ pre-commit  │ prefact scan       │ enabled / cmd:✓ │
+│ vallm   │ task:validate │ post-commit │ vallm batch        │ enabled / cmd:✓ │
+│ testless│ task:test     │ pre-push    │ testless scan      │ enabled / cmd:✓ │
+└─────────┴───────────────┴─────────────┴────────────────────┴─────────────────┘
+```
+
+### Multi-Plugin Workflow Example
+
+With multiple plugins installed, giton runs them in sequence based on their triggers:
+
+```bash
+# 1. Pre-commit: pyqual + prefact run automatically
+git add src/main.py
+git commit -m "feat: add feature"
+# → pyqual runs: checks code quality
+# → prefact runs: scans for LLM-introduced issues
+# → policies check: validates commit message
+
+# 2. Post-commit: vallm + tagi run after commit
+# → vallm runs: validates LLM-generated code
+# → tagi runs: scans and groups uncommitted changes for next commits
+
+# 3. Pre-push: testless runs before push
+git push origin feature-branch
+# → testless runs: scans tests and coverage
+```
+
+### Commit Grouping with tagi
+
+The `tagi` plugin provides automatic change grouping and commit orchestration:
+
+```bash
+# Install tagi for commit grouping
+giton plugin install tagi
+
+# After installation, tagi automatically scans changes on each commit
+# and shows grouped analysis via post-commit hook
+
+# Manual tagi commands:
+tagi scan . --grouped        # Scan and group uncommitted changes
+tagi list-groups .           # List available change groups
+tagi send . small docs       # Send specific groups in order
+tagi auto .                  # Auto-scan, order, commit and push
+```
+
+### Install Additional Plugins
+
+```bash
+# Install specific plugins
+giton plugin install domd          # Markdown linter
+giton plugin install code2llm      # LLM context packer
+giton plugin install tagi          # Commit grouping and orchestration
+giton plugin install redsl         # Auto-fix lint issues
+giton plugin install pfix          # Generic patch fixer
+giton plugin install todocs        # Docs generator
+giton plugin install prellm        # Pre-LLM security gate
+```
+
+### Plugin Categories
+
+Browse available plugins by category:
+
+```bash
+giton plugin catalog
+```
+
+Categories include:
+- **Languages:** `lang:python`, `lang:markdown`, `lang:any`
+- **Tasks:** `task:validate`, `task:test`, `task:refactor`, `task:autofix`, `task:fix`, `task:docs`, `task:security`
+- **Integrations:** `integration:mcp`
+
 ## Quick start
 
 ```bash
@@ -190,7 +425,7 @@ day-to-day needs in a `commit → push` loop:
 | --------- | --------------- | ------------ | ------------------------------------------ |
 | `pyqual`  | `lang:python`   | `pre-commit` | Python lint / type / complexity checks      |
 | `vallm`   | `task:validate` | `post-commit`| Validate AI-generated code/patches          |
-| `pretest` | `task:test`     | `pre-push`   | Run / generate tests before push            |
+| `testless`| `task:test`     | `pre-push`   | Run / generate tests before push            |
 
 ### Quick-extend categories
 
@@ -234,8 +469,13 @@ Inspect or customize them per repo:
 ```bash
 giton policy list                    # show active policies
 giton policy check -t pre-commit     # evaluate without running plugins
+giton policy fix                     # apply auto-fixes from the last check
 giton policy init                    # write .giton/config.yaml
 ```
+
+Policies that can be auto-fixed (e.g. `conventional_commits`, `no_wip_commits`)
+generate a `git commit --amend -m "…"` command.  Run `giton policy fix` to
+apply it interactively, or pass `--yes` to skip the prompt.
 
 `.giton/config.yaml` is a deep-merge over the defaults — disable a
 single check or tweak `max_subject_length` without restating everything:
@@ -271,6 +511,8 @@ The `examples/` directory contains working demonstrations of giton:
 - **[examples/advanced](examples/advanced/)** - Advanced usage example demonstrating plugin management (add, remove, list), custom policy configuration, hook installation/uninstallation, and running multiple triggers in sequence.
 
 - **[examples/testing](examples/testing/)** - Testing example with pytest integration and Docker support. Shows how to integrate giton into CI/CD pipelines with containerized testing environments. Includes Dockerfile and docker-compose.yml for easy setup.
+
+- **[examples/plugins](examples/plugins/)** - Plugin lifecycle example. Demonstrates how to register a custom shell-script plugin in an isolated repo, execute it via `giton hook pre-commit`, and verify that placeholders (`{paths}`, `{root}`) are expanded and output is captured. Useful for authors who want to build their own plugins.
 
 ### Running examples with Docker
 

@@ -1,10 +1,11 @@
 % ── Project Metadata ─────────────────────────────────────
-project_metadata('gix', '0.1.5', 'python').
+project_metadata('gix', '0.1.9', 'python').
 
 % ── Project Files ────────────────────────────────────────
 project_file('app.doql.less', 29, 'less').
 project_file('examples/advanced/main.py', 157, 'python').
 project_file('examples/basic/main.py', 68, 'python').
+project_file('examples/plugins/test_plugin_lifecycle.py', 117, 'python').
 project_file('examples/testing/sample_project/src/example.py', 21, 'python').
 project_file('examples/testing/sample_project/tests/test_example.py', 31, 'python').
 project_file('examples/testing/test_giton_integration.py', 179, 'python').
@@ -12,20 +13,24 @@ project_file('project.sh', 59, 'shell').
 project_file('src/giton/__init__.py', 4, 'python').
 project_file('src/giton/__main__.py', 5, 'python').
 project_file('src/giton/catalog.py', 174, 'python').
-project_file('src/giton/cli.py', 422, 'python').
+project_file('src/giton/cli.py', 448, 'python').
 project_file('src/giton/config.py', 75, 'python').
 project_file('src/giton/context.py', 67, 'python').
+project_file('src/giton/fixups.py', 69, 'python').
 project_file('src/giton/history.py', 141, 'python').
 project_file('src/giton/hooks.py', 49, 'python').
 project_file('src/giton/interactive.py', 59, 'python').
-project_file('src/giton/plugins.py', 121, 'python').
-project_file('src/giton/policies.py', 166, 'python').
+project_file('src/giton/plugins.py', 144, 'python').
+project_file('src/giton/policies.py', 172, 'python').
 project_file('src/giton/repo_config.py', 102, 'python').
-project_file('src/giton/runner.py', 123, 'python').
-project_file('src/giton/shell.py', 206, 'python').
+project_file('src/giton/runner.py', 124, 'python').
+project_file('src/giton/shell.py', 217, 'python').
+project_file('src/giton/store.py', 37, 'python').
 project_file('tests/__init__.py', 1, 'python').
 project_file('tests/test_basic.py', 86, 'python').
+project_file('tests/test_fixups.py', 85, 'python').
 project_file('tests/test_history.py', 134, 'python').
+project_file('tests/test_plugin_runner.py', 209, 'python').
 project_file('tests/test_policies.py', 99, 'python').
 project_file('tree.sh', 2, 'shell').
 
@@ -37,6 +42,10 @@ python_function('examples/advanced/main.py', 'demonstrate_trigger_sequence', 0, 
 python_function('examples/advanced/main.py', 'main', 0, 2, 6).
 python_function('examples/basic/main.py', 'test_basic_giton_usage', 0, 8, 4).
 python_function('examples/basic/main.py', 'main', 0, 1, 1).
+python_function('examples/plugins/test_plugin_lifecycle.py', '_git', 2, 1, 1).
+python_function('examples/plugins/test_plugin_lifecycle.py', 'isolated_repo', 2, 1, 6).
+python_function('examples/plugins/test_plugin_lifecycle.py', 'test_register_run_and_unregister', 3, 9, 15).
+python_function('examples/plugins/test_plugin_lifecycle.py', 'test_default_catalog_pyqual_command_is_valid', 0, 5, 3).
 python_function('examples/testing/sample_project/src/example.py', 'add', 2, 1, 0).
 python_function('examples/testing/sample_project/src/example.py', 'multiply', 2, 1, 0).
 python_function('examples/testing/sample_project/src/example.py', 'divide', 2, 2, 1).
@@ -68,12 +77,13 @@ python_function('src/giton/cli.py', 'plugin_install_defaults', 0, 1, 2).
 python_function('src/giton/cli.py', 'plugin_install_category', 1, 1, 3).
 python_function('src/giton/cli.py', 'plugin_remove', 1, 1, 2).
 python_function('src/giton/cli.py', 'hook_pre_commit', 0, 2, 3).
-python_function('src/giton/cli.py', 'hook_commit_msg', 1, 9, 17).
+python_function('src/giton/cli.py', 'hook_commit_msg', 1, 9, 18).
 python_function('src/giton/cli.py', 'hook_post_commit', 0, 1, 2).
 python_function('src/giton/cli.py', 'hook_pre_push', 0, 2, 3).
-python_function('src/giton/cli.py', 'policy_check', 1, 7, 10).
+python_function('src/giton/cli.py', 'policy_check', 1, 7, 11).
 python_function('src/giton/cli.py', 'policy_init', 1, 2, 7).
 python_function('src/giton/cli.py', 'policy_list', 0, 5, 7).
+python_function('src/giton/cli.py', 'policy_fix', 1, 6, 7).
 python_function('src/giton/cli.py', 'fixup', 2, 9, 12).
 python_function('src/giton/cli.py', 'history_log', 2, 9, 8).
 python_function('src/giton/cli.py', 'history_clean', 3, 12, 15).
@@ -86,6 +96,8 @@ python_function('src/giton/config.py', 'remove_plugin', 1, 4, 3).
 python_function('src/giton/context.py', '_run', 2, 1, 1).
 python_function('src/giton/context.py', 'repo_root', 1, 2, 3).
 python_function('src/giton/context.py', 'collect', 1, 5, 5).
+python_function('src/giton/fixups.py', 'apply_fix', 2, 6, 4).
+python_function('src/giton/fixups.py', 'apply_all', 2, 6, 3).
 python_function('src/giton/history.py', '_git', 2, 1, 2).
 python_function('src/giton/history.py', 'head_sha', 1, 1, 2).
 python_function('src/giton/history.py', 'make_backup_ref', 2, 2, 4).
@@ -101,14 +113,15 @@ python_function('src/giton/interactive.py', 'is_tty', 0, 3, 2).
 python_function('src/giton/interactive.py', 'confirm', 1, 5, 5).
 python_function('src/giton/interactive.py', 'choose', 2, 8, 7).
 python_function('src/giton/plugins.py', '_pip_install', 1, 1, 3).
-python_function('src/giton/plugins.py', 'install_from_catalog', 1, 9, 8).
+python_function('src/giton/plugins.py', '_init_plugin', 1, 3, 3).
+python_function('src/giton/plugins.py', 'install_from_catalog', 1, 10, 9).
 python_function('src/giton/plugins.py', 'install_defaults', 0, 2, 2).
 python_function('src/giton/plugins.py', 'install_category', 1, 6, 3).
 python_function('src/giton/plugins.py', 'uninstall', 1, 2, 2).
 python_function('src/giton/plugins.py', 'show_table', 0, 5, 8).
 python_function('src/giton/plugins.py', 'show_catalog', 0, 4, 8).
 python_function('src/giton/policies.py', '_check_conventional_commits', 3, 10, 10).
-python_function('src/giton/policies.py', '_check_no_wip', 3, 6, 4).
+python_function('src/giton/policies.py', '_check_no_wip', 3, 7, 5).
 python_function('src/giton/policies.py', '_check_no_secrets', 3, 10, 8).
 python_function('src/giton/policies.py', '_check_max_file_size', 3, 6, 5).
 python_function('src/giton/policies.py', 'evaluate', 3, 4, 7).
@@ -118,14 +131,16 @@ python_function('src/giton/repo_config.py', 'load', 1, 4, 5).
 python_function('src/giton/repo_config.py', 'write_default', 1, 3, 4).
 python_function('src/giton/runner.py', '_print_findings', 1, 4, 2).
 python_function('src/giton/runner.py', '_format_command', 2, 1, 4).
-python_function('src/giton/runner.py', 'run_trigger', 2, 8, 9).
+python_function('src/giton/runner.py', 'run_trigger', 2, 8, 10).
 python_function('src/giton/runner.py', '_run_plugin', 2, 6, 6).
 python_function('src/giton/shell.py', '_set_enabled', 2, 5, 3).
 python_function('src/giton/shell.py', '_cmd_status', 0, 4, 5).
-python_function('src/giton/shell.py', '_cmd_policy', 1, 12, 8).
+python_function('src/giton/shell.py', '_cmd_policy', 1, 17, 10).
 python_function('src/giton/shell.py', '_cmd_init', 0, 3, 4).
 python_function('src/giton/shell.py', 'dispatch', 1, 23, 16).
 python_function('src/giton/shell.py', 'run', 0, 5, 4).
+python_function('src/giton/store.py', 'save_findings', 2, 2, 3).
+python_function('src/giton/store.py', 'load_findings', 1, 3, 4).
 python_function('tests/test_basic.py', 'isolated_xdg', 2, 1, 4).
 python_function('tests/test_basic.py', 'test_catalog_has_three_defaults', 0, 4, 1).
 python_function('tests/test_basic.py', 'test_catalog_categories_grouped', 0, 3, 3).
@@ -133,6 +148,13 @@ python_function('tests/test_basic.py', 'test_plugin_persistence', 2, 2, 7).
 python_function('tests/test_basic.py', 'test_cli_help_runs', 0, 3, 2).
 python_function('tests/test_basic.py', 'test_cli_plugin_catalog_runs', 0, 5, 2).
 python_function('tests/test_basic.py', 'test_hook_install_in_temp_repo', 2, 6, 5).
+python_function('tests/test_fixups.py', '_ctx', 1, 1, 1).
+python_function('tests/test_fixups.py', 'test_conventional_commits_includes_fix', 0, 6, 5).
+python_function('tests/test_fixups.py', 'test_no_wip_commits_includes_fix', 0, 6, 5).
+python_function('tests/test_fixups.py', 'test_store_roundtrip', 1, 4, 4).
+python_function('tests/test_fixups.py', 'test_apply_fix_runs_command', 1, 3, 3).
+python_function('tests/test_fixups.py', 'test_apply_all_counts', 1, 3, 2).
+python_function('tests/test_fixups.py', 'test_apply_fix_in_real_repo', 1, 7, 9).
 python_function('tests/test_history.py', '_git', 2, 1, 1).
 python_function('tests/test_history.py', 'repo', 1, 1, 3).
 python_function('tests/test_history.py', 'test_install_hooks_includes_commit_msg', 1, 4, 2).
@@ -143,6 +165,18 @@ python_function('tests/test_history.py', 'test_cli_fixup_creates_commit', 2, 3, 
 python_function('tests/test_history.py', 'test_commit_msg_hook_blocks_wip', 3, 3, 5).
 python_function('tests/test_history.py', 'test_commit_msg_hook_accepts_conventional', 3, 2, 5).
 python_function('tests/test_history.py', 'test_history_log_command', 2, 3, 5).
+python_function('tests/test_plugin_runner.py', '_git', 2, 1, 1).
+python_function('tests/test_plugin_runner.py', 'repo', 2, 1, 6).
+python_function('tests/test_plugin_runner.py', '_write_fake_plugin', 2, 1, 3).
+python_function('tests/test_plugin_runner.py', '_register', 3, 3, 4).
+python_function('tests/test_plugin_runner.py', 'test_plugin_executes_and_expands_paths', 3, 5, 9).
+python_function('tests/test_plugin_runner.py', 'test_plugin_diff_file_placeholder', 3, 4, 8).
+python_function('tests/test_plugin_runner.py', 'test_plugin_root_placeholder', 3, 3, 9).
+python_function('tests/test_plugin_runner.py', 'test_plugin_failure_propagates_to_outcome', 3, 4, 6).
+python_function('tests/test_plugin_runner.py', 'test_plugin_disabled_is_skipped', 3, 2, 6).
+python_function('tests/test_plugin_runner.py', 'test_plugin_command_not_found', 1, 3, 4).
+python_function('tests/test_plugin_runner.py', 'test_multiple_plugins_run_in_order', 3, 4, 7).
+python_function('tests/test_plugin_runner.py', 'test_default_catalog_commands_are_well_formed', 0, 4, 3).
 python_function('tests/test_policies.py', '_ctx', 1, 1, 1).
 python_function('tests/test_policies.py', 'test_conventional_commits_accepts_valid', 0, 2, 4).
 python_function('tests/test_policies.py', 'test_conventional_commits_rejects_invalid', 0, 2, 5).
@@ -202,6 +236,7 @@ testql_scenario('generated-from-pytests.testql.toon.yaml', 'integration').
 sumd_declared_file('app.doql.less', 'doql').
 sumd_declared_file('testql-scenarios/generated-cli-tests.testql.toon.yaml', 'testql').
 sumd_declared_file('testql-scenarios/generated-from-pytests.testql.toon.yaml', 'testql').
+sumd_declared_file('pyqual.yaml', 'pyqual').
 sumd_declared_file('project/map.toon.yaml', 'analysis').
 sumd_declared_file('project/logic.pl', 'analysis').
 sumd_declared_file('project/calls.toon.yaml', 'analysis').

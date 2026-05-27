@@ -1,13 +1,14 @@
-# gix | 26f 2580L | python:23,shell:2,less:1 | 2026-05-27
-# stats: 123 func | 8 cls | 26 mod | CC̄=3.6 | critical:5 | cycles:0
-# alerts[5]: CC dispatch=23; CC history_clean=12; CC _cmd_policy=12; CC _check_conventional_commits=10; CC _check_no_secrets=10
-# hotspots[5]: hook_commit_msg fan=17; dispatch fan=16; history_clean fan=15; fixup fan=12; test_create_fixup_and_autosquash fan=11
+# gix | 31f 3164L | python:28,shell:2,less:1 | 2026-05-27
+# stats: 152 func | 8 cls | 31 mod | CC̄=3.6 | critical:6 | cycles:0
+# alerts[5]: CC dispatch=23; CC _cmd_policy=17; CC history_clean=12; CC install_from_catalog=10; CC _check_conventional_commits=10
+# hotspots[5]: hook_commit_msg fan=18; dispatch fan=16; test_register_run_and_unregister fan=15; history_clean fan=15; fixup fan=12
 # evolution: baseline
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
-M[26]:
+M[31]:
   app.doql.less,29
   examples/advanced/main.py,157
   examples/basic/main.py,68
+  examples/plugins/test_plugin_lifecycle.py,117
   examples/testing/sample_project/src/example.py,21
   examples/testing/sample_project/tests/test_example.py,31
   examples/testing/test_giton_integration.py,179
@@ -15,20 +16,24 @@ M[26]:
   src/giton/__init__.py,4
   src/giton/__main__.py,5
   src/giton/catalog.py,174
-  src/giton/cli.py,422
+  src/giton/cli.py,448
   src/giton/config.py,75
   src/giton/context.py,67
+  src/giton/fixups.py,69
   src/giton/history.py,141
   src/giton/hooks.py,49
   src/giton/interactive.py,59
-  src/giton/plugins.py,121
-  src/giton/policies.py,166
+  src/giton/plugins.py,144
+  src/giton/policies.py,172
   src/giton/repo_config.py,102
-  src/giton/runner.py,123
-  src/giton/shell.py,206
+  src/giton/runner.py,124
+  src/giton/shell.py,217
+  src/giton/store.py,37
   tests/__init__.py,1
   tests/test_basic.py,86
+  tests/test_fixups.py,85
   tests/test_history.py,134
+  tests/test_plugin_runner.py,209
   tests/test_policies.py,99
   tree.sh,2
 D:
@@ -43,6 +48,12 @@ D:
     e: test_basic_giton_usage,main
     test_basic_giton_usage()
     main()
+  examples/plugins/test_plugin_lifecycle.py:
+    e: _git,isolated_repo,test_register_run_and_unregister,test_default_catalog_pyqual_command_is_valid
+    _git(args;cwd)
+    isolated_repo(tmp_path;monkeypatch)
+    test_register_run_and_unregister(isolated_repo;tmp_path;monkeypatch)
+    test_default_catalog_pyqual_command_is_valid()
   examples/testing/sample_project/src/example.py:
     e: add,multiply,divide
     add(a;b)
@@ -73,7 +84,7 @@ D:
     find(name)
     defaults()
   src/giton/cli.py:
-    e: _root,init,uninit,status,shell,doctor,plugin_list,plugin_catalog,plugin_install,plugin_install_defaults,plugin_install_category,plugin_remove,hook_pre_commit,hook_commit_msg,hook_post_commit,hook_pre_push,policy_check,policy_init,policy_list,fixup,history_log,history_clean
+    e: _root,init,uninit,status,shell,doctor,plugin_list,plugin_catalog,plugin_install,plugin_install_defaults,plugin_install_category,plugin_remove,hook_pre_commit,hook_commit_msg,hook_post_commit,hook_pre_push,policy_check,policy_init,policy_list,policy_fix,fixup,history_log,history_clean
     _root(ctx;version)
     init(install_default_plugins)
     uninit()
@@ -93,6 +104,7 @@ D:
     policy_check(trigger)
     policy_init(overwrite)
     policy_list()
+    policy_fix(yes)
     fixup(target;yes)
     history_log(limit;range_)
     history_clean(base;yes;interactive_rebase)
@@ -111,6 +123,10 @@ D:
     _run(cmd;cwd)
     repo_root(cwd)
     collect(cwd)
+  src/giton/fixups.py:
+    e: apply_fix,apply_all
+    apply_fix(finding;cwd)
+    apply_all(findings;cwd)
   src/giton/history.py:
     e: _git,head_sha,make_backup_ref,list_log,upstream_range,create_fixup,has_staged_changes,autosquash,GitResult
     GitResult: ok(0)
@@ -133,8 +149,9 @@ D:
     confirm(question)
     choose(question;options)
   src/giton/plugins.py:
-    e: _pip_install,install_from_catalog,install_defaults,install_category,uninstall,show_table,show_catalog
+    e: _pip_install,_init_plugin,install_from_catalog,install_defaults,install_category,uninstall,show_table,show_catalog
     _pip_install(target)
+    _init_plugin(name)
     install_from_catalog(name)
     install_defaults()
     install_category(category)
@@ -172,6 +189,10 @@ D:
     _cmd_init()
     dispatch(line)
     run()
+  src/giton/store.py:
+    e: save_findings,load_findings
+    save_findings(findings;repo_root)
+    load_findings(repo_root)
   tests/__init__.py:
   tests/test_basic.py:
     e: isolated_xdg,test_catalog_has_three_defaults,test_catalog_categories_grouped,test_plugin_persistence,test_cli_help_runs,test_cli_plugin_catalog_runs,test_hook_install_in_temp_repo
@@ -182,6 +203,15 @@ D:
     test_cli_help_runs()
     test_cli_plugin_catalog_runs()
     test_hook_install_in_temp_repo(tmp_path;monkeypatch)
+  tests/test_fixups.py:
+    e: _ctx,test_conventional_commits_includes_fix,test_no_wip_commits_includes_fix,test_store_roundtrip,test_apply_fix_runs_command,test_apply_all_counts,test_apply_fix_in_real_repo
+    _ctx(root)
+    test_conventional_commits_includes_fix()
+    test_no_wip_commits_includes_fix()
+    test_store_roundtrip(tmp_path)
+    test_apply_fix_runs_command(tmp_path)
+    test_apply_all_counts(tmp_path)
+    test_apply_fix_in_real_repo(tmp_path)
   tests/test_history.py:
     e: _git,repo,test_install_hooks_includes_commit_msg,test_make_backup_ref,test_create_fixup_and_autosquash,test_cli_fixup_requires_staged,test_cli_fixup_creates_commit,test_commit_msg_hook_blocks_wip,test_commit_msg_hook_accepts_conventional,test_history_log_command
     _git(args;cwd)
@@ -194,6 +224,20 @@ D:
     test_commit_msg_hook_blocks_wip(repo;tmp_path;monkeypatch)
     test_commit_msg_hook_accepts_conventional(repo;tmp_path;monkeypatch)
     test_history_log_command(repo;monkeypatch)
+  tests/test_plugin_runner.py:
+    e: _git,repo,_write_fake_plugin,_register,test_plugin_executes_and_expands_paths,test_plugin_diff_file_placeholder,test_plugin_root_placeholder,test_plugin_failure_propagates_to_outcome,test_plugin_disabled_is_skipped,test_plugin_command_not_found,test_multiple_plugins_run_in_order,test_default_catalog_commands_are_well_formed
+    _git(args;cwd)
+    repo(tmp_path;monkeypatch)
+    _write_fake_plugin(tmp_path;name)
+    _register(name;command;trigger)
+    test_plugin_executes_and_expands_paths(repo;tmp_path;monkeypatch)
+    test_plugin_diff_file_placeholder(repo;tmp_path;monkeypatch)
+    test_plugin_root_placeholder(repo;tmp_path;monkeypatch)
+    test_plugin_failure_propagates_to_outcome(repo;tmp_path;monkeypatch)
+    test_plugin_disabled_is_skipped(repo;tmp_path;monkeypatch)
+    test_plugin_command_not_found(repo)
+    test_multiple_plugins_run_in_order(repo;tmp_path;monkeypatch)
+    test_default_catalog_commands_are_well_formed()
   tests/test_policies.py:
     e: _ctx,test_conventional_commits_accepts_valid,test_conventional_commits_rejects_invalid,test_no_wip_commits_blocks_wip,test_no_secrets_detects_aws_key,test_no_secrets_skips_non_added_lines,test_max_file_size_flags_big_file,test_repo_config_write_and_load,test_repo_config_user_override,test_runner_returns_outcome_with_findings
     _ctx(root)

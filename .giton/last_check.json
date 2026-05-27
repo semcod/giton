@@ -1,0 +1,9 @@
+[
+  {
+    "policy": "max_file_size",
+    "severity": "error",
+    "message": "uv.lock is 646.8 KB (limit 512 KB)",
+    "location": "uv.lock",
+    "fix": null
+  }
+]

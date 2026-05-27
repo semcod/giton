@@ -26,6 +26,25 @@ def _pip_install(target: str) -> int:
     return subprocess.run(cmd, check=False).returncode
 
 
+def _init_plugin(name: str) -> None:
+    """Run plugin init command if available."""
+    init_commands = {
+        "pyqual": [sys.executable, "-m", "pyqual", "init"],
+        "prefact": ["prefact", "init"],
+        "tagi": ["tagi", "init"],
+        # Add other plugins with init commands here
+    }
+    
+    if name in init_commands:
+        cmd = init_commands[name]
+        console.print(f"[dim]$ {' '.join(cmd)}[/dim]")
+        result = subprocess.run(cmd, check=False, capture_output=True, text=True)
+        if result.returncode == 0:
+            console.print(f"[green]✓ initialized {name} config[/green]")
+        else:
+            console.print(f"[yellow]Note: {name} init skipped or failed (may not be required)[/yellow]")
+
+
 def install_from_catalog(name: str, *, prefer_local: bool = True) -> bool:
     entry = catalog.find(name)
     if entry is None:
@@ -48,6 +67,11 @@ def install_from_catalog(name: str, *, prefer_local: bool = True) -> bool:
         )
     upsert_plugin(entry.record)
     console.print(f"[green]✓ registered plugin '{name}'[/green]")
+    
+    # Initialize plugin config if available
+    if rc == 0:
+        _init_plugin(name)
+    
     return rc == 0
 
 

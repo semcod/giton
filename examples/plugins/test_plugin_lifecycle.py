@@ -99,7 +99,7 @@ def test_default_catalog_pyqual_command_is_valid():
     """Smoke-test the catalog metadata for the three default plugins."""
     from giton import catalog
 
-    expected = {"pyqual", "vallm", "pretest"}
+    expected = {"pyqual", "vallm", "testless"}
     actual = {e.record.name for e in catalog.defaults()}
     assert expected == actual
 

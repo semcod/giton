@@ -6,6 +6,7 @@ SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorizati
 
 - [Metadata](#metadata)
 - [Architecture](#architecture)
+- [Quality Pipeline (`pyqual.yaml`)](#quality-pipeline-pyqualyaml)
 - [Dependencies](#dependencies)
 - [Call Graph](#call-graph)
 - [Test Contracts](#test-contracts)
@@ -15,12 +16,12 @@ SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorizati
 ## Metadata
 
 - **name**: `giton`
-- **version**: `0.1.5`
+- **version**: `0.1.9`
 - **python_requires**: `>=3.10`
 - **license**: Apache-2.0
 - **ai_model**: `openrouter/qwen/qwen3-coder-next`
 - **ecosystem**: SUMD + DOQL + testql + taskfile
-- **generated_from**: pyproject.toml, testql(2), app.doql.less, goal.yaml, .env.example, project/(5 analysis files)
+- **generated_from**: pyproject.toml, testql(2), app.doql.less, pyqual.yaml, goal.yaml, .env.example, project/(6 analysis files)
 
 ## Architecture
 
@@ -35,7 +36,7 @@ SUMD (description) → DOQL/source (code) → taskfile (automation) → testql (
 
 app {
   name: giton;
-  version: 0.1.5;
+  version: 0.1.9;
 }
 
 dependencies {
@@ -61,6 +62,72 @@ environment[name="local"] {
 }
 ```
 
+## Quality Pipeline (`pyqual.yaml`)
+
+```yaml markpact:pyqual path=pyqual.yaml
+pipeline:
+  name: quality-loop
+
+  # Quickstart: replace all of this with a single profile line:
+  #   profile: python-minimal   # analyze → validate → lint → fix → test
+  #   profile: python-publish   # + git-push and make-publish
+  #   profile: python-secure    # + pip-audit, bandit, detect-secrets
+  #   profile: python           # standard (needs manual stage config)
+  #   profile: ci               # CI-only, no fix
+  # See: pyqual profiles
+
+  # Quality gates — pipeline iterates until ALL pass
+  metrics:
+    cc_max: 15           # cyclomatic complexity per function
+    vallm_pass_min: 90   # vallm validation pass rate (%)
+    coverage_min: 80     # test coverage (%)
+
+  # Pipeline stages — use 'tool:' for built-in presets or 'run:' for custom commands
+  # See all presets: pyqual tools
+  # when: any_stage_fail    — run only when a prior stage in this iteration failed
+  # when: metrics_fail      — run only when quality gates are not yet passing
+  # when: first_iteration   — run only on iteration 1 (skip re-runs after fix)
+  # when: after_fix         — run only after the fix stage ran in this iteration
+  stages:
+    - name: analyze
+      tool: code2llm-filtered   # uses sensible exclude defaults
+
+    - name: validate
+      tool: vallm-filtered      # uses sensible exclude defaults
+
+    - name: prefact
+      tool: prefact
+      optional: true
+      when: any_stage_fail
+      timeout: 900
+
+    - name: fix
+      tool: llx-fix
+      optional: true
+      when: any_stage_fail
+      timeout: 1800
+
+    - name: test
+      tool: pytest
+
+    - name: push
+      tool: git-push            # built-in: git add + commit + push
+      optional: true
+      timeout: 120
+
+  # Loop behavior
+  loop:
+    max_iterations: 3
+    on_fail: report      # report | create_ticket | block
+    ticket_backends:     # backends to sync when on_fail = create_ticket
+      - markdown        # TODO.md (default)
+      # - github        # GitHub Issues (requires GITHUB_TOKEN)
+
+  # Environment (optional)
+  env:
+    LLM_MODEL: openrouter/qwen/qwen3-coder-next
+```
+
 ## Dependencies
 
 ### Runtime
@@ -82,7 +149,7 @@ pfix>=0.1.60
 
 ## Call Graph
 
-*61 nodes · 64 edges · 12 modules · CC̄=3.8*
+*65 nodes · 66 edges · 13 modules · CC̄=3.9*
 
 ### Hubs (by degree)
 
@@ -91,17 +158,17 @@ pfix>=0.1.60
 | `history_clean` *(in src.giton.cli)* | 12 ⚠ | 0 | 30 | **30** |
 | `fixup` *(in src.giton.cli)* | 9 | 0 | 28 | **28** |
 | `dispatch` *(in src.giton.shell)* | 23 ⚠ | 1 | 25 | **26** |
-| `hook_commit_msg` *(in src.giton.cli)* | 9 | 0 | 24 | **24** |
+| `hook_commit_msg` *(in src.giton.cli)* | 9 | 0 | 25 | **25** |
 | `test_basic_giton_usage` *(in examples.basic.main)* | 8 | 1 | 20 | **21** |
+| `_cmd_policy` *(in src.giton.shell)* | 17 ⚠ | 1 | 20 | **21** |
 | `collect` *(in src.giton.context)* | 5 | 7 | 13 | **20** |
 | `demonstrate_plugin_management` *(in examples.advanced.main)* | 3 | 1 | 19 | **20** |
-| `run_trigger` *(in src.giton.runner)* | 8 | 6 | 11 | **17** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/gix
-# generated in 0.02s
-# nodes: 61 | edges: 64 | modules: 12
-# CC̄=3.8
+# generated in 0.03s
+# nodes: 65 | edges: 66 | modules: 13
+# CC̄=3.9
 
 HUBS[20]:
   src.giton.cli.history_clean
@@ -111,37 +178,37 @@ HUBS[20]:
   src.giton.shell.dispatch
     CC=23  in:1  out:25  total:26
   src.giton.cli.hook_commit_msg
-    CC=9  in:0  out:24  total:24
+    CC=9  in:0  out:25  total:25
   examples.basic.main.test_basic_giton_usage
     CC=8  in:1  out:20  total:21
+  src.giton.shell._cmd_policy
+    CC=17  in:1  out:20  total:21
   src.giton.context.collect
     CC=5  in:7  out:13  total:20
   examples.advanced.main.demonstrate_plugin_management
     CC=3  in:1  out:19  total:20
   src.giton.runner.run_trigger
-    CC=8  in:6  out:11  total:17
-  src.giton.shell._cmd_policy
-    CC=12  in:1  out:15  total:16
+    CC=8  in:6  out:12  total:18
+  src.giton.context.repo_root
+    CC=2  in:13  out:3  total:16
   src.giton.runner._run_plugin
     CC=6  in:1  out:15  total:16
-  src.giton.context.repo_root
-    CC=2  in:12  out:3  total:15
   src.giton.plugins.install_from_catalog
-    CC=9  in:2  out:12  total:14
+    CC=10  in:2  out:13  total:15
   examples.advanced.main.demonstrate_catalog
     CC=2  in:1  out:13  total:14
   src.giton.cli.policy_check
-    CC=7  in:0  out:13  total:13
+    CC=7  in:0  out:14  total:14
   src.giton.plugins.show_table
     CC=5  in:0  out:13  total:13
   examples.advanced.main.demonstrate_trigger_sequence
     CC=9  in:1  out:12  total:13
   src.giton.cli.history_log
     CC=9  in:0  out:12  total:12
-  src.giton.hooks.install
-    CC=5  in:0  out:12  total:12
   src.giton.cli.init
     CC=4  in:0  out:12  total:12
+  src.giton.hooks.install
+    CC=5  in:0  out:12  total:12
   src.giton.config.load_plugins
     CC=4  in:6  out:6  total:12
 
@@ -155,17 +222,17 @@ MODULES:
   examples.basic.main  [2 funcs]
     main  CC=1  out:1
     test_basic_giton_usage  CC=8  out:20
-  src.giton.cli  [14 funcs]
+  src.giton.cli  [15 funcs]
     doctor  CC=3  out:6
     fixup  CC=9  out:28
     history_clean  CC=12  out:30
     history_log  CC=9  out:12
-    hook_commit_msg  CC=9  out:24
+    hook_commit_msg  CC=9  out:25
     hook_post_commit  CC=1  out:2
     hook_pre_commit  CC=2  out:3
     hook_pre_push  CC=2  out:3
     init  CC=4  out:12
-    policy_check  CC=7  out:13
+    policy_check  CC=7  out:14
   src.giton.config  [5 funcs]
     ensure_user_dirs  CC=1  out:1
     load_plugins  CC=4  out:6
@@ -176,6 +243,9 @@ MODULES:
     _run  CC=1  out:1
     collect  CC=5  out:13
     repo_root  CC=2  out:3
+  src.giton.fixups  [2 funcs]
+    apply_all  CC=6  out:3
+    apply_fix  CC=6  out:5
   src.giton.history  [8 funcs]
     _git  CC=1  out:2
     autosquash  CC=2  out:7
@@ -193,11 +263,12 @@ MODULES:
     choose  CC=8  out:10
     confirm  CC=5  out:5
     is_tty  CC=3  out:3
-  src.giton.plugins  [6 funcs]
+  src.giton.plugins  [7 funcs]
+    _init_plugin  CC=3  out:5
     _pip_install  CC=1  out:3
     install_category  CC=6  out:3
     install_defaults  CC=2  out:2
-    install_from_catalog  CC=9  out:12
+    install_from_catalog  CC=10  out:13
     show_table  CC=5  out:13
     uninstall  CC=2  out:3
   src.giton.repo_config  [2 funcs]
@@ -207,10 +278,10 @@ MODULES:
     _format_command  CC=1  out:5
     _print_findings  CC=4  out:3
     _run_plugin  CC=6  out:15
-    run_trigger  CC=8  out:11
+    run_trigger  CC=8  out:12
   src.giton.shell  [6 funcs]
     _cmd_init  CC=3  out:6
-    _cmd_policy  CC=12  out:15
+    _cmd_policy  CC=17  out:20
     _cmd_status  CC=4  out:6
     _set_enabled  CC=5  out:4
     dispatch  CC=23  out:25
@@ -234,6 +305,22 @@ EDGES:
   src.giton.config.upsert_plugin → src.giton.config.save_plugins
   src.giton.config.remove_plugin → src.giton.config.load_plugins
   src.giton.config.remove_plugin → src.giton.config.save_plugins
+  src.giton.interactive.confirm → src.giton.interactive.is_tty
+  src.giton.interactive.choose → src.giton.interactive.is_tty
+  src.giton.context.repo_root → src.giton.context._run
+  src.giton.context.collect → src.giton.context.repo_root
+  src.giton.context.collect → src.giton.context._run
+  src.giton.hooks.install → src.giton.hooks.hooks_dir
+  src.giton.hooks.uninstall → src.giton.hooks.hooks_dir
+  src.giton.history.head_sha → src.giton.history._git
+  src.giton.history.make_backup_ref → src.giton.history.head_sha
+  src.giton.history.make_backup_ref → src.giton.history._git
+  src.giton.history.list_log → src.giton.history._git
+  src.giton.history.upstream_range → src.giton.history._git
+  src.giton.history.create_fixup → src.giton.history._git
+  src.giton.history.has_staged_changes → src.giton.history._git
+  src.giton.history.autosquash → src.giton.history._git
+  src.giton.repo_config.load → src.giton.repo_config._deep_merge
   src.giton.cli.init → src.giton.context.repo_root
   src.giton.cli.uninit → src.giton.context.repo_root
   src.giton.cli.status → src.giton.context.collect
@@ -245,28 +332,12 @@ EDGES:
   src.giton.cli.policy_check → src.giton.context.collect
   src.giton.cli.policy_init → src.giton.context.repo_root
   src.giton.cli.policy_list → src.giton.context.repo_root
+  src.giton.cli.policy_fix → src.giton.context.repo_root
   src.giton.cli.fixup → src.giton.context.repo_root
   src.giton.cli.history_log → src.giton.context.repo_root
   src.giton.cli.history_clean → src.giton.context.repo_root
   src.giton.plugins.install_from_catalog → src.giton.plugins._pip_install
   src.giton.plugins.install_from_catalog → src.giton.config.upsert_plugin
-  src.giton.plugins.install_defaults → src.giton.plugins.install_from_catalog
-  src.giton.plugins.install_category → src.giton.plugins.install_from_catalog
-  src.giton.plugins.uninstall → src.giton.config.remove_plugin
-  src.giton.plugins.show_table → src.giton.config.load_plugins
-  src.giton.runner.run_trigger → src.giton.context.collect
-  src.giton.runner.run_trigger → src.giton.runner._print_findings
-  src.giton.runner.run_trigger → src.giton.config.load_plugins
-  src.giton.runner.run_trigger → src.giton.runner._run_plugin
-  src.giton.runner._run_plugin → src.giton.runner._format_command
-  src.giton.interactive.confirm → src.giton.interactive.is_tty
-  src.giton.interactive.choose → src.giton.interactive.is_tty
-  src.giton.context.repo_root → src.giton.context._run
-  src.giton.context.collect → src.giton.context.repo_root
-  src.giton.context.collect → src.giton.context._run
-  src.giton.hooks.install → src.giton.hooks.hooks_dir
-  src.giton.hooks.uninstall → src.giton.hooks.hooks_dir
-  src.giton.history.head_sha → src.giton.history._git
 ```
 
 ## Test Contracts
@@ -289,9 +360,9 @@ EDGES:
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/gix
-# generated in 0.02s
-# nodes: 61 | edges: 64 | modules: 12
-# CC̄=3.8
+# generated in 0.03s
+# nodes: 65 | edges: 66 | modules: 13
+# CC̄=3.9
 
 HUBS[20]:
   src.giton.cli.history_clean
@@ -301,37 +372,37 @@ HUBS[20]:
   src.giton.shell.dispatch
     CC=23  in:1  out:25  total:26
   src.giton.cli.hook_commit_msg
-    CC=9  in:0  out:24  total:24
+    CC=9  in:0  out:25  total:25
   examples.basic.main.test_basic_giton_usage
     CC=8  in:1  out:20  total:21
+  src.giton.shell._cmd_policy
+    CC=17  in:1  out:20  total:21
   src.giton.context.collect
     CC=5  in:7  out:13  total:20
   examples.advanced.main.demonstrate_plugin_management
     CC=3  in:1  out:19  total:20
   src.giton.runner.run_trigger
-    CC=8  in:6  out:11  total:17
-  src.giton.shell._cmd_policy
-    CC=12  in:1  out:15  total:16
+    CC=8  in:6  out:12  total:18
+  src.giton.context.repo_root
+    CC=2  in:13  out:3  total:16
   src.giton.runner._run_plugin
     CC=6  in:1  out:15  total:16
-  src.giton.context.repo_root
-    CC=2  in:12  out:3  total:15
   src.giton.plugins.install_from_catalog
-    CC=9  in:2  out:12  total:14
+    CC=10  in:2  out:13  total:15
   examples.advanced.main.demonstrate_catalog
     CC=2  in:1  out:13  total:14
   src.giton.cli.policy_check
-    CC=7  in:0  out:13  total:13
+    CC=7  in:0  out:14  total:14
   src.giton.plugins.show_table
     CC=5  in:0  out:13  total:13
   examples.advanced.main.demonstrate_trigger_sequence
     CC=9  in:1  out:12  total:13
   src.giton.cli.history_log
     CC=9  in:0  out:12  total:12
-  src.giton.hooks.install
-    CC=5  in:0  out:12  total:12
   src.giton.cli.init
     CC=4  in:0  out:12  total:12
+  src.giton.hooks.install
+    CC=5  in:0  out:12  total:12
   src.giton.config.load_plugins
     CC=4  in:6  out:6  total:12
 
@@ -345,17 +416,17 @@ MODULES:
   examples.basic.main  [2 funcs]
     main  CC=1  out:1
     test_basic_giton_usage  CC=8  out:20
-  src.giton.cli  [14 funcs]
+  src.giton.cli  [15 funcs]
     doctor  CC=3  out:6
     fixup  CC=9  out:28
     history_clean  CC=12  out:30
     history_log  CC=9  out:12
-    hook_commit_msg  CC=9  out:24
+    hook_commit_msg  CC=9  out:25
     hook_post_commit  CC=1  out:2
     hook_pre_commit  CC=2  out:3
     hook_pre_push  CC=2  out:3
     init  CC=4  out:12
-    policy_check  CC=7  out:13
+    policy_check  CC=7  out:14
   src.giton.config  [5 funcs]
     ensure_user_dirs  CC=1  out:1
     load_plugins  CC=4  out:6
@@ -366,6 +437,9 @@ MODULES:
     _run  CC=1  out:1
     collect  CC=5  out:13
     repo_root  CC=2  out:3
+  src.giton.fixups  [2 funcs]
+    apply_all  CC=6  out:3
+    apply_fix  CC=6  out:5
   src.giton.history  [8 funcs]
     _git  CC=1  out:2
     autosquash  CC=2  out:7
@@ -383,11 +457,12 @@ MODULES:
     choose  CC=8  out:10
     confirm  CC=5  out:5
     is_tty  CC=3  out:3
-  src.giton.plugins  [6 funcs]
+  src.giton.plugins  [7 funcs]
+    _init_plugin  CC=3  out:5
     _pip_install  CC=1  out:3
     install_category  CC=6  out:3
     install_defaults  CC=2  out:2
-    install_from_catalog  CC=9  out:12
+    install_from_catalog  CC=10  out:13
     show_table  CC=5  out:13
     uninstall  CC=2  out:3
   src.giton.repo_config  [2 funcs]
@@ -397,10 +472,10 @@ MODULES:
     _format_command  CC=1  out:5
     _print_findings  CC=4  out:3
     _run_plugin  CC=6  out:15
-    run_trigger  CC=8  out:11
+    run_trigger  CC=8  out:12
   src.giton.shell  [6 funcs]
     _cmd_init  CC=3  out:6
-    _cmd_policy  CC=12  out:15
+    _cmd_policy  CC=17  out:20
     _cmd_status  CC=4  out:6
     _set_enabled  CC=5  out:4
     dispatch  CC=23  out:25
@@ -424,6 +499,22 @@ EDGES:
   src.giton.config.upsert_plugin → src.giton.config.save_plugins
   src.giton.config.remove_plugin → src.giton.config.load_plugins
   src.giton.config.remove_plugin → src.giton.config.save_plugins
+  src.giton.interactive.confirm → src.giton.interactive.is_tty
+  src.giton.interactive.choose → src.giton.interactive.is_tty
+  src.giton.context.repo_root → src.giton.context._run
+  src.giton.context.collect → src.giton.context.repo_root
+  src.giton.context.collect → src.giton.context._run
+  src.giton.hooks.install → src.giton.hooks.hooks_dir
+  src.giton.hooks.uninstall → src.giton.hooks.hooks_dir
+  src.giton.history.head_sha → src.giton.history._git
+  src.giton.history.make_backup_ref → src.giton.history.head_sha
+  src.giton.history.make_backup_ref → src.giton.history._git
+  src.giton.history.list_log → src.giton.history._git
+  src.giton.history.upstream_range → src.giton.history._git
+  src.giton.history.create_fixup → src.giton.history._git
+  src.giton.history.has_staged_changes → src.giton.history._git
+  src.giton.history.autosquash → src.giton.history._git
+  src.giton.repo_config.load → src.giton.repo_config._deep_merge
   src.giton.cli.init → src.giton.context.repo_root
   src.giton.cli.uninit → src.giton.context.repo_root
   src.giton.cli.status → src.giton.context.collect
@@ -435,45 +526,30 @@ EDGES:
   src.giton.cli.policy_check → src.giton.context.collect
   src.giton.cli.policy_init → src.giton.context.repo_root
   src.giton.cli.policy_list → src.giton.context.repo_root
+  src.giton.cli.policy_fix → src.giton.context.repo_root
   src.giton.cli.fixup → src.giton.context.repo_root
   src.giton.cli.history_log → src.giton.context.repo_root
   src.giton.cli.history_clean → src.giton.context.repo_root
   src.giton.plugins.install_from_catalog → src.giton.plugins._pip_install
   src.giton.plugins.install_from_catalog → src.giton.config.upsert_plugin
-  src.giton.plugins.install_defaults → src.giton.plugins.install_from_catalog
-  src.giton.plugins.install_category → src.giton.plugins.install_from_catalog
-  src.giton.plugins.uninstall → src.giton.config.remove_plugin
-  src.giton.plugins.show_table → src.giton.config.load_plugins
-  src.giton.runner.run_trigger → src.giton.context.collect
-  src.giton.runner.run_trigger → src.giton.runner._print_findings
-  src.giton.runner.run_trigger → src.giton.config.load_plugins
-  src.giton.runner.run_trigger → src.giton.runner._run_plugin
-  src.giton.runner._run_plugin → src.giton.runner._format_command
-  src.giton.interactive.confirm → src.giton.interactive.is_tty
-  src.giton.interactive.choose → src.giton.interactive.is_tty
-  src.giton.context.repo_root → src.giton.context._run
-  src.giton.context.collect → src.giton.context.repo_root
-  src.giton.context.collect → src.giton.context._run
-  src.giton.hooks.install → src.giton.hooks.hooks_dir
-  src.giton.hooks.uninstall → src.giton.hooks.hooks_dir
-  src.giton.history.head_sha → src.giton.history._git
 ```
 
 ### Code Analysis (`project/analysis.toon.yaml`)
 
 ```toon markpact:analysis path=project/analysis.toon.yaml
-# code2llm | 30f 2930L | python:17,txt:3,yaml:2,toml:2,shell:2,yml:1 | 2026-05-27
+# code2llm | 37f 3815L | python:19,yaml:7,txt:3,shell:2,toml:2,yml:1 | 2026-05-27
 # generated in 0.01s
-# CC̅=3.8 | critical:1/92 | dups:0 | cycles:1
+# CC̅=3.9 | critical:2/98 | dups:0 | cycles:1
 
-HEALTH[1]:
+HEALTH[2]:
+  🟡 CC    _cmd_policy CC=17 (limit:15)
   🟡 CC    dispatch CC=23 (limit:15)
 
 REFACTOR[2]:
-  1. split 1 high-CC methods  (CC>15)
+  1. split 2 high-CC methods  (CC>15)
   2. break 1 circular dependencies
 
-PIPELINES[60]:
+PIPELINES[64]:
   [1] Src [main]: main → demonstrate_catalog
       PURITY: 100% pure
   [2] Src [main]: main → test_basic_giton_usage → collect → repo_root → ...(1 more)
@@ -486,109 +562,111 @@ PIPELINES[60]:
       PURITY: 100% pure
   [6] Src [from_dict]: from_dict
       PURITY: 100% pure
-  [7] Src [_root]: _root
+  [7] Src [confirm]: confirm → is_tty
       PURITY: 100% pure
-  [8] Src [init]: init → repo_root → _run
+  [8] Src [choose]: choose → is_tty
       PURITY: 100% pure
-  [9] Src [uninit]: uninit → repo_root → _run
+  [9] Src [diff_file]: diff_file
       PURITY: 100% pure
-  [10] Src [status]: status → collect → repo_root → _run
+  [10] Src [paths_arg]: paths_arg
       PURITY: 100% pure
-  [11] Src [shell]: shell
+  [11] Src [install]: install → hooks_dir
       PURITY: 100% pure
-  [12] Src [doctor]: doctor → repo_root → _run
+  [12] Src [uninstall]: uninstall → hooks_dir
       PURITY: 100% pure
-  [13] Src [plugin_list]: plugin_list
+  [13] Src [make_backup_ref]: make_backup_ref → head_sha → _git
       PURITY: 100% pure
-  [14] Src [plugin_catalog]: plugin_catalog
+  [14] Src [list_log]: list_log → _git
       PURITY: 100% pure
-  [15] Src [plugin_install]: plugin_install
+  [15] Src [upstream_range]: upstream_range → _git
       PURITY: 100% pure
-  [16] Src [plugin_install_defaults]: plugin_install_defaults
+  [16] Src [create_fixup]: create_fixup → _git
       PURITY: 100% pure
-  [17] Src [plugin_install_category]: plugin_install_category
+  [17] Src [has_staged_changes]: has_staged_changes → _git
       PURITY: 100% pure
-  [18] Src [plugin_remove]: plugin_remove
+  [18] Src [autosquash]: autosquash → _git
       PURITY: 100% pure
-  [19] Src [hook_pre_commit]: hook_pre_commit → run_trigger → collect → repo_root → ...(1 more)
+  [19] Src [policy]: policy
       PURITY: 100% pure
-  [20] Src [hook_commit_msg]: hook_commit_msg → collect → repo_root → _run
+  [20] Src [hook]: hook
       PURITY: 100% pure
-  [21] Src [hook_post_commit]: hook_post_commit → run_trigger → collect → repo_root → ...(1 more)
+  [21] Src [fail_on_policy]: fail_on_policy
       PURITY: 100% pure
-  [22] Src [hook_pre_push]: hook_pre_push → run_trigger → collect → repo_root → ...(1 more)
+  [22] Src [load]: load → _deep_merge
       PURITY: 100% pure
-  [23] Src [policy_check]: policy_check → collect → repo_root → _run
+  [23] Src [write_default]: write_default
       PURITY: 100% pure
-  [24] Src [policy_init]: policy_init → repo_root → _run
+  [24] Src [save_findings]: save_findings
       PURITY: 100% pure
-  [25] Src [policy_list]: policy_list → repo_root → _run
+  [25] Src [load_findings]: load_findings
       PURITY: 100% pure
-  [26] Src [fixup]: fixup → repo_root → _run
+  [26] Src [_root]: _root
       PURITY: 100% pure
-  [27] Src [history_log]: history_log → repo_root → _run
+  [27] Src [init]: init → repo_root → _run
       PURITY: 100% pure
-  [28] Src [history_clean]: history_clean → repo_root → _run
+  [28] Src [uninit]: uninit → repo_root → _run
       PURITY: 100% pure
-  [29] Src [install_defaults]: install_defaults → install_from_catalog → _pip_install
+  [29] Src [status]: status → collect → repo_root → _run
       PURITY: 100% pure
-  [30] Src [install_category]: install_category → install_from_catalog → _pip_install
+  [30] Src [shell]: shell
       PURITY: 100% pure
-  [31] Src [uninstall]: uninstall → remove_plugin → load_plugins → ensure_user_dirs
+  [31] Src [doctor]: doctor → repo_root → _run
       PURITY: 100% pure
-  [32] Src [show_table]: show_table → load_plugins → ensure_user_dirs
+  [32] Src [plugin_list]: plugin_list
       PURITY: 100% pure
-  [33] Src [show_catalog]: show_catalog
+  [33] Src [plugin_catalog]: plugin_catalog
       PURITY: 100% pure
-  [34] Src [_entry]: _entry
+  [34] Src [plugin_install]: plugin_install
       PURITY: 100% pure
-  [35] Src [list_categories]: list_categories
+  [35] Src [plugin_install_defaults]: plugin_install_defaults
       PURITY: 100% pure
-  [36] Src [find]: find
+  [36] Src [plugin_install_category]: plugin_install_category
       PURITY: 100% pure
-  [37] Src [confirm]: confirm → is_tty
+  [37] Src [plugin_remove]: plugin_remove
       PURITY: 100% pure
-  [38] Src [choose]: choose → is_tty
+  [38] Src [hook_pre_commit]: hook_pre_commit → run_trigger → collect → repo_root → ...(1 more)
       PURITY: 100% pure
-  [39] Src [diff_file]: diff_file
+  [39] Src [hook_commit_msg]: hook_commit_msg → collect → repo_root → _run
       PURITY: 100% pure
-  [40] Src [paths_arg]: paths_arg
+  [40] Src [hook_post_commit]: hook_post_commit → run_trigger → collect → repo_root → ...(1 more)
       PURITY: 100% pure
-  [41] Src [install]: install → hooks_dir
+  [41] Src [hook_pre_push]: hook_pre_push → run_trigger → collect → repo_root → ...(1 more)
       PURITY: 100% pure
-  [42] Src [uninstall]: uninstall → hooks_dir
+  [42] Src [policy_check]: policy_check → collect → repo_root → _run
       PURITY: 100% pure
-  [43] Src [make_backup_ref]: make_backup_ref → head_sha → _git
+  [43] Src [policy_init]: policy_init → repo_root → _run
       PURITY: 100% pure
-  [44] Src [list_log]: list_log → _git
+  [44] Src [policy_list]: policy_list → repo_root → _run
       PURITY: 100% pure
-  [45] Src [upstream_range]: upstream_range → _git
+  [45] Src [policy_fix]: policy_fix → repo_root → _run
       PURITY: 100% pure
-  [46] Src [create_fixup]: create_fixup → _git
+  [46] Src [fixup]: fixup → repo_root → _run
       PURITY: 100% pure
-  [47] Src [has_staged_changes]: has_staged_changes → _git
+  [47] Src [history_log]: history_log → repo_root → _run
       PURITY: 100% pure
-  [48] Src [autosquash]: autosquash → _git
+  [48] Src [history_clean]: history_clean → repo_root → _run
       PURITY: 100% pure
-  [49] Src [_check_conventional_commits]: _check_conventional_commits
+  [49] Src [install_defaults]: install_defaults → install_from_catalog → _pip_install
       PURITY: 100% pure
-  [50] Src [_check_no_wip]: _check_no_wip
+  [50] Src [install_category]: install_category → install_from_catalog → _pip_install
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.9    ←in:0  →out:0
-  │ cli                        421L  0C   22m  CC=12     ←0
-  │ !! shell                      205L  0C    6m  CC=23     ←0
+  src/                            CC̄=4.0    ←in:0  →out:0
+  │ cli                        447L  0C   23m  CC=12     ←0
+  │ !! shell                      216L  0C    6m  CC=23     ←0
   │ catalog                    173L  1C    4m  CC=3      ←0
-  │ policies                   165L  1C    6m  CC=10     ←0
+  │ policies                   171L  1C    6m  CC=10     ←0
+  │ plugins                    143L  0C    8m  CC=10     ←0
   │ history                    140L  1C    8m  CC=4      ←0
-  │ runner                     122L  2C    4m  CC=8      ←4
-  │ plugins                    120L  0C    7m  CC=9      ←0
+  │ runner                     123L  2C    4m  CC=8      ←4
   │ repo_config                101L  1C    6m  CC=4      ←0
   │ config                      74L  1C    8m  CC=4      ←4
+  │ fixups                      68L  0C    2m  CC=6      ←0
   │ context                     66L  1C    5m  CC=5      ←5
   │ interactive                 58L  0C    3m  CC=8      ←0
   │ hooks                       48L  0C    3m  CC=5      ←0
+  │ store                       36L  0C    2m  CC=3      ←0
   │ __main__                     4L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │
@@ -606,11 +684,18 @@ LAYERS:
   │ docker-compose.yml          11L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=0.0    ←in:0  →out:0
+  │ !! planfile.yaml              526L  0C    0m  CC=0.0    ←0
   │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
   │ koru.yaml                  133L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                94L  0C    0m  CC=0.0    ←0
   │ pyproject.toml              62L  0C    0m  CC=0.0    ←0
+  │ pyqual.yaml                 61L  0C    0m  CC=0.0    ←0
   │ project.sh                  59L  0C    0m  CC=0.0    ←0
   │ tree.sh                      1L  0C    0m  CC=0.0    ←0
+  │
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-cli-tests.testql.toon.yaml    20L  0C    0m  CC=0.0    ←0
+  │ generated-from-pytests.testql.toon.yaml    13L  0C    0m  CC=0.0    ←0
   │
 
 COUPLING:
@@ -629,31 +714,31 @@ EXTERNAL:
 ### Duplication (`project/duplication.toon.yaml`)
 
 ```toon markpact:analysis path=project/duplication.toon.yaml
-# redup/duplication | 3 groups | 16f 1923L | 2026-05-27
+# redup/duplication | 3 groups | 18f 2094L | 2026-05-27
 
 SUMMARY:
-  files_scanned: 16
-  total_lines:   1923
+  files_scanned: 18
+  total_lines:   2094
   dup_groups:    3
   dup_fragments: 8
   saved_lines:   17
-  scan_ms:       1927
+  scan_ms:       2207
 
 HOTSPOTS[1] (files with most duplication):
-  src/giton/cli.py  dup=28L  groups=3  frags=8  (1.5%)
+  src/giton/cli.py  dup=28L  groups=3  frags=8  (1.3%)
 
 DUPLICATES[3] (ranked by impact):
   [c83a3afee3e88a5c]   STRU  shell  L=3 N=4 saved=9 sim=1.00
-      src/giton/cli.py:103-105  (shell)
-      src/giton/cli.py:122-124  (plugin_list)
-      src/giton/cli.py:128-130  (plugin_catalog)
-      src/giton/cli.py:140-142  (plugin_install_defaults)
+      src/giton/cli.py:105-107  (shell)
+      src/giton/cli.py:124-126  (plugin_list)
+      src/giton/cli.py:130-132  (plugin_catalog)
+      src/giton/cli.py:142-144  (plugin_install_defaults)
   [53a68daa2f26aa3a]   STRU  hook_pre_commit  L=5 N=2 saved=5 sim=1.00
-      src/giton/cli.py:161-165  (hook_pre_commit)
-      src/giton/cli.py:219-223  (hook_pre_push)
+      src/giton/cli.py:163-167  (hook_pre_commit)
+      src/giton/cli.py:222-226  (hook_pre_push)
   [b67a4e80d3d0d106]   STRU  plugin_install  L=3 N=2 saved=3 sim=1.00
-      src/giton/cli.py:134-136  (plugin_install)
-      src/giton/cli.py:153-155  (plugin_remove)
+      src/giton/cli.py:136-138  (plugin_install)
+      src/giton/cli.py:155-157  (plugin_remove)
 
 REFACTOR[3] (ranked by priority):
   [1] ○ extract_function   → src/giton/utils/shell.py
@@ -683,27 +768,36 @@ METRICS-TARGET:
 ### Evolution / Churn (`project/evolution.toon.yaml`)
 
 ```toon markpact:analysis path=project/evolution.toon.yaml
-# code2llm/evolution | 82 func | 12f | 2026-05-27
+# code2llm/evolution | 88 func | 14f | 2026-05-27
 # generated in 0.00s
 
-NEXT[2] (ranked by impact):
+NEXT[4] (ranked by impact):
   [1] !  SPLIT-FUNC      dispatch  CC=23  fan=16
       WHY: CC=23 exceeds 15
       EFFORT: ~1h  IMPACT: 368
 
-  [2] !! SPLIT           goal.yaml
+  [2] !  SPLIT-FUNC      _cmd_policy  CC=17  fan=11
+      WHY: CC=17 exceeds 15
+      EFFORT: ~1h  IMPACT: 187
+
+  [3] !! SPLIT           planfile.yaml
+      WHY: 526L, 0 classes, max CC=0
+      EFFORT: ~4h  IMPACT: 0
+
+  [4] !! SPLIT           goal.yaml
       WHY: 512L, 0 classes, max CC=0
       EFFORT: ~4h  IMPACT: 0
 
 
-RISKS[1]:
+RISKS[2]:
+  ⚠ Splitting planfile.yaml may break 0 import paths
   ⚠ Splitting goal.yaml may break 0 import paths
 
 METRICS-TARGET:
-  CC̄:          3.9 → ≤2.7
+  CC̄:          4.0 → ≤2.8
   max-CC:      23 → ≤11
-  god-modules: 1 → 0
-  high-CC(≥15): 1 → ≤0
+  god-modules: 2 → 0
+  high-CC(≥15): 2 → ≤1
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):
@@ -731,7 +825,154 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  (first run — no previous data)
+  prev CC̄=3.9 → now CC̄=4.0
+```
+
+### Validation (`project/validation.toon.yaml`)
+
+```toon markpact:analysis path=project/validation.toon.yaml
+# vallm batch | 75f | 0✓ 45⚠ 0✗ | 2026-05-27
+
+SUMMARY:
+  scanned: 75  passed: 0 (0.0%)  warnings: 45  errors: 0  unsupported: 0
+
+WARNINGS[45]{path,score}:
+  src/giton/shell.py,0.74
+    issues[2]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+      complexity.lizard_cc,warning,dispatch: CC=23 exceeds limit 15,132
+  .koru/onboarding.json,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse JSON: Download error: Language 'JSON' not available for download. Available groups: [""all""]",
+  .koru/project.json,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse JSON: Download error: Language 'JSON' not available for download. Available groups: [""all""]",
+  .planfile/.koru/autonomous-state.json,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse JSON: Download error: Language 'JSON' not available for download. Available groups: [""all""]",
+  .planfile/.koru/autonomy-telemetry.json,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse JSON: Download error: Language 'JSON' not available for download. Available groups: [""all""]",
+  .planfile/.koru/serve-endpoint.json,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse JSON: Download error: Language 'JSON' not available for download. Available groups: [""all""]",
+  .planfile/config.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  .planfile/sprints/current.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  .pyqual/runtime_errors.json,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse JSON: Download error: Language 'JSON' not available for download. Available groups: [""all""]",
+  examples/advanced/main.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  examples/basic/main.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  examples/plugins/test_plugin_lifecycle.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  examples/testing/sample_project/pyproject.toml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse TOML: Download error: Language 'TOML' not available for download. Available groups: [""all""]",
+  examples/testing/sample_project/src/example.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  examples/testing/sample_project/tests/test_example.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  examples/testing/test_giton_integration.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  goal.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  koru.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  planfile.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  prefact.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  project.sh,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse BASH: Download error: Language 'BASH' not available for download. Available groups: [""all""]",
+  project/calls.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  project/logic.pl,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PERL: Download error: Language 'PERL' not available for download. Available groups: [""all""]",
+  project/planfile-tickets.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  pyproject.toml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse TOML: Download error: Language 'TOML' not available for download. Available groups: [""all""]",
+  pyqual.yaml,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse YAML: Download error: Language 'YAML' not available for download. Available groups: [""all""]",
+  src/giton/__init__.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/__main__.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/catalog.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/cli.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/config.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/context.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/history.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/hooks.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/interactive.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/plugins.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/policies.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/repo_config.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  src/giton/runner.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tests/__init__.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tests/test_basic.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tests/test_history.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tests/test_plugin_runner.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tests/test_policies.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tree.sh,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse BASH: Download error: Language 'BASH' not available for download. Available groups: [""all""]",
 ```
 
 ## Intent

@@ -1,15 +1,16 @@
-# code2llm | 30f 2930L | python:17,txt:3,yaml:2,toml:2,shell:2,yml:1 | 2026-05-27
+# code2llm | 44f 4810L | python:19,yaml:7,md:7,txt:3,shell:2,toml:2,yml:1 | 2026-05-27
 # generated in 0.01s
-# CC̅=3.8 | critical:1/92 | dups:0 | cycles:1
+# CC̅=3.9 | critical:2/98 | dups:0 | cycles:1
 
-HEALTH[1]:
+HEALTH[2]:
+  🟡 CC    _cmd_policy CC=17 (limit:15)
   🟡 CC    dispatch CC=23 (limit:15)
 
 REFACTOR[2]:
-  1. split 1 high-CC methods  (CC>15)
+  1. split 2 high-CC methods  (CC>15)
   2. break 1 circular dependencies
 
-PIPELINES[60]:
+PIPELINES[64]:
   [1] Src [main]: main → demonstrate_catalog
       PURITY: 100% pure
   [2] Src [main]: main → test_basic_giton_usage → collect → repo_root → ...(1 more)
@@ -22,116 +23,122 @@ PIPELINES[60]:
       PURITY: 100% pure
   [6] Src [from_dict]: from_dict
       PURITY: 100% pure
-  [7] Src [_root]: _root
+  [7] Src [save_findings]: save_findings
       PURITY: 100% pure
-  [8] Src [init]: init → repo_root → _run
+  [8] Src [load_findings]: load_findings
       PURITY: 100% pure
-  [9] Src [uninit]: uninit → repo_root → _run
+  [9] Src [_root]: _root
       PURITY: 100% pure
-  [10] Src [status]: status → collect → repo_root → _run
+  [10] Src [init]: init → repo_root → _run
       PURITY: 100% pure
-  [11] Src [shell]: shell
+  [11] Src [uninit]: uninit → repo_root → _run
       PURITY: 100% pure
-  [12] Src [doctor]: doctor → repo_root → _run
+  [12] Src [status]: status → collect → repo_root → _run
       PURITY: 100% pure
-  [13] Src [plugin_list]: plugin_list
+  [13] Src [shell]: shell
       PURITY: 100% pure
-  [14] Src [plugin_catalog]: plugin_catalog
+  [14] Src [doctor]: doctor → repo_root → _run
       PURITY: 100% pure
-  [15] Src [plugin_install]: plugin_install
+  [15] Src [plugin_list]: plugin_list
       PURITY: 100% pure
-  [16] Src [plugin_install_defaults]: plugin_install_defaults
+  [16] Src [plugin_catalog]: plugin_catalog
       PURITY: 100% pure
-  [17] Src [plugin_install_category]: plugin_install_category
+  [17] Src [plugin_install]: plugin_install
       PURITY: 100% pure
-  [18] Src [plugin_remove]: plugin_remove
+  [18] Src [plugin_install_defaults]: plugin_install_defaults
       PURITY: 100% pure
-  [19] Src [hook_pre_commit]: hook_pre_commit → run_trigger → collect → repo_root → ...(1 more)
+  [19] Src [plugin_install_category]: plugin_install_category
       PURITY: 100% pure
-  [20] Src [hook_commit_msg]: hook_commit_msg → collect → repo_root → _run
+  [20] Src [plugin_remove]: plugin_remove
       PURITY: 100% pure
-  [21] Src [hook_post_commit]: hook_post_commit → run_trigger → collect → repo_root → ...(1 more)
+  [21] Src [hook_pre_commit]: hook_pre_commit → run_trigger → collect → repo_root → ...(1 more)
       PURITY: 100% pure
-  [22] Src [hook_pre_push]: hook_pre_push → run_trigger → collect → repo_root → ...(1 more)
+  [22] Src [hook_commit_msg]: hook_commit_msg → collect → repo_root → _run
       PURITY: 100% pure
-  [23] Src [policy_check]: policy_check → collect → repo_root → _run
+  [23] Src [hook_post_commit]: hook_post_commit → run_trigger → collect → repo_root → ...(1 more)
       PURITY: 100% pure
-  [24] Src [policy_init]: policy_init → repo_root → _run
+  [24] Src [hook_pre_push]: hook_pre_push → run_trigger → collect → repo_root → ...(1 more)
       PURITY: 100% pure
-  [25] Src [policy_list]: policy_list → repo_root → _run
+  [25] Src [policy_check]: policy_check → collect → repo_root → _run
       PURITY: 100% pure
-  [26] Src [fixup]: fixup → repo_root → _run
+  [26] Src [policy_init]: policy_init → repo_root → _run
       PURITY: 100% pure
-  [27] Src [history_log]: history_log → repo_root → _run
+  [27] Src [policy_list]: policy_list → repo_root → _run
       PURITY: 100% pure
-  [28] Src [history_clean]: history_clean → repo_root → _run
+  [28] Src [policy_fix]: policy_fix → repo_root → _run
       PURITY: 100% pure
-  [29] Src [install_defaults]: install_defaults → install_from_catalog → _pip_install
+  [29] Src [fixup]: fixup → repo_root → _run
       PURITY: 100% pure
-  [30] Src [install_category]: install_category → install_from_catalog → _pip_install
+  [30] Src [history_log]: history_log → repo_root → _run
       PURITY: 100% pure
-  [31] Src [uninstall]: uninstall → remove_plugin → load_plugins → ensure_user_dirs
+  [31] Src [history_clean]: history_clean → repo_root → _run
       PURITY: 100% pure
-  [32] Src [show_table]: show_table → load_plugins → ensure_user_dirs
+  [32] Src [install_defaults]: install_defaults → install_from_catalog → _pip_install
       PURITY: 100% pure
-  [33] Src [show_catalog]: show_catalog
+  [33] Src [install_category]: install_category → install_from_catalog → _pip_install
       PURITY: 100% pure
-  [34] Src [_entry]: _entry
+  [34] Src [uninstall]: uninstall → remove_plugin → load_plugins → ensure_user_dirs
       PURITY: 100% pure
-  [35] Src [list_categories]: list_categories
+  [35] Src [show_table]: show_table → load_plugins → ensure_user_dirs
       PURITY: 100% pure
-  [36] Src [find]: find
+  [36] Src [show_catalog]: show_catalog
       PURITY: 100% pure
-  [37] Src [confirm]: confirm → is_tty
+  [37] Src [_entry]: _entry
       PURITY: 100% pure
-  [38] Src [choose]: choose → is_tty
+  [38] Src [list_categories]: list_categories
       PURITY: 100% pure
-  [39] Src [diff_file]: diff_file
+  [39] Src [find]: find
       PURITY: 100% pure
-  [40] Src [paths_arg]: paths_arg
+  [40] Src [confirm]: confirm → is_tty
       PURITY: 100% pure
-  [41] Src [install]: install → hooks_dir
+  [41] Src [choose]: choose → is_tty
       PURITY: 100% pure
-  [42] Src [uninstall]: uninstall → hooks_dir
+  [42] Src [diff_file]: diff_file
       PURITY: 100% pure
-  [43] Src [make_backup_ref]: make_backup_ref → head_sha → _git
+  [43] Src [paths_arg]: paths_arg
       PURITY: 100% pure
-  [44] Src [list_log]: list_log → _git
+  [44] Src [apply_all]: apply_all → apply_fix
       PURITY: 100% pure
-  [45] Src [upstream_range]: upstream_range → _git
+  [45] Src [install]: install → hooks_dir
       PURITY: 100% pure
-  [46] Src [create_fixup]: create_fixup → _git
+  [46] Src [uninstall]: uninstall → hooks_dir
       PURITY: 100% pure
-  [47] Src [has_staged_changes]: has_staged_changes → _git
+  [47] Src [make_backup_ref]: make_backup_ref → head_sha → _git
       PURITY: 100% pure
-  [48] Src [autosquash]: autosquash → _git
+  [48] Src [list_log]: list_log → _git
       PURITY: 100% pure
-  [49] Src [_check_conventional_commits]: _check_conventional_commits
+  [49] Src [upstream_range]: upstream_range → _git
       PURITY: 100% pure
-  [50] Src [_check_no_wip]: _check_no_wip
+  [50] Src [create_fixup]: create_fixup → _git
       PURITY: 100% pure
 
 LAYERS:
-  src/                            CC̄=3.9    ←in:0  →out:0
-  │ cli                        421L  0C   22m  CC=12     ←0
-  │ !! shell                      205L  0C    6m  CC=23     ←0
+  src/                            CC̄=4.0    ←in:0  →out:0
+  │ cli                        447L  0C   23m  CC=12     ←0
+  │ !! shell                      216L  0C    6m  CC=23     ←0
   │ catalog                    173L  1C    4m  CC=3      ←0
-  │ policies                   165L  1C    6m  CC=10     ←0
+  │ policies                   171L  1C    6m  CC=10     ←0
+  │ plugins                    143L  0C    8m  CC=10     ←0
   │ history                    140L  1C    8m  CC=4      ←0
-  │ runner                     122L  2C    4m  CC=8      ←4
-  │ plugins                    120L  0C    7m  CC=9      ←0
+  │ runner                     123L  2C    4m  CC=8      ←4
   │ repo_config                101L  1C    6m  CC=4      ←0
   │ config                      74L  1C    8m  CC=4      ←4
+  │ fixups                      68L  0C    2m  CC=6      ←0
   │ context                     66L  1C    5m  CC=5      ←5
   │ interactive                 58L  0C    3m  CC=8      ←0
   │ hooks                       48L  0C    3m  CC=5      ←0
+  │ store                       36L  0C    2m  CC=3      ←0
   │ __main__                     4L  0C    0m  CC=0.0    ←0
   │ __init__                     3L  0C    0m  CC=0.0    ←0
   │
   examples/                       CC̄=3.3    ←in:0  →out:0
+  │ README.md                  166L  0C    0m  CC=0.0    ←0
   │ main                       156L  0C    5m  CC=9      ←0
   │ main                        67L  0C    2m  CC=8      ←0
   │ log.txt                     64L  0C    0m  CC=0.0    ←0
+  │ README.md                   55L  0C    0m  CC=0.0    ←0
+  │ README.md                   51L  0C    0m  CC=0.0    ←0
+  │ README.md                   46L  0C    0m  CC=0.0    ←0
   │ Dockerfile                  37L  0C    0m  CC=0.0    ←0
   │ Dockerfile                  33L  0C    0m  CC=0.0    ←0
   │ Dockerfile                  33L  0C    0m  CC=0.0    ←0
@@ -142,11 +149,21 @@ LAYERS:
   │ docker-compose.yml          11L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=0.0    ←in:0  →out:0
+  │ !! README.md                  520L  0C    0m  CC=0.0    ←0
   │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
+  │ planfile.yaml              474L  0C    0m  CC=0.0    ←0
   │ koru.yaml                  133L  0C    0m  CC=0.0    ←0
+  │ CHANGELOG.md               124L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                94L  0C    0m  CC=0.0    ←0
+  │ TODO.md                     85L  0C    0m  CC=0.0    ←0
   │ pyproject.toml              62L  0C    0m  CC=0.0    ←0
+  │ pyqual.yaml                 61L  0C    0m  CC=0.0    ←0
   │ project.sh                  59L  0C    0m  CC=0.0    ←0
   │ tree.sh                      1L  0C    0m  CC=0.0    ←0
+  │
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-cli-tests.testql.toon.yaml    20L  0C    0m  CC=0.0    ←0
+  │ generated-from-pytests.testql.toon.yaml    13L  0C    0m  CC=0.0    ←0
   │
 
 COUPLING:

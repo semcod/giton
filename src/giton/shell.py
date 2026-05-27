@@ -12,7 +12,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 
-from giton import catalog, plugins as plug, policies, repo_config
+from giton import catalog, fixups, plugins as plug, policies, repo_config, store
 from giton.context import collect, repo_root
 from giton.hooks import install as install_hooks
 from giton.runner import run_trigger
@@ -28,7 +28,7 @@ HELP = """\
   ls                       list registered plugins
   catalog                  show available plugins + categories
   install <name>           install a plugin from the catalog
-  install-defaults         install the 3 default plugins (pyqual, vallm, pretest)
+  install-defaults         install the 3 default plugins (pyqual, vallm, testless)
   install-category <cat>   install all plugins of a category (e.g. lang:python)
   remove <name>            unregister a plugin
   enable <name> / disable <name>
@@ -42,6 +42,7 @@ HELP = """\
 [bold]Policy[/bold]
   policy list              show active built-in policies
   policy check [trigger]   evaluate built-in policies (default: pre-commit)
+  policy fix               apply auto-fixes from the last check
   policy init              write default .giton/config.yaml
 
 [bold]Misc[/bold]
@@ -104,11 +105,21 @@ def _cmd_policy(args: list[str]) -> None:
         for f in findings:
             color = {"error": "red", "warn": "yellow", "info": "cyan"}.get(f.severity, "white")
             console.print(f"  [{color}]{f.severity}[/{color}] {f.policy}: {f.message}")
+    elif sub == "fix":
+        findings = store.load_findings(ctx.root)
+        if not findings:
+            console.print("[dim]no saved findings — run `policy check` first[/dim]")
+            return
+        applied, total = fixups.apply_all(findings, ctx.root, yes=False)
+        if applied == total and total:
+            console.print(f"[green]✓ applied {applied}/{total} fix(es)[/green]")
+        elif total:
+            console.print(f"[yellow]applied {applied}/{total} fix(es)[/yellow]")
     elif sub == "init":
         path = repo_config.write_default(ctx.root)
         console.print(f"[green]✓ wrote {path}[/green]")
     else:
-        console.print("[yellow]usage: policy <list|check [trigger]|init>[/yellow]")
+        console.print("[yellow]usage: policy <list|check [trigger]|fix|init>[/yellow]")
 
 
 def _cmd_init() -> None:

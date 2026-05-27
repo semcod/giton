@@ -10,7 +10,7 @@ from rich.console import Console
 
 from giton.config import PluginRecord, load_plugins
 from giton.context import GitContext, collect
-from giton import policies, repo_config
+from giton import policies, repo_config, store
 
 console = Console()
 
@@ -71,6 +71,7 @@ def run_trigger(trigger: str, cwd: Path | None = None) -> TriggerOutcome:
 
     cfg = repo_config.load(ctx.root)
     findings = policies.evaluate(ctx, cfg, trigger)
+    store.save_findings(findings, ctx.root)
     _print_findings(findings)
 
     plugins = [p for p in load_plugins() if p.enabled and trigger in p.triggers]

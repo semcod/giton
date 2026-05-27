@@ -69,7 +69,7 @@ def test_cli_plugin_catalog_runs():
     assert result.exit_code == 0
     assert "pyqual" in result.stdout
     assert "vallm" in result.stdout
-    assert "pretest" in result.stdout
+    assert "testless" in result.stdout
 
 
 def test_hook_install_in_temp_repo(tmp_path, monkeypatch):

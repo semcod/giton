@@ -33,7 +33,7 @@ PASSED  test_default_catalog_pyqual_command_is_valid
 
 ## Verifying the real default catalog
 
-The catalog ships three default plugins (`pyqual`, `vallm`, `pretest`)
+The catalog ships three default plugins (`pyqual`, `vallm`, `testless`)
 that point at sibling repos under `semcod/`. They are real Python
 packages with real CLIs, so you can install one and run it for real:
 

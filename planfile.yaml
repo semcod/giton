@@ -394,133 +394,81 @@ sprints:
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-f8e33603
-    name: Fix string-concat issues
-    description: Resolve 1 string-concat issues in examples/testing/sample_project/src/example.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - examples/testing/sample_project/src/example.py
-    rule_id: string-concat
-    count: 1
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-5241a23f
-    name: Fix smart-return-type issues
-    description: Resolve 2 smart-return-type issues in examples/basic/main.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - examples/basic/main.py
-    rule_id: smart-return-type
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-678976ed
+  - id: ticket-003e7b36
     name: Fix unused-imports issues
-    description: Resolve 4 unused-imports issues in examples/basic/main.py
+    description: Resolve 2 unused-imports issues in src/giton/fixups.py
     task_type: prefactor
     priority: medium
-    estimate: 2d
+    estimate: 1d
     files:
-    - examples/basic/main.py
+    - src/giton/fixups.py
     rule_id: unused-imports
-    count: 4
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-f1340096
-    name: Fix ai-boilerplate issues
-    description: Resolve 2 ai-boilerplate issues in examples/basic/main.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - examples/basic/main.py
-    rule_id: ai-boilerplate
     count: 2
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-cf388d88
-    name: Fix smart-return-type issues
-    description: Resolve 5 smart-return-type issues in examples/advanced/main.py
+  - id: ticket-e71d1acd
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/store.py
     task_type: prefactor
     priority: medium
-    estimate: 2d
+    estimate: 1d
     files:
-    - examples/advanced/main.py
-    rule_id: smart-return-type
-    count: 5
+    - src/giton/store.py
+    rule_id: unused-imports
+    count: 2
     model_hints:
       planning: balanced
       implementation: balanced
-  - id: ticket-ef62ed06
+  - id: ticket-4cf6ae2d
+    name: Fix smart-return-type issues
+    description: Resolve 6 smart-return-type issues in tests/test_fixups.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_fixups.py
+    rule_id: smart-return-type
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-261d252e
     name: Fix unused-imports issues
-    description: Resolve 12 unused-imports issues in examples/advanced/main.py
+    description: Resolve 2 unused-imports issues in tests/test_fixups.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_fixups.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-052daebf
+    name: Fix smart-return-type issues
+    description: Resolve 9 smart-return-type issues in tests/test_plugin_runner.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_plugin_runner.py
+    rule_id: smart-return-type
+    count: 9
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-2eaa4f5e
+    name: Fix unused-imports issues
+    description: Resolve 14 unused-imports issues in tests/test_plugin_runner.py
     task_type: prefactor
     priority: high
     estimate: 3d
     files:
-    - examples/advanced/main.py
+    - tests/test_plugin_runner.py
     rule_id: unused-imports
-    count: 12
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-c9e99715
-    name: Fix ai-boilerplate issues
-    description: Resolve 2 ai-boilerplate issues in examples/advanced/main.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - examples/advanced/main.py
-    rule_id: ai-boilerplate
-    count: 2
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-25895170
-    name: Fix smart-return-type issues
-    description: Resolve 7 smart-return-type issues in examples/testing/test_giton_integration.py
-    task_type: prefactor
-    priority: high
-    estimate: 2d
-    files:
-    - examples/testing/test_giton_integration.py
-    rule_id: smart-return-type
-    count: 7
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-d5864acf
-    name: Fix llm-hallucinations issues
-    description: Resolve 1 llm-hallucinations issues in examples/testing/test_giton_integration.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - examples/testing/test_giton_integration.py
-    rule_id: llm-hallucinations
-    count: 1
-    model_hints:
-      planning: balanced
-      implementation: balanced
-  - id: ticket-22c7a20b
-    name: Fix ai-boilerplate issues
-    description: Resolve 1 ai-boilerplate issues in examples/testing/test_giton_integration.py
-    task_type: prefactor
-    priority: medium
-    estimate: 1d
-    files:
-    - examples/testing/test_giton_integration.py
-    rule_id: ai-boilerplate
-    count: 1
+    count: 14
     model_hints:
       planning: balanced
       implementation: balanced

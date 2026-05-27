@@ -19,7 +19,7 @@ class CatalogEntry:
 
 
 # --- Defaults: three plugins activated by `giton init` ---------------------
-DEFAULT_PLUGIN_NAMES: tuple[str, ...] = ("pyqual", "vallm", "pretest")
+DEFAULT_PLUGIN_NAMES: tuple[str, ...] = ("pyqual", "vallm", "testless")
 
 
 def _entry(
@@ -54,7 +54,7 @@ CATALOG: dict[str, CatalogEntry] = {
         "Python code quality checks (lint, types, complexity).",
         category="lang:python",
         triggers=["pre-commit"],
-        command="pyqual gates --workdir {root}",
+        command="pyqual run --workdir {root}",
         pypi="pyqual",
         local="../pyqual",
     ),
@@ -67,13 +67,13 @@ CATALOG: dict[str, CatalogEntry] = {
         pypi="vallm",
         local="../vallm",
     ),
-    "pretest": _entry(
-        "pretest",
+    "testless": _entry(
+        "testless",
         "Run / generate tests before push.",
         category="task:test",
         triggers=["pre-push"],
-        command="pretest scan",
-        pypi="pretest",
+        command="testless scan",
+        pypi="testless",
         local="../pretest",
     ),
 
@@ -100,12 +100,21 @@ CATALOG: dict[str, CatalogEntry] = {
     # --- Quick-extend: task plugins -------------------------------------
     "prefact": _entry(
         "prefact",
-        "AI refactoring suggestions as fixup! commits.",
-        category="task:refactor",
-        triggers=["post-commit"],
-        command="prefact suggest --diff {diff_file}",
+        "Python code quality tool with LLM-aware rules and plugin system.",
+        category="task:autofix",
+        triggers=["pre-commit"],
+        command="prefact scan {paths}",
         pypi="prefact",
         local="../prefact",
+    ),
+    "tagi": _entry(
+        "tagi",
+        "Orchestrate commit grouping and shipment automation.",
+        category="task:ship",
+        triggers=["post-commit"],
+        command="tagi scan {root} --grouped",
+        pypi="tagi",
+        local="../tagi",
     ),
     "redsl": _entry(
         "redsl",

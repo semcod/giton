@@ -1,21 +1,20 @@
 # System Architecture Analysis
-<!-- generated in 0.00s -->
 
 ## Overview
 
 - **Project**: /home/tom/github/semcod/gix
 - **Primary Language**: python
-- **Languages**: python: 17, txt: 3, yaml: 2, toml: 2, shell: 2
+- **Languages**: python: 19, yaml: 7, md: 7, txt: 3, shell: 2
 - **Analysis Mode**: static
-- **Total Functions**: 92
+- **Total Functions**: 98
 - **Total Classes**: 8
-- **Modules**: 30
-- **Entry Points**: 63
+- **Modules**: 44
+- **Entry Points**: 67
 
 ## Architecture by Module
 
 ### src.giton.cli
-- **Functions**: 22
+- **Functions**: 23
 - **File**: `cli.py`
 
 ### src.giton.config
@@ -23,14 +22,14 @@
 - **Classes**: 1
 - **File**: `config.py`
 
+### src.giton.plugins
+- **Functions**: 8
+- **File**: `plugins.py`
+
 ### src.giton.history
 - **Functions**: 8
 - **Classes**: 1
 - **File**: `history.py`
-
-### src.giton.plugins
-- **Functions**: 7
-- **File**: `plugins.py`
 
 ### src.giton.policies
 - **Functions**: 6
@@ -81,6 +80,14 @@
 - **Functions**: 2
 - **File**: `main.py`
 
+### src.giton.store
+- **Functions**: 2
+- **File**: `store.py`
+
+### src.giton.fixups
+- **Functions**: 2
+- **File**: `fixups.py`
+
 ## Key Entry Points
 
 Main execution flows into the system:
@@ -109,12 +116,12 @@ On policy errors we exit no
 ### src.giton.policies._check_conventional_commits
 - **Calls**: ctx.last_commit_subject.strip, int, bool, opts.get, opts.get, len, findings.append, None.join
 
-### src.giton.plugins.show_catalog
-- **Calls**: Table, table.add_column, table.add_column, table.add_column, table.add_column, set, catalog.CATALOG.items, console.print
-
 ### src.giton.cli.policy_check
 > Run only the built-in policy engine for the given trigger.
-- **Calls**: policy_app.command, typer.Option, src.giton.context.collect, repo_config.load, policies.evaluate, console.print, typer.Exit, console.print
+- **Calls**: policy_app.command, typer.Option, src.giton.context.collect, repo_config.load, policies.evaluate, store.save_findings, console.print, typer.Exit
+
+### src.giton.plugins.show_catalog
+- **Calls**: Table, table.add_column, table.add_column, table.add_column, table.add_column, set, catalog.CATALOG.items, console.print
 
 ### src.giton.plugins.show_table
 - **Calls**: src.giton.config.load_plugins, Table, table.add_column, table.add_column, table.add_column, table.add_column, table.add_column, table.add_row
@@ -129,6 +136,10 @@ On policy errors we exit no
 
 ### src.giton.hooks.install
 - **Calls**: src.giton.hooks.hooks_dir, hd.exists, FileNotFoundError, target.exists, target.write_text, target.chmod, written.append, target.with_suffix
+
+### src.giton.cli.policy_fix
+> Apply auto-fixes from the most recent policy check.
+- **Calls**: policy_app.command, typer.Option, src.giton.context.repo_root, store.load_findings, fixups.apply_all, console.print, typer.Exit, console.print
 
 ### src.giton.interactive.choose
 > Pick one of `options` by index. Returns `default` when not on TTY.
@@ -187,6 +198,9 @@ With `interactive=False` (default) we set `GIT_SEQUENCE_EDITOR` to convert
 > Quick environment check.
 - **Calls**: app.command, console.print, src.giton.context.repo_root, console.print, plug.show_table, shutil.which
 
+### src.giton.policies._check_no_wip
+- **Calls**: ctx.last_commit_subject.strip, opts.get, re.search, None.strip, Finding, re.sub
+
 ### src.giton.repo_config.load
 - **Calls**: src.giton.repo_config._deep_merge, RepoConfig, path.exists, RepoConfig, yaml.safe_load, path.read_text
 
@@ -196,13 +210,6 @@ With `interactive=False` (default) we set `GIT_SEQUENCE_EDITOR` to convert
 
 ### src.giton.policies._check_max_file_size
 - **Calls**: int, findings.append, opts.get, p.stat, Finding
-
-### src.giton.history.make_backup_ref
-> Create `refs/giton/backup/<prefix>-<timestamp>` pointing at HEAD.
-- **Calls**: None.strftime, src.giton.history.head_sha, src.giton.history._git, _dt.datetime.now
-
-### src.giton.policies._check_no_wip
-- **Calls**: ctx.last_commit_subject.strip, opts.get, re.search, Finding
 
 ## Process Flows
 
@@ -236,18 +243,18 @@ hook_commit_msg [src.giton.cli]
 _check_conventional_commits [src.giton.policies]
 ```
 
-### Flow 5: show_catalog
-```
-show_catalog [src.giton.plugins]
-```
-
-### Flow 6: policy_check
+### Flow 5: policy_check
 ```
 policy_check [src.giton.cli]
   └─ →> collect
       └─> repo_root
           └─> _run
       └─> _run
+```
+
+### Flow 6: show_catalog
+```
+show_catalog [src.giton.plugins]
 ```
 
 ### Flow 7: show_table
@@ -330,21 +337,22 @@ Functions exposed as public API (no underscore prefix):
 
 - `src.giton.cli.history_clean` - 30 calls
 - `src.giton.cli.fixup` - 28 calls
+- `src.giton.cli.hook_commit_msg` - 25 calls
 - `src.giton.shell.dispatch` - 25 calls
-- `src.giton.cli.hook_commit_msg` - 24 calls
 - `examples.basic.main.test_basic_giton_usage` - 20 calls
 - `examples.advanced.main.demonstrate_plugin_management` - 19 calls
+- `src.giton.cli.policy_check` - 14 calls
 - `src.giton.plugins.show_catalog` - 14 calls
 - `examples.advanced.main.demonstrate_catalog` - 13 calls
-- `src.giton.cli.policy_check` - 13 calls
+- `src.giton.plugins.install_from_catalog` - 13 calls
 - `src.giton.plugins.show_table` - 13 calls
 - `src.giton.context.collect` - 13 calls
 - `examples.advanced.main.demonstrate_trigger_sequence` - 12 calls
 - `src.giton.cli.init` - 12 calls
 - `src.giton.cli.history_log` - 12 calls
-- `src.giton.plugins.install_from_catalog` - 12 calls
+- `src.giton.runner.run_trigger` - 12 calls
 - `src.giton.hooks.install` - 12 calls
-- `src.giton.runner.run_trigger` - 11 calls
+- `src.giton.cli.policy_fix` - 11 calls
 - `src.giton.interactive.choose` - 10 calls
 - `examples.advanced.main.demonstrate_hooks` - 9 calls
 - `examples.advanced.main.main` - 9 calls
@@ -362,12 +370,11 @@ Functions exposed as public API (no underscore prefix):
 - `src.giton.cli.doctor` - 6 calls
 - `src.giton.repo_config.load` - 6 calls
 - `src.giton.interactive.confirm` - 5 calls
+- `src.giton.fixups.apply_fix` - 5 calls
 - `src.giton.config.save_plugins` - 4 calls
 - `src.giton.config.remove_plugin` - 4 calls
+- `src.giton.store.load_findings` - 4 calls
 - `src.giton.history.make_backup_ref` - 4 calls
-- `src.giton.repo_config.write_default` - 4 calls
-- `src.giton.config.upsert_plugin` - 3 calls
-- `src.giton.cli.plugin_install_category` - 3 calls
 
 ## System Interactions
 
@@ -391,13 +398,13 @@ graph TD
     _check_conventional_ --> int
     _check_conventional_ --> bool
     _check_conventional_ --> get
-    show_catalog --> Table
-    show_catalog --> add_column
     policy_check --> command
     policy_check --> Option
     policy_check --> collect
     policy_check --> load
     policy_check --> evaluate
+    show_catalog --> Table
+    show_catalog --> add_column
     show_table --> load_plugins
     show_table --> Table
     show_table --> add_column

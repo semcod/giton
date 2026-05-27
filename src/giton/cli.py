@@ -8,12 +8,14 @@ from rich.console import Console
 
 from giton import (
     __version__,
+    fixups,
     history,
     interactive,
     plugins as plug,
     policies,
     repo_config,
     shell as giton_shell,
+    store,
 )
 from giton.context import collect, repo_root
 from giton.hooks import install as install_hooks, uninstall as uninstall_hooks
@@ -138,7 +140,7 @@ def plugin_install(name: str):
 
 @plugin_app.command("install-defaults")
 def plugin_install_defaults():
-    """Install the 3 default plugins (pyqual, vallm, pretest)."""
+    """Install the 3 default plugins (pyqual, vallm, testless)."""
     plug.install_defaults()
 
 
@@ -194,6 +196,7 @@ def hook_commit_msg(
     git_ctx.last_commit_body = body.strip()
     cfg = repo_config.load(git_ctx.root)
     findings = policies.evaluate(git_ctx, cfg, "commit-msg")
+    store.save_findings(findings, git_ctx.root)
     if not findings:
         return
     for f in findings:
@@ -239,6 +242,7 @@ def policy_check(
         raise typer.Exit(1)
     cfg = repo_config.load(git_ctx.root)
     findings = policies.evaluate(git_ctx, cfg, trigger)
+    store.save_findings(findings, git_ctx.root)
     if not findings:
         console.print("[green]✓ no policy findings[/green]")
         return
@@ -279,6 +283,28 @@ def policy_list():
         opts = cfg.policy(name)
         on = "[green]on [/green]" if opts.get("enabled", True) else "[dim]off[/dim]"
         console.print(f"  {on} {name}")
+
+
+@policy_app.command("fix")
+def policy_fix(
+    yes: bool = typer.Option(
+        False, "--yes", "-y", help="Apply all available fixes without prompting.",
+    ),
+):
+    """Apply auto-fixes from the most recent policy check."""
+    root = repo_root()
+    if not root:
+        console.print("[red]not inside a git repository[/red]")
+        raise typer.Exit(1)
+    findings = store.load_findings(root)
+    if not findings:
+        console.print("[dim]no saved findings — run `giton policy check` first[/dim]")
+        raise typer.Exit(0)
+    applied, total = fixups.apply_all(findings, root, yes=yes)
+    if applied == total and total:
+        console.print(f"[green]✓ applied {applied}/{total} fix(es)[/green]")
+    elif total:
+        console.print(f"[yellow]applied {applied}/{total} fix(es)[/yellow]")
 
 
 # --- fixup workflow ---------------------------------------------------------

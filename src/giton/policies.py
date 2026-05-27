@@ -25,6 +25,7 @@ class Finding:
     severity: Severity
     message: str
     location: str = ""
+    fix: str | None = None  # shell command that resolves the finding
 
     @property
     def is_error(self) -> bool:
@@ -57,12 +58,14 @@ def _check_conventional_commits(
     scope_part = r"\([^)]+\)" if require_scope else r"(?:\([^)]+\))?"
     pattern = rf"^({type_alt}){scope_part}!?:\s.+"
     if not re.match(pattern, subject):
+        fix = f'git commit --amend -m "chore: {subject}"'
         findings.append(
             Finding(
                 "conventional_commits", "error",
                 f"subject does not match Conventional Commits "
                 f"(types: {', '.join(types) or 'any'}): {subject!r}",
                 location="HEAD",
+                fix=fix,
             )
         )
     return findings
@@ -76,10 +79,13 @@ def _check_no_wip(ctx: GitContext, opts: dict, trigger: str) -> list[Finding]:
         return []
     for raw in opts.get("patterns", []) or []:
         if re.search(raw, subject):
+            new_subject = re.sub(raw, "", subject, count=1, flags=re.IGNORECASE).strip()
+            fix = f'git commit --amend -m "{new_subject}"' if new_subject else None
             return [Finding(
                 "no_wip_commits", "error",
                 f"WIP-style commit subject not allowed: {subject!r}",
                 location="HEAD",
+                fix=fix,
             )]
     return []
 
