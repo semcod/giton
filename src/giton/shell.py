@@ -12,7 +12,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 
-from giton import catalog, plugins as plug
+from giton import catalog, plugins as plug, policies, repo_config
 from giton.context import collect, repo_root
 from giton.hooks import install as install_hooks
 from giton.runner import run_trigger
@@ -37,7 +37,12 @@ HELP = """\
   init                     install git hooks in the current repo
   status                   show repo + staged-files summary
   hook <pre-commit|post-commit|pre-push>
-                           run all plugins for that trigger
+                           run policies + plugins for that trigger
+
+[bold]Policy[/bold]
+  policy list              show active built-in policies
+  policy check [trigger]   evaluate built-in policies (default: pre-commit)
+  policy init              write default .giton/config.yaml
 
 [bold]Misc[/bold]
   help                     show this help
@@ -74,6 +79,36 @@ def _cmd_status() -> None:
             title="giton status",
         )
     )
+
+
+def _cmd_policy(args: list[str]) -> None:
+    sub = args[0] if args else "list"
+    ctx = collect()
+    if not ctx:
+        console.print("[red]not inside a git repository[/red]")
+        return
+    cfg = repo_config.load(ctx.root)
+    if sub == "list":
+        src = cfg.path or "(defaults)"
+        console.print(f"config source: {src}")
+        for name in policies.CHECKS:
+            opts = cfg.policy(name)
+            on = "[green]on [/green]" if opts.get("enabled", True) else "[dim]off[/dim]"
+            console.print(f"  {on} {name}")
+    elif sub == "check":
+        trigger = args[1] if len(args) > 1 else "pre-commit"
+        findings = policies.evaluate(ctx, cfg, trigger)
+        if not findings:
+            console.print("[green]✓ no policy findings[/green]")
+            return
+        for f in findings:
+            color = {"error": "red", "warn": "yellow", "info": "cyan"}.get(f.severity, "white")
+            console.print(f"  [{color}]{f.severity}[/{color}] {f.policy}: {f.message}")
+    elif sub == "init":
+        path = repo_config.write_default(ctx.root)
+        console.print(f"[green]✓ wrote {path}[/green]")
+    else:
+        console.print("[yellow]usage: policy <list|check [trigger]|init>[/yellow]")
 
 
 def _cmd_init() -> None:
@@ -147,6 +182,8 @@ def dispatch(line: str) -> bool:
             console.print("[yellow]usage: hook <pre-commit|post-commit|pre-push>[/yellow]")
         else:
             run_trigger(args[0])
+    elif cmd == "policy":
+        _cmd_policy(args)
     else:
         console.print(f"[red]unknown command: {cmd}[/red] — try 'help'")
     return True

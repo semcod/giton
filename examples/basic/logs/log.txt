@@ -1,0 +1,13 @@
+Basic Giton Example
+
+1. Collecting git context...
+   Repository root: /app
+   Staged files: 0
+   Staged diff size: 0 bytes
+
+2. Running pre-commit trigger...
+giton: no plugins or policies fired for pre-commit
+   No policy findings
+   No plugins executed
+
+3. Overall outcome: OK

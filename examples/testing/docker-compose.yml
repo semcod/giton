@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    volumes:
+      - ./sample_project:/app/sample_project
+      - ./test_giton_integration.py:/app/test_giton_integration.py
+    environment:
+      - PYTHONPATH=/app/src
+    command: python -m pytest test_giton_integration.py -v

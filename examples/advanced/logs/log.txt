@@ -1,0 +1,64 @@
+Advanced Giton Example
+
+Plugin Catalog
+
+Default plugins: 3
+
+  pyqual
+    Category: lang:python
+    Description: Python code quality checks (lint, types, complexity).
+    Triggers: pre-commit
+
+  vallm
+    Category: task:validate
+    Description: Validate LLM-generated code/patches before they land in 
+history.
+    Triggers: post-commit
+
+  pretest
+    Category: task:test
+    Description: Run / generate tests before push.
+    Triggers: pre-push
+
+Categories: ['integration:mcp', 'lang:any', 'lang:markdown', 'lang:python', 
+'task:autofix', 'task:docs', 'task:fix', 'task:refactor', 'task:security', 
+'task:test', 'task:validate']
+
+Plugin Management
+
+Current plugins: 0
+┏━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┓
+┃ Name ┃ Category ┃ Triggers ┃ Enabled ┃
+┡━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━┩
+└──────┴──────────┴──────────┴─────────┘
+
+Adding custom plugin...
+✓ Custom plugin added
+
+Removing custom plugin...
+✓ Custom plugin removed
+
+Git Hooks Management
+
+Installing git hooks...
+✓ Installed 4 hooks:
+  - pre-commit
+  - commit-msg
+  - post-commit
+  - pre-push
+
+Trigger Sequence
+
+Running pre-commit...
+giton: no plugins or policies fired for pre-commit
+  Outcome: OK
+
+Running post-commit...
+giton: no plugins or policies fired for post-commit
+  Outcome: OK
+
+Running pre-push...
+giton: no plugins or policies fired for pre-push
+  Outcome: OK
+
+All examples completed successfully!

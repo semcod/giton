@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pyproject.toml
+plugins: cov-7.1.0, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 6 items
+
+test_giton_integration.py::test_giton_installation PASSED                [ 16%]
+test_giton_integration.py::test_giton_policy_check PASSED                [ 33%]
+test_giton_integration.py::test_giton_policy_init PASSED                 [ 50%]
+test_giton_integration.py::test_giton_plugin_list PASSED                 [ 66%]
+test_giton_integration.py::test_sample_project_tests PASSED              [ 83%]
+test_giton_integration.py::test_giton_with_pytest_integration PASSED     [100%]
+
+============================== 6 passed in 1.46s ===============================

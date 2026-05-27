@@ -10,6 +10,7 @@ from rich.console import Console
 
 from giton.config import PluginRecord, load_plugins
 from giton.context import GitContext, collect
+from giton import policies, repo_config
 
 console = Console()
 
@@ -26,6 +27,21 @@ class PluginResult:
         return self.returncode == 0
 
 
+def _print_findings(findings: list[policies.Finding]) -> None:
+    if not findings:
+        return
+    console.print("[bold]Policy findings:[/bold]")
+    for f in findings:
+        color = {"error": "red", "warn": "yellow", "info": "cyan"}.get(
+            f.severity, "white"
+        )
+        loc = f" [dim]({f.location})[/dim]" if f.location else ""
+        console.print(
+            f"  [{color}]{f.severity}[/{color}] [bold]{f.policy}[/bold]: "
+            f"{f.message}{loc}"
+        )
+
+
 def _format_command(cmd: str, ctx: GitContext) -> str:
     return cmd.format(
         paths=ctx.paths_arg(),
@@ -34,21 +50,42 @@ def _format_command(cmd: str, ctx: GitContext) -> str:
     )
 
 
-def run_trigger(trigger: str, cwd: Path | None = None) -> list[PluginResult]:
+@dataclass
+class TriggerOutcome:
+    findings: list[policies.Finding]
+    plugin_results: list[PluginResult]
+    fail_on_policy: bool = True
+
+    @property
+    def ok(self) -> bool:
+        if self.fail_on_policy and policies.has_errors(self.findings):
+            return False
+        return all(r.ok for r in self.plugin_results)
+
+
+def run_trigger(trigger: str, cwd: Path | None = None) -> TriggerOutcome:
     ctx = collect(cwd)
     if ctx is None:
         console.print("[yellow]giton: not inside a git repository[/yellow]")
-        return []
+        return TriggerOutcome([], [])
+
+    cfg = repo_config.load(ctx.root)
+    findings = policies.evaluate(ctx, cfg, trigger)
+    _print_findings(findings)
 
     plugins = [p for p in load_plugins() if p.enabled and trigger in p.triggers]
     if not plugins:
-        console.print(f"[dim]giton: no plugins registered for {trigger}[/dim]")
-        return []
+        if not findings:
+            console.print(f"[dim]giton: no plugins or policies fired for {trigger}[/dim]")
+        results: list[PluginResult] = []
+    else:
+        results = [_run_plugin(p, ctx) for p in plugins]
 
-    results: list[PluginResult] = []
-    for plugin in plugins:
-        results.append(_run_plugin(plugin, ctx))
-    return results
+    return TriggerOutcome(
+        findings=findings,
+        plugin_results=results,
+        fail_on_policy=cfg.fail_on_policy(trigger),
+    )
 
 
 def _run_plugin(plugin: PluginRecord, ctx: GitContext) -> PluginResult:

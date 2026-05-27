@@ -5,7 +5,7 @@ import os
 import stat
 from pathlib import Path
 
-HOOKS = ("pre-commit", "post-commit", "pre-push")
+HOOKS = ("pre-commit", "commit-msg", "post-commit", "pre-push")
 
 HOOK_TEMPLATE = """#!/bin/sh
 # Installed by giton — delegates to: giton hook {name}
