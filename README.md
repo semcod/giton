@@ -3,57 +3,57 @@
 `gix` is a local AI layer for Git that works between `commit` and `push`.
 It helps standardize commits, propose safe code fixes, and orchestrate external tools via plugins.
 
-## Czy coś takiego już istnieje?
+## Does something like this already exist?
 
-Częściowo: istnieją narzędzia do AI commit messages, git hooks, albo przepisywania historii commitów.
-Brakuje jednak jednego, lokalnego operatora, który:
+Partially: there are tools for AI commit messages, git hooks, and commit-history rewriting.
+What is still missing is one local operator that:
 
-- prowadzi interakcję z użytkownikiem po commicie,
-- proponuje poprawki kodu jako kolejne commity (`fixup!`),
-- porządkuje historię przed `push`,
-- integruje pluginy przez MCP/REST/CLI/gRPC.
+- interacts with the user right after commit,
+- proposes code fixes as additional commits (`fixup!`),
+- cleans up history before `push`,
+- integrates plugins via MCP/REST/CLI/gRPC.
 
-## Kierunek dla `gix`
+## Proposed direction for `gix`
 
-1. **Local-first i bezpieczne domyślne zachowanie**
-   - AI proponuje zmiany, użytkownik zatwierdza.
-   - Preferowane są `fixup!` commity zamiast automatycznego nadpisywania historii.
+1. **Local-first with safe defaults**
+   - AI proposes changes, user approves them.
+   - Prefer `fixup!` commits over automatic history rewriting.
 
-2. **Warstwa hooków Git**
-   - `pre-commit`: walidacja polityk i szybkie poprawki.
-   - `post-commit`: analiza świeżego commita, propozycje kolejnych patchy.
-   - `pre-push`: standaryzacja historii (`autosquash`, nazewnictwo commitów, final checks).
+2. **Git hook layer**
+   - `pre-commit`: policy validation and quick fixes.
+   - `post-commit`: inspect the fresh commit and propose follow-up patches.
+   - `pre-push`: standardize history (`autosquash`, commit naming, final checks).
 
 3. **Plugin architecture**
-   - Wspólny kontrakt wejście/wyjście (JSON schema).
-   - Adaptery pluginów: MCP, REST, CLI shell, gRPC/protobuf.
+   - Shared input/output contract (JSON schema).
+   - Plugin adapters: MCP, REST, CLI shell, gRPC/protobuf.
 
-## Przykład użycia (MVP)
+## MVP usage example
 
 ```bash
-# 1) inicjalizacja hooków w repo
+# 1) initialize hooks in the repository
 gix init
 
-# 2) standardowy commit użytkownika
+# 2) user makes a normal commit
 git add -p
-git commit -m "wip"
+git commit -m "update stuff"
 
-# 3) gix wykrywa problemy i proponuje fixup commit
+# 3) gix detects issues and proposes a fixup commit
 gix hook post-commit
 
-# 4) przed push gix proponuje porządkowanie historii
+# 4) before push, gix suggests history cleanup
 gix hook pre-push
 ```
 
-Przykładowa interakcja:
+Example interaction:
 
 ```text
-gix: Znaleziono 2 problemy (null-check, commit message).
-gix: Zastosować patch i dodać commit "fixup! ..."? [Y/n]
+gix: Found 2 issues (null-check, commit message policy).
+gix: Apply patch and add commit "fixup! ..."? [Y/n]
 ```
 
-## Plan MVP
+## MVP plan
 
-- MVP 1: hooki + policy engine + interakcja CLI
+- MVP 1: hooks + policy engine + interactive CLI
 - MVP 2: patching + fixup workflow + pre-push autosquash
-- MVP 3: stabilne API pluginów i integracje MCP/REST/CLI/gRPC
+- MVP 3: stable plugin API and MCP/REST/CLI/gRPC integrations
