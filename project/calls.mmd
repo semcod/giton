@@ -1,0 +1,133 @@
+flowchart LR
+%% generated in 0.00s
+    subgraph examples__advanced
+        examples__advanced__main__demonstrate_trigger_sequence["demonstrate_trigger_sequence"]
+        examples__advanced__main__demonstrate_hooks["demonstrate_hooks"]
+        examples__advanced__main__main["main"]
+        examples__advanced__main__demonstrate_catalog["demonstrate_catalog"]
+        examples__advanced__main__demonstrate_plugin_management["demonstrate_plugin_management"]
+    end
+    subgraph examples__basic
+        examples__basic__main__test_basic_giton_usage["test_basic_giton_usage"]
+        examples__basic__main__main["main"]
+    end
+    subgraph src__giton
+        src__giton__cli__history_log["history_log"]
+        src__giton__cli__policy_check["policy_check"]
+        src__giton__history__list_log["list_log"]
+        src__giton__cli__uninit["uninit"]
+        src__giton__shell___cmd_init["_cmd_init"]
+        src__giton__history__create_fixup["create_fixup"]
+        src__giton__hooks__install["install"]
+        src__giton__history__make_backup_ref["make_backup_ref"]
+        src__giton__shell___cmd_policy["_cmd_policy"]
+        src__giton__plugins__install_category["install_category"]
+        src__giton__cli__fixup["fixup"]
+        src__giton__cli__hook_pre_commit["hook_pre_commit"]
+        src__giton__cli__status["status"]
+        src__giton__plugins__show_table["show_table"]
+        src__giton__history___git["_git"]
+        src__giton__interactive__confirm["confirm"]
+        src__giton__shell__dispatch["dispatch"]
+        src__giton__plugins___pip_install["_pip_install"]
+        src__giton__interactive__choose["choose"]
+        src__giton__config__remove_plugin["remove_plugin"]
+        src__giton__config__upsert_plugin["upsert_plugin"]
+        src__giton__config__save_plugins["save_plugins"]
+        src__giton__cli__policy_init["policy_init"]
+        src__giton__runner___print_findings["_print_findings"]
+        src__giton__cli__policy_list["policy_list"]
+        src__giton__context__collect["collect"]
+        src__giton__context___run["_run"]
+        src__giton__cli__history_clean["history_clean"]
+        src__giton__repo_config__load["load"]
+        src__giton__cli__doctor["doctor"]
+        src__giton__history__has_staged_changes["has_staged_changes"]
+        src__giton__runner___format_command["_format_command"]
+        src__giton__cli__init["init"]
+        src__giton__hooks__uninstall["uninstall"]
+        src__giton__config__ensure_user_dirs["ensure_user_dirs"]
+        src__giton__history__upstream_range["upstream_range"]
+        src__giton__shell___set_enabled["_set_enabled"]
+        src__giton__repo_config___deep_merge["_deep_merge"]
+        src__giton__plugins__install_defaults["install_defaults"]
+        src__giton__hooks__hooks_dir["hooks_dir"]
+        src__giton__plugins__install_from_catalog["install_from_catalog"]
+        src__giton__history__head_sha["head_sha"]
+        src__giton__interactive__is_tty["is_tty"]
+        src__giton__shell___cmd_status["_cmd_status"]
+        src__giton__cli__hook_pre_push["hook_pre_push"]
+        src__giton__history__autosquash["autosquash"]
+        src__giton__shell__run["run"]
+        src__giton__context__repo_root["repo_root"]
+        src__giton__runner___run_plugin["_run_plugin"]
+        src__giton__config__load_plugins["load_plugins"]
+        src__giton__cli__hook_post_commit["hook_post_commit"]
+        src__giton__plugins__uninstall["uninstall"]
+        src__giton__cli__hook_commit_msg["hook_commit_msg"]
+        src__giton__runner__run_trigger["run_trigger"]
+    end
+    examples__advanced__main__demonstrate_plugin_management --> src__giton__config__load_plugins
+    examples__advanced__main__demonstrate_hooks --> src__giton__context__repo_root
+    examples__advanced__main__demonstrate_trigger_sequence --> src__giton__context__repo_root
+    examples__advanced__main__demonstrate_trigger_sequence --> src__giton__runner__run_trigger
+    examples__advanced__main__main --> examples__advanced__main__demonstrate_catalog
+    examples__advanced__main__main --> examples__advanced__main__demonstrate_plugin_management
+    examples__advanced__main__main --> examples__advanced__main__demonstrate_hooks
+    examples__advanced__main__main --> examples__advanced__main__demonstrate_trigger_sequence
+    examples__basic__main__test_basic_giton_usage --> src__giton__context__collect
+    examples__basic__main__test_basic_giton_usage --> src__giton__runner__run_trigger
+    examples__basic__main__main --> examples__basic__main__test_basic_giton_usage
+    src__giton__config__load_plugins --> src__giton__config__ensure_user_dirs
+    src__giton__config__save_plugins --> src__giton__config__ensure_user_dirs
+    src__giton__config__upsert_plugin --> src__giton__config__load_plugins
+    src__giton__config__upsert_plugin --> src__giton__config__save_plugins
+    src__giton__config__remove_plugin --> src__giton__config__load_plugins
+    src__giton__config__remove_plugin --> src__giton__config__save_plugins
+    src__giton__cli__init --> src__giton__context__repo_root
+    src__giton__cli__uninit --> src__giton__context__repo_root
+    src__giton__cli__status --> src__giton__context__collect
+    src__giton__cli__doctor --> src__giton__context__repo_root
+    src__giton__cli__hook_pre_commit --> src__giton__runner__run_trigger
+    src__giton__cli__hook_commit_msg --> src__giton__context__collect
+    src__giton__cli__hook_post_commit --> src__giton__runner__run_trigger
+    src__giton__cli__hook_pre_push --> src__giton__runner__run_trigger
+    src__giton__cli__policy_check --> src__giton__context__collect
+    src__giton__cli__policy_init --> src__giton__context__repo_root
+    src__giton__cli__policy_list --> src__giton__context__repo_root
+    src__giton__cli__fixup --> src__giton__context__repo_root
+    src__giton__cli__history_log --> src__giton__context__repo_root
+    src__giton__cli__history_clean --> src__giton__context__repo_root
+    src__giton__plugins__install_from_catalog --> src__giton__plugins___pip_install
+    src__giton__plugins__install_from_catalog --> src__giton__config__upsert_plugin
+    src__giton__plugins__install_defaults --> src__giton__plugins__install_from_catalog
+    src__giton__plugins__install_category --> src__giton__plugins__install_from_catalog
+    src__giton__plugins__uninstall --> src__giton__config__remove_plugin
+    src__giton__plugins__show_table --> src__giton__config__load_plugins
+    src__giton__runner__run_trigger --> src__giton__context__collect
+    src__giton__runner__run_trigger --> src__giton__runner___print_findings
+    src__giton__runner__run_trigger --> src__giton__config__load_plugins
+    src__giton__runner__run_trigger --> src__giton__runner___run_plugin
+    src__giton__runner___run_plugin --> src__giton__runner___format_command
+    src__giton__interactive__confirm --> src__giton__interactive__is_tty
+    src__giton__interactive__choose --> src__giton__interactive__is_tty
+    src__giton__context__repo_root --> src__giton__context___run
+    src__giton__context__collect --> src__giton__context__repo_root
+    src__giton__context__collect --> src__giton__context___run
+    src__giton__hooks__install --> src__giton__hooks__hooks_dir
+    src__giton__hooks__uninstall --> src__giton__hooks__hooks_dir
+    src__giton__history__head_sha --> src__giton__history___git
+    src__giton__history__make_backup_ref --> src__giton__history__head_sha
+    src__giton__history__make_backup_ref --> src__giton__history___git
+    src__giton__history__list_log --> src__giton__history___git
+    src__giton__history__upstream_range --> src__giton__history___git
+    src__giton__history__create_fixup --> src__giton__history___git
+    src__giton__history__has_staged_changes --> src__giton__history___git
+    src__giton__history__autosquash --> src__giton__history___git
+    src__giton__shell___set_enabled --> src__giton__config__load_plugins
+    src__giton__shell___set_enabled --> src__giton__config__save_plugins
+    src__giton__shell___cmd_status --> src__giton__context__collect
+    src__giton__shell___cmd_policy --> src__giton__context__collect
+    src__giton__shell___cmd_init --> src__giton__context__repo_root
+    src__giton__shell__run --> src__giton__shell__dispatch
+    src__giton__repo_config__load --> src__giton__repo_config___deep_merge

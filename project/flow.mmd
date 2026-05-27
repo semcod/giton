@@ -1,0 +1,26 @@
+flowchart TD
+%% generated in 0.00s
+
+    %% Entry points (blue)
+    classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
+
+    subgraph Core
+        src__giton__config___xdg_config_home["_xdg_config_home"]
+        src__giton__config__PluginRecord__to_dict["to_dict"]
+        src__giton__config__PluginRecord__from_dict["from_dict"]
+        src__giton__cli___root["_root"]
+        src__giton__cli__init["init"]
+        src__giton__cli__uninit["uninit"]
+        src__giton__cli__status["status"]
+        src__giton__cli__shell["shell"]
+        src__giton__cli__doctor["doctor"]
+        src__giton__cli__plugin_list["plugin_list"]
+        src__giton__cli__plugin_catalog["plugin_catalog"]
+        src__giton__cli__plugin_install["plugin_install"]
+        src__giton__cli__plugin_install_defaults["plugin_install_defaults"]
+        src__giton__cli__plugin_install_category["plugin_install_category"]
+        src__giton__cli__plugin_remove["plugin_remove"]
+        ...["+48 more"]
+    end
+
+    class src__giton__config___xdg_config_home,src__giton__config__PluginRecord__to_dict,src__giton__config__PluginRecord__from_dict,src__giton__cli___root,src__giton__cli__init,src__giton__cli__uninit,src__giton__cli__status,src__giton__cli__shell,src__giton__cli__doctor,src__giton__cli__plugin_list entry

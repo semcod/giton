@@ -1,0 +1,169 @@
+# code2llm call graph | /home/tom/github/semcod/gix
+# generated in 0.02s
+# nodes: 61 | edges: 64 | modules: 12
+# CC̄=3.8
+
+HUBS[20]:
+  src.giton.cli.history_clean
+    CC=12  in:0  out:30  total:30
+  src.giton.cli.fixup
+    CC=9  in:0  out:28  total:28
+  src.giton.shell.dispatch
+    CC=23  in:1  out:25  total:26
+  src.giton.cli.hook_commit_msg
+    CC=9  in:0  out:24  total:24
+  examples.basic.main.test_basic_giton_usage
+    CC=8  in:1  out:20  total:21
+  src.giton.context.collect
+    CC=5  in:7  out:13  total:20
+  examples.advanced.main.demonstrate_plugin_management
+    CC=3  in:1  out:19  total:20
+  src.giton.runner.run_trigger
+    CC=8  in:6  out:11  total:17
+  src.giton.shell._cmd_policy
+    CC=12  in:1  out:15  total:16
+  src.giton.runner._run_plugin
+    CC=6  in:1  out:15  total:16
+  src.giton.context.repo_root
+    CC=2  in:12  out:3  total:15
+  src.giton.plugins.install_from_catalog
+    CC=9  in:2  out:12  total:14
+  examples.advanced.main.demonstrate_catalog
+    CC=2  in:1  out:13  total:14
+  src.giton.cli.policy_check
+    CC=7  in:0  out:13  total:13
+  src.giton.plugins.show_table
+    CC=5  in:0  out:13  total:13
+  examples.advanced.main.demonstrate_trigger_sequence
+    CC=9  in:1  out:12  total:13
+  src.giton.cli.history_log
+    CC=9  in:0  out:12  total:12
+  src.giton.hooks.install
+    CC=5  in:0  out:12  total:12
+  src.giton.cli.init
+    CC=4  in:0  out:12  total:12
+  src.giton.config.load_plugins
+    CC=4  in:6  out:6  total:12
+
+MODULES:
+  examples.advanced.main  [5 funcs]
+    demonstrate_catalog  CC=2  out:13
+    demonstrate_hooks  CC=4  out:9
+    demonstrate_plugin_management  CC=3  out:19
+    demonstrate_trigger_sequence  CC=9  out:12
+    main  CC=2  out:9
+  examples.basic.main  [2 funcs]
+    main  CC=1  out:1
+    test_basic_giton_usage  CC=8  out:20
+  src.giton.cli  [14 funcs]
+    doctor  CC=3  out:6
+    fixup  CC=9  out:28
+    history_clean  CC=12  out:30
+    history_log  CC=9  out:12
+    hook_commit_msg  CC=9  out:24
+    hook_post_commit  CC=1  out:2
+    hook_pre_commit  CC=2  out:3
+    hook_pre_push  CC=2  out:3
+    init  CC=4  out:12
+    policy_check  CC=7  out:13
+  src.giton.config  [5 funcs]
+    ensure_user_dirs  CC=1  out:1
+    load_plugins  CC=4  out:6
+    remove_plugin  CC=4  out:4
+    save_plugins  CC=2  out:4
+    upsert_plugin  CC=3  out:3
+  src.giton.context  [3 funcs]
+    _run  CC=1  out:1
+    collect  CC=5  out:13
+    repo_root  CC=2  out:3
+  src.giton.history  [8 funcs]
+    _git  CC=1  out:2
+    autosquash  CC=2  out:7
+    create_fixup  CC=2  out:2
+    has_staged_changes  CC=1  out:1
+    head_sha  CC=1  out:2
+    list_log  CC=4  out:7
+    make_backup_ref  CC=2  out:4
+    upstream_range  CC=2  out:2
+  src.giton.hooks  [3 funcs]
+    hooks_dir  CC=1  out:0
+    install  CC=5  out:12
+    uninstall  CC=5  out:8
+  src.giton.interactive  [3 funcs]
+    choose  CC=8  out:10
+    confirm  CC=5  out:5
+    is_tty  CC=3  out:3
+  src.giton.plugins  [6 funcs]
+    _pip_install  CC=1  out:3
+    install_category  CC=6  out:3
+    install_defaults  CC=2  out:2
+    install_from_catalog  CC=9  out:12
+    show_table  CC=5  out:13
+    uninstall  CC=2  out:3
+  src.giton.repo_config  [2 funcs]
+    _deep_merge  CC=4  out:6
+    load  CC=4  out:6
+  src.giton.runner  [4 funcs]
+    _format_command  CC=1  out:5
+    _print_findings  CC=4  out:3
+    _run_plugin  CC=6  out:15
+    run_trigger  CC=8  out:11
+  src.giton.shell  [6 funcs]
+    _cmd_init  CC=3  out:6
+    _cmd_policy  CC=12  out:15
+    _cmd_status  CC=4  out:6
+    _set_enabled  CC=5  out:4
+    dispatch  CC=23  out:25
+    run  CC=5  out:7
+
+EDGES:
+  examples.advanced.main.demonstrate_plugin_management → src.giton.config.load_plugins
+  examples.advanced.main.demonstrate_hooks → src.giton.context.repo_root
+  examples.advanced.main.demonstrate_trigger_sequence → src.giton.context.repo_root
+  examples.advanced.main.demonstrate_trigger_sequence → src.giton.runner.run_trigger
+  examples.advanced.main.main → examples.advanced.main.demonstrate_catalog
+  examples.advanced.main.main → examples.advanced.main.demonstrate_plugin_management
+  examples.advanced.main.main → examples.advanced.main.demonstrate_hooks
+  examples.advanced.main.main → examples.advanced.main.demonstrate_trigger_sequence
+  examples.basic.main.test_basic_giton_usage → src.giton.context.collect
+  examples.basic.main.test_basic_giton_usage → src.giton.runner.run_trigger
+  examples.basic.main.main → examples.basic.main.test_basic_giton_usage
+  src.giton.config.load_plugins → src.giton.config.ensure_user_dirs
+  src.giton.config.save_plugins → src.giton.config.ensure_user_dirs
+  src.giton.config.upsert_plugin → src.giton.config.load_plugins
+  src.giton.config.upsert_plugin → src.giton.config.save_plugins
+  src.giton.config.remove_plugin → src.giton.config.load_plugins
+  src.giton.config.remove_plugin → src.giton.config.save_plugins
+  src.giton.cli.init → src.giton.context.repo_root
+  src.giton.cli.uninit → src.giton.context.repo_root
+  src.giton.cli.status → src.giton.context.collect
+  src.giton.cli.doctor → src.giton.context.repo_root
+  src.giton.cli.hook_pre_commit → src.giton.runner.run_trigger
+  src.giton.cli.hook_commit_msg → src.giton.context.collect
+  src.giton.cli.hook_post_commit → src.giton.runner.run_trigger
+  src.giton.cli.hook_pre_push → src.giton.runner.run_trigger
+  src.giton.cli.policy_check → src.giton.context.collect
+  src.giton.cli.policy_init → src.giton.context.repo_root
+  src.giton.cli.policy_list → src.giton.context.repo_root
+  src.giton.cli.fixup → src.giton.context.repo_root
+  src.giton.cli.history_log → src.giton.context.repo_root
+  src.giton.cli.history_clean → src.giton.context.repo_root
+  src.giton.plugins.install_from_catalog → src.giton.plugins._pip_install
+  src.giton.plugins.install_from_catalog → src.giton.config.upsert_plugin
+  src.giton.plugins.install_defaults → src.giton.plugins.install_from_catalog
+  src.giton.plugins.install_category → src.giton.plugins.install_from_catalog
+  src.giton.plugins.uninstall → src.giton.config.remove_plugin
+  src.giton.plugins.show_table → src.giton.config.load_plugins
+  src.giton.runner.run_trigger → src.giton.context.collect
+  src.giton.runner.run_trigger → src.giton.runner._print_findings
+  src.giton.runner.run_trigger → src.giton.config.load_plugins
+  src.giton.runner.run_trigger → src.giton.runner._run_plugin
+  src.giton.runner._run_plugin → src.giton.runner._format_command
+  src.giton.interactive.confirm → src.giton.interactive.is_tty
+  src.giton.interactive.choose → src.giton.interactive.is_tty
+  src.giton.context.repo_root → src.giton.context._run
+  src.giton.context.collect → src.giton.context.repo_root
+  src.giton.context.collect → src.giton.context._run
+  src.giton.hooks.install → src.giton.hooks.hooks_dir
+  src.giton.hooks.uninstall → src.giton.hooks.hooks_dir
+  src.giton.history.head_sha → src.giton.history._git

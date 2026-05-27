@@ -1,0 +1,49 @@
+# redup/duplication | 3 groups | 16f 1923L | 2026-05-27
+
+SUMMARY:
+  files_scanned: 16
+  total_lines:   1923
+  dup_groups:    3
+  dup_fragments: 8
+  saved_lines:   17
+  scan_ms:       1927
+
+HOTSPOTS[1] (files with most duplication):
+  src/giton/cli.py  dup=28L  groups=3  frags=8  (1.5%)
+
+DUPLICATES[3] (ranked by impact):
+  [c83a3afee3e88a5c]   STRU  shell  L=3 N=4 saved=9 sim=1.00
+      src/giton/cli.py:103-105  (shell)
+      src/giton/cli.py:122-124  (plugin_list)
+      src/giton/cli.py:128-130  (plugin_catalog)
+      src/giton/cli.py:140-142  (plugin_install_defaults)
+  [53a68daa2f26aa3a]   STRU  hook_pre_commit  L=5 N=2 saved=5 sim=1.00
+      src/giton/cli.py:161-165  (hook_pre_commit)
+      src/giton/cli.py:219-223  (hook_pre_push)
+  [b67a4e80d3d0d106]   STRU  plugin_install  L=3 N=2 saved=3 sim=1.00
+      src/giton/cli.py:134-136  (plugin_install)
+      src/giton/cli.py:153-155  (plugin_remove)
+
+REFACTOR[3] (ranked by priority):
+  [1] ○ extract_function   → src/giton/utils/shell.py
+      WHY: 4 occurrences of 3-line block across 1 files — saves 9 lines
+      FILES: src/giton/cli.py
+  [2] ○ extract_function   → src/giton/utils/hook_pre_commit.py
+      WHY: 2 occurrences of 5-line block across 1 files — saves 5 lines
+      FILES: src/giton/cli.py
+  [3] ○ extract_function   → src/giton/utils/plugin_install.py
+      WHY: 2 occurrences of 3-line block across 1 files — saves 3 lines
+      FILES: src/giton/cli.py
+
+QUICK_WINS[1] (low risk, high savings — do first):
+  [1] extract_function   saved=9L  → src/giton/utils/shell.py
+      FILES: cli.py
+
+EFFORT_ESTIMATE (total ≈ 0.6h):
+  easy   shell                               saved=9L  ~18min
+  easy   hook_pre_commit                     saved=5L  ~10min
+  easy   plugin_install                      saved=3L  ~6min
+
+METRICS-TARGET:
+  dup_groups:  3 → 0
+  saved_lines: 17 lines recoverable

@@ -1,0 +1,162 @@
+# code2llm | 30f 2930L | python:17,txt:3,yaml:2,toml:2,shell:2,yml:1 | 2026-05-27
+# generated in 0.01s
+# CC̅=3.8 | critical:1/92 | dups:0 | cycles:1
+
+HEALTH[1]:
+  🟡 CC    dispatch CC=23 (limit:15)
+
+REFACTOR[2]:
+  1. split 1 high-CC methods  (CC>15)
+  2. break 1 circular dependencies
+
+PIPELINES[60]:
+  [1] Src [main]: main → demonstrate_catalog
+      PURITY: 100% pure
+  [2] Src [main]: main → test_basic_giton_usage → collect → repo_root → ...(1 more)
+      PURITY: 100% pure
+  [3] Src [divide]: divide
+      PURITY: 100% pure
+  [4] Src [_xdg_config_home]: _xdg_config_home
+      PURITY: 100% pure
+  [5] Src [to_dict]: to_dict
+      PURITY: 100% pure
+  [6] Src [from_dict]: from_dict
+      PURITY: 100% pure
+  [7] Src [_root]: _root
+      PURITY: 100% pure
+  [8] Src [init]: init → repo_root → _run
+      PURITY: 100% pure
+  [9] Src [uninit]: uninit → repo_root → _run
+      PURITY: 100% pure
+  [10] Src [status]: status → collect → repo_root → _run
+      PURITY: 100% pure
+  [11] Src [shell]: shell
+      PURITY: 100% pure
+  [12] Src [doctor]: doctor → repo_root → _run
+      PURITY: 100% pure
+  [13] Src [plugin_list]: plugin_list
+      PURITY: 100% pure
+  [14] Src [plugin_catalog]: plugin_catalog
+      PURITY: 100% pure
+  [15] Src [plugin_install]: plugin_install
+      PURITY: 100% pure
+  [16] Src [plugin_install_defaults]: plugin_install_defaults
+      PURITY: 100% pure
+  [17] Src [plugin_install_category]: plugin_install_category
+      PURITY: 100% pure
+  [18] Src [plugin_remove]: plugin_remove
+      PURITY: 100% pure
+  [19] Src [hook_pre_commit]: hook_pre_commit → run_trigger → collect → repo_root → ...(1 more)
+      PURITY: 100% pure
+  [20] Src [hook_commit_msg]: hook_commit_msg → collect → repo_root → _run
+      PURITY: 100% pure
+  [21] Src [hook_post_commit]: hook_post_commit → run_trigger → collect → repo_root → ...(1 more)
+      PURITY: 100% pure
+  [22] Src [hook_pre_push]: hook_pre_push → run_trigger → collect → repo_root → ...(1 more)
+      PURITY: 100% pure
+  [23] Src [policy_check]: policy_check → collect → repo_root → _run
+      PURITY: 100% pure
+  [24] Src [policy_init]: policy_init → repo_root → _run
+      PURITY: 100% pure
+  [25] Src [policy_list]: policy_list → repo_root → _run
+      PURITY: 100% pure
+  [26] Src [fixup]: fixup → repo_root → _run
+      PURITY: 100% pure
+  [27] Src [history_log]: history_log → repo_root → _run
+      PURITY: 100% pure
+  [28] Src [history_clean]: history_clean → repo_root → _run
+      PURITY: 100% pure
+  [29] Src [install_defaults]: install_defaults → install_from_catalog → _pip_install
+      PURITY: 100% pure
+  [30] Src [install_category]: install_category → install_from_catalog → _pip_install
+      PURITY: 100% pure
+  [31] Src [uninstall]: uninstall → remove_plugin → load_plugins → ensure_user_dirs
+      PURITY: 100% pure
+  [32] Src [show_table]: show_table → load_plugins → ensure_user_dirs
+      PURITY: 100% pure
+  [33] Src [show_catalog]: show_catalog
+      PURITY: 100% pure
+  [34] Src [_entry]: _entry
+      PURITY: 100% pure
+  [35] Src [list_categories]: list_categories
+      PURITY: 100% pure
+  [36] Src [find]: find
+      PURITY: 100% pure
+  [37] Src [confirm]: confirm → is_tty
+      PURITY: 100% pure
+  [38] Src [choose]: choose → is_tty
+      PURITY: 100% pure
+  [39] Src [diff_file]: diff_file
+      PURITY: 100% pure
+  [40] Src [paths_arg]: paths_arg
+      PURITY: 100% pure
+  [41] Src [install]: install → hooks_dir
+      PURITY: 100% pure
+  [42] Src [uninstall]: uninstall → hooks_dir
+      PURITY: 100% pure
+  [43] Src [make_backup_ref]: make_backup_ref → head_sha → _git
+      PURITY: 100% pure
+  [44] Src [list_log]: list_log → _git
+      PURITY: 100% pure
+  [45] Src [upstream_range]: upstream_range → _git
+      PURITY: 100% pure
+  [46] Src [create_fixup]: create_fixup → _git
+      PURITY: 100% pure
+  [47] Src [has_staged_changes]: has_staged_changes → _git
+      PURITY: 100% pure
+  [48] Src [autosquash]: autosquash → _git
+      PURITY: 100% pure
+  [49] Src [_check_conventional_commits]: _check_conventional_commits
+      PURITY: 100% pure
+  [50] Src [_check_no_wip]: _check_no_wip
+      PURITY: 100% pure
+
+LAYERS:
+  src/                            CC̄=3.9    ←in:0  →out:0
+  │ cli                        421L  0C   22m  CC=12     ←0
+  │ !! shell                      205L  0C    6m  CC=23     ←0
+  │ catalog                    173L  1C    4m  CC=3      ←0
+  │ policies                   165L  1C    6m  CC=10     ←0
+  │ history                    140L  1C    8m  CC=4      ←0
+  │ runner                     122L  2C    4m  CC=8      ←4
+  │ plugins                    120L  0C    7m  CC=9      ←0
+  │ repo_config                101L  1C    6m  CC=4      ←0
+  │ config                      74L  1C    8m  CC=4      ←4
+  │ context                     66L  1C    5m  CC=5      ←5
+  │ interactive                 58L  0C    3m  CC=8      ←0
+  │ hooks                       48L  0C    3m  CC=5      ←0
+  │ __main__                     4L  0C    0m  CC=0.0    ←0
+  │ __init__                     3L  0C    0m  CC=0.0    ←0
+  │
+  examples/                       CC̄=3.3    ←in:0  →out:0
+  │ main                       156L  0C    5m  CC=9      ←0
+  │ main                        67L  0C    2m  CC=8      ←0
+  │ log.txt                     64L  0C    0m  CC=0.0    ←0
+  │ Dockerfile                  37L  0C    0m  CC=0.0    ←0
+  │ Dockerfile                  33L  0C    0m  CC=0.0    ←0
+  │ Dockerfile                  33L  0C    0m  CC=0.0    ←0
+  │ example                     20L  0C    3m  CC=2      ←0
+  │ log.txt                     17L  0C    0m  CC=0.0    ←0
+  │ log.txt                     13L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml              12L  0C    0m  CC=0.0    ←0
+  │ docker-compose.yml          11L  0C    0m  CC=0.0    ←0
+  │
+  ./                              CC̄=0.0    ←in:0  →out:0
+  │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0
+  │ koru.yaml                  133L  0C    0m  CC=0.0    ←0
+  │ pyproject.toml              62L  0C    0m  CC=0.0    ←0
+  │ project.sh                  59L  0C    0m  CC=0.0    ←0
+  │ tree.sh                      1L  0C    0m  CC=0.0    ←0
+  │
+
+COUPLING:
+                             src.giton  examples.advanced     examples.basic
+          src.giton                 ──                 ←6                 ←2  hub
+  examples.advanced                  6                 ──                   
+     examples.basic                  2                                    ──
+  CYCLES: 1
+  HUB: src.giton/ (fan-in=8)
+
+EXTERNAL:
+  validation: run `vallm batch .` → validation.toon
+  duplication: run `redup scan .` → duplication.toon

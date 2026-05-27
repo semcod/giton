@@ -1,0 +1,208 @@
+# gix | 26f 2580L | python:23,shell:2,less:1 | 2026-05-27
+# stats: 123 func | 8 cls | 26 mod | CC̄=3.6 | critical:5 | cycles:0
+# alerts[5]: CC dispatch=23; CC history_clean=12; CC _cmd_policy=12; CC _check_conventional_commits=10; CC _check_no_secrets=10
+# hotspots[5]: hook_commit_msg fan=17; dispatch fan=16; history_clean fan=15; fixup fan=12; test_create_fixup_and_autosquash fan=11
+# evolution: baseline
+# Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
+M[26]:
+  app.doql.less,29
+  examples/advanced/main.py,157
+  examples/basic/main.py,68
+  examples/testing/sample_project/src/example.py,21
+  examples/testing/sample_project/tests/test_example.py,31
+  examples/testing/test_giton_integration.py,179
+  project.sh,59
+  src/giton/__init__.py,4
+  src/giton/__main__.py,5
+  src/giton/catalog.py,174
+  src/giton/cli.py,422
+  src/giton/config.py,75
+  src/giton/context.py,67
+  src/giton/history.py,141
+  src/giton/hooks.py,49
+  src/giton/interactive.py,59
+  src/giton/plugins.py,121
+  src/giton/policies.py,166
+  src/giton/repo_config.py,102
+  src/giton/runner.py,123
+  src/giton/shell.py,206
+  tests/__init__.py,1
+  tests/test_basic.py,86
+  tests/test_history.py,134
+  tests/test_policies.py,99
+  tree.sh,2
+D:
+  examples/advanced/main.py:
+    e: demonstrate_plugin_management,demonstrate_catalog,demonstrate_hooks,demonstrate_trigger_sequence,main
+    demonstrate_plugin_management()
+    demonstrate_catalog()
+    demonstrate_hooks()
+    demonstrate_trigger_sequence()
+    main()
+  examples/basic/main.py:
+    e: test_basic_giton_usage,main
+    test_basic_giton_usage()
+    main()
+  examples/testing/sample_project/src/example.py:
+    e: add,multiply,divide
+    add(a;b)
+    multiply(a;b)
+    divide(a;b)
+  examples/testing/sample_project/tests/test_example.py:
+    e: test_add,test_multiply,test_divide,test_divide_by_zero
+    test_add()
+    test_multiply()
+    test_divide()
+    test_divide_by_zero()
+  examples/testing/test_giton_integration.py:
+    e: temp_repo,test_giton_installation,test_giton_policy_check,test_giton_policy_init,test_giton_plugin_list,test_sample_project_tests,test_giton_with_pytest_integration
+    temp_repo()
+    test_giton_installation()
+    test_giton_policy_check(temp_repo)
+    test_giton_policy_init(temp_repo)
+    test_giton_plugin_list()
+    test_sample_project_tests()
+    test_giton_with_pytest_integration(temp_repo)
+  src/giton/__init__.py:
+  src/giton/__main__.py:
+  src/giton/catalog.py:
+    e: _entry,list_categories,find,defaults,CatalogEntry
+    CatalogEntry:
+    _entry(name;desc)
+    list_categories()
+    find(name)
+    defaults()
+  src/giton/cli.py:
+    e: _root,init,uninit,status,shell,doctor,plugin_list,plugin_catalog,plugin_install,plugin_install_defaults,plugin_install_category,plugin_remove,hook_pre_commit,hook_commit_msg,hook_post_commit,hook_pre_push,policy_check,policy_init,policy_list,fixup,history_log,history_clean
+    _root(ctx;version)
+    init(install_default_plugins)
+    uninit()
+    status()
+    shell()
+    doctor()
+    plugin_list()
+    plugin_catalog()
+    plugin_install(name)
+    plugin_install_defaults()
+    plugin_install_category(category)
+    plugin_remove(name)
+    hook_pre_commit()
+    hook_commit_msg(message_file)
+    hook_post_commit()
+    hook_pre_push()
+    policy_check(trigger)
+    policy_init(overwrite)
+    policy_list()
+    fixup(target;yes)
+    history_log(limit;range_)
+    history_clean(base;yes;interactive_rebase)
+  src/giton/config.py:
+    e: _xdg_config_home,ensure_user_dirs,load_plugins,save_plugins,upsert_plugin,remove_plugin,PluginRecord
+    PluginRecord: to_dict(0),from_dict(2)
+    _xdg_config_home()
+    ensure_user_dirs()
+    load_plugins()
+    save_plugins(plugins)
+    upsert_plugin(plugin)
+    remove_plugin(name)
+  src/giton/context.py:
+    e: _run,repo_root,collect,GitContext
+    GitContext: diff_file(0),paths_arg(0)
+    _run(cmd;cwd)
+    repo_root(cwd)
+    collect(cwd)
+  src/giton/history.py:
+    e: _git,head_sha,make_backup_ref,list_log,upstream_range,create_fixup,has_staged_changes,autosquash,GitResult
+    GitResult: ok(0)
+    _git(args;cwd)
+    head_sha(cwd)
+    make_backup_ref(cwd;prefix)
+    list_log(cwd;range_;limit)
+    upstream_range(cwd)
+    create_fixup(cwd;target_sha)
+    has_staged_changes(cwd)
+    autosquash(cwd;base)
+  src/giton/hooks.py:
+    e: hooks_dir,install,uninstall
+    hooks_dir(repo_root)
+    install(repo_root)
+    uninstall(repo_root)
+  src/giton/interactive.py:
+    e: is_tty,confirm,choose
+    is_tty()
+    confirm(question)
+    choose(question;options)
+  src/giton/plugins.py:
+    e: _pip_install,install_from_catalog,install_defaults,install_category,uninstall,show_table,show_catalog
+    _pip_install(target)
+    install_from_catalog(name)
+    install_defaults()
+    install_category(category)
+    uninstall(name)
+    show_table()
+    show_catalog()
+  src/giton/policies.py:
+    e: _check_conventional_commits,_check_no_wip,_check_no_secrets,_check_max_file_size,evaluate,has_errors,Finding
+    Finding: is_error(0)
+    _check_conventional_commits(ctx;opts;trigger)
+    _check_no_wip(ctx;opts;trigger)
+    _check_no_secrets(ctx;opts;trigger)
+    _check_max_file_size(ctx;opts;trigger)
+    evaluate(ctx;repo_cfg;trigger)
+    has_errors(findings)
+  src/giton/repo_config.py:
+    e: _deep_merge,load,write_default,RepoConfig
+    RepoConfig: policy(1),hook(1),fail_on_policy(1)
+    _deep_merge(base;over)
+    load(repo_root)
+    write_default(repo_root)
+  src/giton/runner.py:
+    e: _print_findings,_format_command,run_trigger,_run_plugin,PluginResult,TriggerOutcome
+    PluginResult: ok(0)
+    TriggerOutcome: ok(0)
+    _print_findings(findings)
+    _format_command(cmd;ctx)
+    run_trigger(trigger;cwd)
+    _run_plugin(plugin;ctx)
+  src/giton/shell.py:
+    e: _set_enabled,_cmd_status,_cmd_policy,_cmd_init,dispatch,run
+    _set_enabled(name;value)
+    _cmd_status()
+    _cmd_policy(args)
+    _cmd_init()
+    dispatch(line)
+    run()
+  tests/__init__.py:
+  tests/test_basic.py:
+    e: isolated_xdg,test_catalog_has_three_defaults,test_catalog_categories_grouped,test_plugin_persistence,test_cli_help_runs,test_cli_plugin_catalog_runs,test_hook_install_in_temp_repo
+    isolated_xdg(tmp_path;monkeypatch)
+    test_catalog_has_three_defaults()
+    test_catalog_categories_grouped()
+    test_plugin_persistence(tmp_path;monkeypatch)
+    test_cli_help_runs()
+    test_cli_plugin_catalog_runs()
+    test_hook_install_in_temp_repo(tmp_path;monkeypatch)
+  tests/test_history.py:
+    e: _git,repo,test_install_hooks_includes_commit_msg,test_make_backup_ref,test_create_fixup_and_autosquash,test_cli_fixup_requires_staged,test_cli_fixup_creates_commit,test_commit_msg_hook_blocks_wip,test_commit_msg_hook_accepts_conventional,test_history_log_command
+    _git(args;cwd)
+    repo(tmp_path)
+    test_install_hooks_includes_commit_msg(repo)
+    test_make_backup_ref(repo)
+    test_create_fixup_and_autosquash(repo)
+    test_cli_fixup_requires_staged(repo;monkeypatch)
+    test_cli_fixup_creates_commit(repo;monkeypatch)
+    test_commit_msg_hook_blocks_wip(repo;tmp_path;monkeypatch)
+    test_commit_msg_hook_accepts_conventional(repo;tmp_path;monkeypatch)
+    test_history_log_command(repo;monkeypatch)
+  tests/test_policies.py:
+    e: _ctx,test_conventional_commits_accepts_valid,test_conventional_commits_rejects_invalid,test_no_wip_commits_blocks_wip,test_no_secrets_detects_aws_key,test_no_secrets_skips_non_added_lines,test_max_file_size_flags_big_file,test_repo_config_write_and_load,test_repo_config_user_override,test_runner_returns_outcome_with_findings
+    _ctx(root)
+    test_conventional_commits_accepts_valid()
+    test_conventional_commits_rejects_invalid()
+    test_no_wip_commits_blocks_wip()
+    test_no_secrets_detects_aws_key()
+    test_no_secrets_skips_non_added_lines()
+    test_max_file_size_flags_big_file(tmp_path)
+    test_repo_config_write_and_load(tmp_path)
+    test_repo_config_user_override(tmp_path)
+    test_runner_returns_outcome_with_findings(tmp_path;monkeypatch)

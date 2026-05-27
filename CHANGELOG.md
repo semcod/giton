@@ -5,7 +5,82 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - 2026-05-27
+
+### Fixed
+- Fix string-concat issues (ticket-f8e33603)
+- Fix smart-return-type issues (ticket-5241a23f)
+- Fix unused-imports issues (ticket-678976ed)
+- Fix ai-boilerplate issues (ticket-f1340096)
+- Fix smart-return-type issues (ticket-cf388d88)
+- Fix unused-imports issues (ticket-ef62ed06)
+- Fix ai-boilerplate issues (ticket-c9e99715)
+- Fix smart-return-type issues (ticket-25895170)
+- Fix llm-hallucinations issues (ticket-d5864acf)
+- Fix ai-boilerplate issues (ticket-22c7a20b)
+
+## [0.1.10] - 2026-05-27
+
+### Fixed
+- Fix ai-boilerplate issues (ticket-520cc8b0)
+- Fix unused-imports issues (ticket-d9ba49df)
+- Fix smart-return-type issues (ticket-a078f21e)
+- Fix unused-imports issues (ticket-6bb663ef)
+- Fix magic-numbers issues (ticket-670a4fff)
+- Fix ai-boilerplate issues (ticket-7b75c64a)
+- Fix unused-imports issues (ticket-7f7595f5)
+- Fix unused-imports issues (ticket-7836e6dc)
+- Fix magic-numbers issues (ticket-364cdbb4)
+- Fix unused-imports issues (ticket-3df4999d)
+- Fix string-concat issues (ticket-ddefd20d)
+- Fix unused-imports issues (ticket-37e354ce)
+- Fix string-concat issues (ticket-0959072c)
+- Fix unused-imports issues (ticket-cbff985c)
+- Fix unused-imports issues (ticket-d9544d1d)
+- Fix magic-numbers issues (ticket-01a9b257)
+- Fix unused-imports issues (ticket-bf9e08bd)
+- Fix unused-imports issues (ticket-dc102598)
+- Fix magic-numbers issues (ticket-0afc68c7)
+- Fix smart-return-type issues (ticket-a5264d97)
+- Fix unused-imports issues (ticket-97fe62d8)
+- Fix string-concat issues (ticket-07df1cf8)
+- Fix unused-imports issues (ticket-9135e71a)
+- Fix unused-imports issues (ticket-580c65b2)
+- Fix magic-numbers issues (ticket-f6e8663e)
+- Fix smart-return-type issues (ticket-b5dc313c)
+- Fix unused-imports issues (ticket-e85782ed)
+- Fix smart-return-type issues (ticket-bbf11608)
+- Fix unused-imports issues (ticket-61cab342)
+
 ## [Unreleased]
+
+## [0.1.6] - 2026-05-27
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update TODO.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update testql-scenarios/generated-cli-tests.testql.toon.yaml
+- Update testql-scenarios/generated-from-pytests.testql.toon.yaml
+
+### Other
+- Update .code2llm_cache/Dockerfile_1779904106733599983_1063.pkl
+- Update .code2llm_cache/Dockerfile_1779904204018542516_855.pkl
+- Update .code2llm_cache/Dockerfile_1779904222125718170_858.pkl
+- Update .code2llm_cache/__init___1779904484527861301_88.pkl
+- Update .code2llm_cache/__main___1779903461855440523_64.pkl
+- Update .code2llm_cache/catalog_1779903467942497517_4931.pkl
+- Update .code2llm_cache/cli_1779904308177553774_14209.pkl
+- Update .code2llm_cache/config_1779903467956497648_2190.pkl
+- Update .code2llm_cache/context_1779903467968497760_1979.pkl
+- Update .code2llm_cache/docker-compose_1779904015273715995_275.pkl
+- ... and 43 more files
 
 ## [0.1.5] - 2026-05-27
 

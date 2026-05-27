@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<!-- generated in 0.00s -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code2llm Analysis Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --border: #475569;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #22c55e;
+            --warning: #eab308;
+            --error: #ef4444;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f8fafc;
+                --surface: #ffffff;
+                --surface-hover: #f1f5f9;
+                --border: #e2e8f0;
+                --text: #1e293b;
+                --text-muted: #64748b;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .search {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            color: var(--text);
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .search input:focus {
+            border-color: var(--accent);
+        }
+
+        .search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .file-group {
+            margin-bottom: 1rem;
+        }
+
+        .file-group-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-bottom: 0.125rem;
+        }
+
+        .file-item:hover {
+            background: var(--surface-hover);
+        }
+
+        .file-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .file-item.active .file-meta {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .file-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-size {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* Content */
+        .content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .content-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-title h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface-hover);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--border);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .content-body {
+            flex: 1;
+            overflow: auto;
+            padding: 1.5rem;
+        }
+
+        /* Welcome */
+        .welcome {
+            max-width: 800px;
+        }
+
+        .welcome h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .welcome p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Content Display */
+        pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+        }
+
+        .markdown-content {
+            line-height: 1.7;
+        }
+
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown-content h1 {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content code {
+            background: var(--surface);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+            margin-left: 0;
+            color: var(--text-muted);
+        }
+
+        .markdown-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content th,
+        .markdown-content td {
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .markdown-content th {
+            background: var(--surface);
+        }
+
+        .markdown-content img {
+            max-width: 100%;
+            border-radius: 0.5rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        /* Mermaid */
+        .mermaid-content {
+            background: var(--surface);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .mermaid-content pre {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: var(--surface);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .sidebar.open {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 100;
+            }
+
+            .file-size {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="header">
+                <h1>🔍 code2llm</h1>
+                <p>Analysis Results Browser</p>
+            </div>
+            <div class="search">
+                <input type="text" id="search" placeholder="Search files..." oninput="filterFiles(this.value)">
+            </div>
+            <div class="file-list" id="fileList">
+                <!-- Files will be rendered here -->
+            </div>
+        </aside>
+
+        <main class="content">
+            <div class="content-header">
+                <div class="content-title">
+                    <span id="contentIcon">📁</span>
+                    <h2 id="contentTitle">Welcome</h2>
+                </div>
+                <div class="content-actions" id="contentActions">
+                    <!-- Actions will be rendered here -->
+                </div>
+            </div>
+            <div class="content-body" id="contentBody">
+                <div class="welcome">
+                    <h2>Analysis Results</h2>
+                    <p>Select a file from the sidebar to view its contents. This interface works on GitHub Pages without any server required.</p>  # noqa: E501
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize mermaid
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+        const files = [{"name": "calls.png", "rel_path": "calls.png", "path": "calls.png", "size": "388.5KB", "icon": "🖼️", "type": "image", "type_name": "Image", "content": "[Binary file]", "is_subdir": false}, {"name": "compact_flow.png", "rel_path": "compact_flow.png", "path": "compact_flow.png", "size": "11.6KB", "icon": "🖼️", "type": "image", "type_name": "Image", "content": "[Binary file]", "is_subdir": false}, {"name": "flow.png", "rel_path": "flow.png", "path": "flow.png", "size": "19.2KB", "icon": "🖼️", "type": "image", "type_name": "Image", "content": "[Binary file]", "is_subdir": false}, {"name": "README.md", "rel_path": "README.md", "path": "README.md", "size": "9.4KB", "icon": "📝", "type": "markdown", "type_name": "Markdown", "content": "# code2llm - Generated Analysis Files\n<!-- generated in 0.00s -->\n\nThis directory contains the complete analysis of your project generated by `code2llm`. Each file serves a specific purpose for understanding, refactoring, and documenting your codebase.  # noqa: E501\n\n## 📁 Generated Files Overview\n\nWhen you run `code2llm ./ -f all`, the following files are created:\n\n### 🎯 Core Analysis Files\n\n| File | Format | Purpose | Key Insights |\n|------|--------|---------|--------------|\n| `evolution.toon.yaml` | **YAML** | **📋 Refactoring queue** - Prioritized improvements | 0 refactoring actions needed |\n| `map.toon.yaml` | **YAML** | **🗺️ Structural map + project header** - Modules, imports, exports, signatures, stats, alerts, hotspots, trend | Project architecture overview |\n\n### 🤖 LLM-Ready Documentation\n\n| File | Format | Purpose | Use Case |\n|------|--------|---------|----------|\n| `prompt.txt` | **Text** | **📝 Ready-to-send prompt** - Lists all files with instructions | Attach to LLM conversation as context guide |\n| `context.md` | **Markdown** | **📖 LLM narrative** - Architecture summary | Paste into ChatGPT/Claude for code analysis |\n\n### 📊 Visualizations\n\n| File | Format | Purpose | Description |\n|------|--------|---------|-------------|\n| `flow.mmd` | **Mermaid** | **🔄 Control flow diagram** | Function call paths with complexity styling |\n| `calls.mmd` | **Mermaid** | **📞 Call graph** | Function dependencies (edges only) |\n| `compact_flow.mmd` | **Mermaid** | **📦 Module overview** | Aggregated module-level view |\n\n## 🚀 Quick Start Commands\n\n### Basic Analysis\n```bash\n# Quick health check (TOON format only)\ncode2llm ./ -f toon\n\n# Generate all formats (what created these files)\ncode2llm ./ -f all\n\n# LLM-ready context only\ncode2llm ./ -f context\n```\n\n### Performance Options\n```bash\n# Fast analysis for large projects\ncode2llm ./ -f toon --strategy quick\n\n# Memory-limited analysis\ncode2llm ./ -f all --max-memory 500\n\n# Skip PNG generation (faster)\ncode2llm ./ -f all --no-png\n```\n\n### Refactoring Focus\n```bash\n# Get refactoring recommendations\ncode2llm ./ -f evolution\n\n# Focus on specific code smells\ncode2llm ./ -f toon --refactor --smell god_function\n\n# Data flow analysis\ncode2llm ./ -f flow --data-flow\n```\n\n## 📖 Understanding Each File\n\n### `analysis.toon` - Health Diagnostics\n**Purpose**: Quick overview of code health issues\n**Key sections**:\n- **HEALTH**: Critical issues (🔴) and warnings (🟡)\n- **REFACTOR**: Prioritized refactoring actions\n- **COUPLING**: Module dependencies and potential cycles\n- **LAYERS**: Package complexity metrics\n- **FUNCTIONS**: High-complexity functions (CC ≥ 10)\n- **CLASSES**: Complex classes needing attention\n\n**Example usage**:\n```bash\n# View health issues\ncat analysis.toon | head -30\n\n# Check refactoring priorities\ngrep \"REFACTOR\" analysis.toon\n```\n\n### `evolution.toon.yaml` - Refactoring Queue\n**Purpose**: Step-by-step refactoring plan\n**Key sections**:\n- **NEXT**: Immediate actions to take\n- **RISKS**: Potential breaking changes\n- **METRICS-TARGET**: Success criteria\n\n**Example usage**:\n```bash\n# Get refactoring plan\ncat evolution.toon.yaml\n\n# Track progress\ngrep \"NEXT\" evolution.toon.yaml\n```\n\n### `flow.toon` - Legacy Data Flow Analysis\n**Purpose**: Understand data movement through the system (legacy / explicit opt-in)\n**Key sections**:\n- **PIPELINES**: Data processing chains\n- **CONTRACTS**: Function input/output contracts\n- **SIDE_EFFECTS**: Functions with external impacts\n\n**Example usage**:\n```bash\n# Find data pipelines\ngrep \"PIPELINES\" flow.toon\n\n# Identify side effects\ngrep \"SIDE_EFFECTS\" flow.toon\n```\n\n### `map.toon.yaml` - Structural Map + Project Header\n**Purpose**: High-level architecture overview plus compact project header\n**Key sections**:\n- **MODULES**: All modules with basic stats\n- **IMPORTS**: Dependency relationships\n- **EXPORTS**: Public API surface and signatures\n- **HEADER**: Stats, alerts, hotspots, evolution trend\n\n**Example usage**:\n```bash\n# See project structure\ncat map.toon.yaml | head -50\n\n# Find public APIs\ngrep \"SIGNATURES\" map.toon.yaml\n```\n\n### `project.toon.yaml` - Compact Analysis View\n**Purpose**: Compact module view generated from project.yaml data\n**Status**: Legacy view generated on demand from unified project.yaml\n\n**Example usage**:\n```bash\n# View compact project structure\ncat project.toon.yaml | head -30\n\n# Find largest files\ngrep -E \"^  .*[0-9]{3,}$\" project.toon.yaml | sort -t',' -k2 -n -r | head -10\n```\n\n### `prompt.txt` - Ready-to-Send LLM Prompt\n**Purpose**: Pre-formatted prompt listing all generated files for LLM conversation\n**Generation**: Written when `code2llm` runs with a source path and requests `-f all` (including `--no-chunk`) or `code2logic`  # noqa: E501\n**Contents**:\n- **Files section**: Lists all existing generated files with descriptions, including `project.toon.yaml` when generated by `-f all`  # noqa: E501\n- **Source files section**: Highlights important source files such as `cli_exports/orchestrator.py`\n- **Missing section**: Shows which files weren't generated (if any)\n- **Task section**: Refactoring brief with concrete execution instructions, not just analysis\n- **Priority Order section**: State-dependent refactoring priorities, starting with blockers and then architecture cleanup  # noqa: E501\n- **Requirements section**: Guidelines for suggested changes\n\n**Example usage**:\n```bash\n# View the prompt\ncat prompt.txt\n\n# Copy to clipboard and paste into ChatGPT/Claude\ncat prompt.txt | pbcopy  # macOS\ncat prompt.txt | xclip -sel clip  # Linux\n```\n\n### `context.md` - LLM Narrative\n**Purpose**: Ready-to-paste context for AI assistants\n**Key sections**:\n- **Overview**: Project statistics\n- **Architecture**: Module breakdown\n- **Entry Points**: Public interfaces\n- **Patterns**: Design patterns detected\n\n**Example usage**:\n```bash\n# Copy to clipboard for LLM\ncat context.md | pbcopy  # macOS\ncat context.md | xclip -sel clip  # Linux\n\n# Use with Claude/ChatGPT for code analysis\n```\n\n### Visualization Files (`*.mmd`, `*.png`)\n**Purpose**: Visual understanding of code structure\n**Files**:\n- `flow.mmd` - Detailed control flow with complexity colors\n- `calls.mmd` - Simple call graph\n- `compact_flow.mmd` - High-level module view\n- `*.png` - Pre-rendered images\n\n**Example usage**:\n```bash\n# View diagrams\nopen flow.png  # macOS\nxdg-open flow.png  # Linux\n\n# Edit in Mermaid Live Editor\n# Copy content of .mmd files to https://mermaid.live\n```\n\n## 🔍 Common Analysis Patterns\n\n### 1. Code Health Assessment\n```bash\n# Quick health check\ncode2llm ./ -f toon\ncat analysis.toon | grep -E \"(HEALTH|REFACTOR)\"\n```\n\n### 2. Refactoring Planning\n```bash\n# Get refactoring queue\ncode2llm ./ -f evolution\ncat evolution.toon.yaml\n\n# Focus on specific issues\ncode2llm ./ -f toon --refactor --smell god_function\n```\n\n### 3. LLM Assistance\n```bash\n# Generate context for AI\ncode2llm ./ -f context\ncat context.md\n\n# Use with Claude: \"Based on this context, help me refactor the god modules\"\n```\n\n### 4. Team Documentation\n```bash\n# Generate all docs for team\ncode2llm ./ -f all -o ./docs/\n\n# Create visual diagrams\nopen docs/flow.png\n```\n\n## 📊 Interpreting Metrics\n\n### Complexity Metrics (CC)\n- **🔴 Critical (≥5.0)**: Immediate refactoring needed\n- **🟠 High (3.0-4.9)**: Consider refactoring\n- **🟡 Medium (1.5-2.9)**: Monitor complexity\n- **🟢 Low (0.1-1.4)**: Acceptable\n- **⚪ Basic (0.0)**: Simple functions\n\n### Module Health\n- **GOD Module**: Too large (>500 lines, >20 methods)\n- **HUB**: High fan-out (calls many modules)\n- **FAN-IN**: High incoming dependencies\n- **CYCLES**: Circular dependencies\n\n### Data Flow Indicators\n- **PIPELINE**: Sequential data processing\n- **CONTRACT**: Clear input/output specification\n- **SIDE_EFFECT**: External state modification\n\n## 🛠️ Integration Examples\n\n### CI/CD Pipeline\n```bash\n#!/bin/bash\n# Analyze code quality in CI\ncode2llm ./ -f toon -o ./analysis\nif grep -q \"🔴 GOD\" ./analysis/analysis.toon; then\n    echo \"❌ God modules detected\"\n    exit 1\nfi\n```\n\n### Pre-commit Hook\n```bash\n#!/bin/sh\n# .git/hooks/pre-commit\ncode2llm ./ -f toon -o ./temp_analysis\nif grep -q \"🔴\" ./temp_analysis/analysis.toon; then\n    echo \"⚠️  Critical issues found. Review before committing.\"\nfi\nrm -rf ./temp_analysis\n```\n\n### Documentation Generation\n```bash\n# Generate docs for README\ncode2llm ./ -f context -o ./docs/\necho \"## Architecture\" >> README.md\ncat docs/context.md >> README.md\n```\n\n## 📚 Next Steps\n\n1. **Review `analysis.toon`** - Identify critical issues\n2. **Check `evolution.toon.yaml`** - Plan refactoring priorities\n3. **Use `context.md`** - Get LLM assistance for complex changes\n4. **Reference visualizations** - Understand system architecture\n5. **Track progress** - Re-run analysis after changes\n\n## 🔧 Advanced Usage\n\n### Custom Analysis\n```bash\n# Deep analysis with all insights\ncode2llm ./ -m hybrid -f all --max-depth 15 -v\n\n# Performance-optimized\ncode2llm ./ -m static -f toon --strategy quick\n\n# Refactoring-focused\ncode2llm ./ -f toon,evolution --refactor\n```\n\n### Output Customization\n```bash\n# Separate output directories\ncode2llm ./ -f all -o ./analysis-$(date +%Y%m%d)\n\n# Split YAML into multiple files\ncode2llm ./ -f yaml --split-output\n\n# Separate orphaned functions\ncode2llm ./ -f yaml --separate-orphans\n```\n\n---\n\n**Generated by**: `code2llm ./ -f all --readme`  \n**Analysis Date**: 2026-05-27  \n**Total Functions**: 92  \n**Total Classes**: 8  \n**Modules**: 30  \n\nFor more information about code2llm, visit: https://github.com/tom-sapletta/code2llm\n", "is_subdir": false}, {"name": "context.md", "rel_path": "context.md", "path": "context.md", "size": "13.1KB", "icon": "📝", "type": "markdown", "type_name": "Markdown", "content": "# System Architecture Analysis\n<!-- generated in 0.00s -->\n\n## Overview\n\n- **Project**: /home/tom/github/semcod/gix\n- **Primary Language**: python\n- **Languages**: python: 17, txt: 3, yaml: 2, toml: 2, shell: 2\n- **Analysis Mode**: static\n- **Total Functions**: 92\n- **Total Classes**: 8\n- **Modules**: 30\n- **Entry Points**: 63\n\n## Architecture by Module\n\n### src.giton.cli\n- **Functions**: 22\n- **File**: `cli.py`\n\n### src.giton.config\n- **Functions**: 8\n- **Classes**: 1\n- **File**: `config.py`\n\n### src.giton.history\n- **Functions**: 8\n- **Classes**: 1\n- **File**: `history.py`\n\n### src.giton.plugins\n- **Functions**: 7\n- **File**: `plugins.py`\n\n### src.giton.policies\n- **Functions**: 6\n- **Classes**: 1\n- **File**: `policies.py`\n\n### src.giton.shell\n- **Functions**: 6\n- **File**: `shell.py`\n\n### src.giton.repo_config\n- **Functions**: 6\n- **Classes**: 1\n- **File**: `repo_config.py`\n\n### examples.advanced.main\n- **Functions**: 5\n- **File**: `main.py`\n\n### src.giton.context\n- **Functions**: 5\n- **Classes**: 1\n- **File**: `context.py`\n\n### src.giton.catalog\n- **Functions**: 4\n- **Classes**: 1\n- **File**: `catalog.py`\n\n### src.giton.runner\n- **Functions**: 4\n- **Classes**: 2\n- **File**: `runner.py`\n\n### examples.testing.sample_project.src.example\n- **Functions**: 3\n- **File**: `example.py`\n\n### src.giton.interactive\n- **Functions**: 3\n- **File**: `interactive.py`\n\n### src.giton.hooks\n- **Functions**: 3\n- **File**: `hooks.py`\n\n### examples.basic.main\n- **Functions**: 2\n- **File**: `main.py`\n\n## Key Entry Points\n\nMain execution flows into the system:\n\n### src.giton.cli.history_clean\n> Run `git rebase -i --autosquash` safely with a backup ref.\n\nDefault base is the tracked upstream. Records `refs/giton/backup/clean-<ts>`\npointing at H\n- **Calls**: history_app.command, typer.Option, typer.Option, typer.Option, src.giton.context.repo_root, history.list_log, console.print, history.make_backup_ref\n\n### src.giton.cli.fixup\n> Create a `fixup!` commit from currently staged changes.\n\nRecords a backup ref under `refs/giton/backup/fixup-<ts>` before\nrunning so the operation is \n- **Calls**: app.command, typer.Option, typer.Option, src.giton.context.repo_root, None.stdout.strip, None.stdout.strip, console.print, history.make_backup_ref\n\n### src.giton.cli.hook_commit_msg\n> Validate the commit message before the commit completes.\n\nGit invokes this hook with the path to the message file as `$1`.\nOn policy errors we exit no\n- **Calls**: hook_app.command, typer.Argument, src.giton.context.collect, None.strip, cleaned.partition, subject.strip, body.strip, repo_config.load\n\n### src.giton.policies._check_conventional_commits\n- **Calls**: ctx.last_commit_subject.strip, int, bool, opts.get, opts.get, len, findings.append, None.join\n\n### src.giton.plugins.show_catalog\n- **Calls**: Table, table.add_column, table.add_column, table.add_column, table.add_column, set, catalog.CATALOG.items, console.print\n\n### src.giton.cli.policy_check\n> Run only the built-in policy engine for the given trigger.\n- **Calls**: policy_app.command, typer.Option, src.giton.context.collect, repo_config.load, policies.evaluate, console.print, typer.Exit, console.print\n\n### src.giton.plugins.show_table\n- **Calls**: src.giton.config.load_plugins, Table, table.add_column, table.add_column, table.add_column, table.add_column, table.add_column, table.add_row\n\n### src.giton.cli.init\n> Install giton git hooks in the current repository.\n- **Calls**: app.command, typer.Option, src.giton.context.repo_root, install_hooks, console.print, console.print, console.print, typer.Exit\n\n### src.giton.cli.history_log\n> Show the commits eligible for the next push.\n- **Calls**: history_app.command, typer.Option, typer.Option, src.giton.context.repo_root, history.list_log, console.print, console.print, typer.Exit\n\n### src.giton.hooks.install\n- **Calls**: src.giton.hooks.hooks_dir, hd.exists, FileNotFoundError, target.exists, target.write_text, target.chmod, written.append, target.with_suffix\n\n### src.giton.interactive.choose\n> Pick one of `options` by index. Returns `default` when not on TTY.\n- **Calls**: console.print, enumerate, src.giton.interactive.is_tty, console.print, None.strip, int, len, console.print\n\n### examples.advanced.main.main\n> Run all advanced examples.\n- **Calls**: console.print, examples.advanced.main.demonstrate_catalog, examples.advanced.main.demonstrate_plugin_management, examples.advanced.main.demonstrate_hooks, examples.advanced.main.demonstrate_trigger_sequence, console.print, console.print, console.print\n\n### src.giton.cli.status\n> Show repo summary.\n- **Calls**: app.command, src.giton.context.collect, console.print, console.print, console.print, console.print, typer.Exit, console.print\n\n### src.giton.cli.policy_list\n> Show currently active policies in this repo.\n- **Calls**: policy_app.command, src.giton.context.repo_root, repo_config.load, console.print, console.print, typer.Exit, cfg.policy, console.print\n\n### src.giton.policies._check_no_secrets\n- **Calls**: None.join, opts.get, rx.search, ctx.staged_diff.splitlines, re.compile, findings.append, line.startswith, Finding\n\n### src.giton.cli.policy_init\n> Write a default `.giton/config.yaml` into the repo.\n- **Calls**: policy_app.command, typer.Option, src.giton.context.repo_root, repo_config.write_default, console.print, console.print, typer.Exit, path.relative_to\n\n### src.giton.catalog.list_categories\n- **Calls**: CATALOG.items, out.values, dict, None.append, v.sort, sorted, out.items, out.setdefault\n\n### src.giton.hooks.uninstall\n- **Calls**: src.giton.hooks.hooks_dir, target.exists, target.unlink, target.with_suffix, backup.exists, removed.append, target.read_text, backup.rename\n\n### src.giton.cli.uninit\n> Remove giton hooks from the current repository (restore backups).\n- **Calls**: app.command, src.giton.context.repo_root, uninstall_hooks, console.print, console.print, typer.Exit, len\n\n### src.giton.history.list_log\n> Return (sha, subject) pairs for recent commits.\n- **Calls**: out.splitlines, args.append, src.giton.history._git, line.partition, rows.append, sha.strip, subj.strip\n\n### src.giton.history.autosquash\n> Run `git rebase -i --autosquash <base>`.\n\nWith `interactive=False` (default) we set `GIT_SEQUENCE_EDITOR` to convert\n\"pick\" to \"fixup\" for commits tha\n- **Calls**: dict, src.giton.history._git, tempfile.NamedTemporaryFile, f.write, os.chmod, src.giton.history._git, os.unlink\n\n### src.giton.policies.evaluate\n- **Calls**: CHECKS.items, repo_cfg.policy, opts.get, out.extend, fn, out.append, Finding\n\n### src.giton.shell.run\n- **Calls**: console.print, console.print, Panel, input, console.print, src.giton.shell.dispatch, console.print\n\n### src.giton.cli._root\n- **Calls**: app.callback, typer.Option, console.print, typer.Exit, typer.echo, ctx.get_help\n\n### src.giton.cli.doctor\n> Quick environment check.\n- **Calls**: app.command, console.print, src.giton.context.repo_root, console.print, plug.show_table, shutil.which\n\n### src.giton.repo_config.load\n- **Calls**: src.giton.repo_config._deep_merge, RepoConfig, path.exists, RepoConfig, yaml.safe_load, path.read_text\n\n### src.giton.interactive.confirm\n> Ask a yes/no question. Returns `default` when not on a TTY.\n- **Calls**: src.giton.interactive.is_tty, None.lower, console.print, None.strip, input\n\n### src.giton.policies._check_max_file_size\n- **Calls**: int, findings.append, opts.get, p.stat, Finding\n\n### src.giton.history.make_backup_ref\n> Create `refs/giton/backup/<prefix>-<timestamp>` pointing at HEAD.\n- **Calls**: None.strftime, src.giton.history.head_sha, src.giton.history._git, _dt.datetime.now\n\n### src.giton.policies._check_no_wip\n- **Calls**: ctx.last_commit_subject.strip, opts.get, re.search, Finding\n\n## Process Flows\n\nKey execution flows identified:\n\n### Flow 1: history_clean\n```\nhistory_clean [src.giton.cli]\n  └─ →> repo_root\n      └─> _run\n```\n\n### Flow 2: fixup\n```\nfixup [src.giton.cli]\n  └─ →> repo_root\n      └─> _run\n```\n\n### Flow 3: hook_commit_msg\n```\nhook_commit_msg [src.giton.cli]\n  └─ →> collect\n      └─> repo_root\n          └─> _run\n      └─> _run\n```\n\n### Flow 4: _check_conventional_commits\n```\n_check_conventional_commits [src.giton.policies]\n```\n\n### Flow 5: show_catalog\n```\nshow_catalog [src.giton.plugins]\n```\n\n### Flow 6: policy_check\n```\npolicy_check [src.giton.cli]\n  └─ →> collect\n      └─> repo_root\n          └─> _run\n      └─> _run\n```\n\n### Flow 7: show_table\n```\nshow_table [src.giton.plugins]\n  └─ →> load_plugins\n      └─> ensure_user_dirs\n```\n\n### Flow 8: init\n```\ninit [src.giton.cli]\n  └─ →> repo_root\n      └─> _run\n```\n\n### Flow 9: history_log\n```\nhistory_log [src.giton.cli]\n  └─ →> repo_root\n      └─> _run\n```\n\n### Flow 10: install\n```\ninstall [src.giton.hooks]\n  └─> hooks_dir\n```\n\n## Key Classes\n\n### src.giton.repo_config.RepoConfig\n- **Methods**: 3\n- **Key Methods**: src.giton.repo_config.RepoConfig.policy, src.giton.repo_config.RepoConfig.hook, src.giton.repo_config.RepoConfig.fail_on_policy\n\n### src.giton.config.PluginRecord\n- **Methods**: 2\n- **Key Methods**: src.giton.config.PluginRecord.to_dict, src.giton.config.PluginRecord.from_dict\n\n### src.giton.context.GitContext\n- **Methods**: 2\n- **Key Methods**: src.giton.context.GitContext.diff_file, src.giton.context.GitContext.paths_arg\n\n### src.giton.runner.PluginResult\n- **Methods**: 1\n- **Key Methods**: src.giton.runner.PluginResult.ok\n\n### src.giton.runner.TriggerOutcome\n- **Methods**: 1\n- **Key Methods**: src.giton.runner.TriggerOutcome.ok\n\n### src.giton.history.GitResult\n- **Methods**: 1\n- **Key Methods**: src.giton.history.GitResult.ok\n\n### src.giton.policies.Finding\n- **Methods**: 1\n- **Key Methods**: src.giton.policies.Finding.is_error\n\n### src.giton.catalog.CatalogEntry\n- **Methods**: 0\n\n## Data Transformation Functions\n\nKey functions that process and transform data:\n\n### src.giton.runner._format_command\n- **Output to**: cmd.format, ctx.paths_arg, str, str, ctx.diff_file\n\n## Behavioral Patterns\n\n### recursion__deep_merge\n- **Type**: recursion\n- **Confidence**: 0.90\n- **Functions**: src.giton.repo_config._deep_merge\n\n## Public API Surface\n\nFunctions exposed as public API (no underscore prefix):\n\n- `src.giton.cli.history_clean` - 30 calls\n- `src.giton.cli.fixup` - 28 calls\n- `src.giton.shell.dispatch` - 25 calls\n- `src.giton.cli.hook_commit_msg` - 24 calls\n- `examples.basic.main.test_basic_giton_usage` - 20 calls\n- `examples.advanced.main.demonstrate_plugin_management` - 19 calls\n- `src.giton.plugins.show_catalog` - 14 calls\n- `examples.advanced.main.demonstrate_catalog` - 13 calls\n- `src.giton.cli.policy_check` - 13 calls\n- `src.giton.plugins.show_table` - 13 calls\n- `src.giton.context.collect` - 13 calls\n- `examples.advanced.main.demonstrate_trigger_sequence` - 12 calls\n- `src.giton.cli.init` - 12 calls\n- `src.giton.cli.history_log` - 12 calls\n- `src.giton.plugins.install_from_catalog` - 12 calls\n- `src.giton.hooks.install` - 12 calls\n- `src.giton.runner.run_trigger` - 11 calls\n- `src.giton.interactive.choose` - 10 calls\n- `examples.advanced.main.demonstrate_hooks` - 9 calls\n- `examples.advanced.main.main` - 9 calls\n- `src.giton.cli.status` - 9 calls\n- `src.giton.cli.policy_list` - 9 calls\n- `src.giton.cli.policy_init` - 8 calls\n- `src.giton.catalog.list_categories` - 8 calls\n- `src.giton.hooks.uninstall` - 8 calls\n- `src.giton.cli.uninit` - 7 calls\n- `src.giton.history.list_log` - 7 calls\n- `src.giton.history.autosquash` - 7 calls\n- `src.giton.policies.evaluate` - 7 calls\n- `src.giton.shell.run` - 7 calls\n- `src.giton.config.load_plugins` - 6 calls\n- `src.giton.cli.doctor` - 6 calls\n- `src.giton.repo_config.load` - 6 calls\n- `src.giton.interactive.confirm` - 5 calls\n- `src.giton.config.save_plugins` - 4 calls\n- `src.giton.config.remove_plugin` - 4 calls\n- `src.giton.history.make_backup_ref` - 4 calls\n- `src.giton.repo_config.write_default` - 4 calls\n- `src.giton.config.upsert_plugin` - 3 calls\n- `src.giton.cli.plugin_install_category` - 3 calls\n\n## System Interactions\n\nHow components interact:\n\n```mermaid\ngraph TD\n    history_clean --> command\n    history_clean --> Option\n    history_clean --> repo_root\n    fixup --> command\n    fixup --> Option\n    fixup --> repo_root\n    fixup --> strip\n    hook_commit_msg --> command\n    hook_commit_msg --> Argument\n    hook_commit_msg --> collect\n    hook_commit_msg --> strip\n    hook_commit_msg --> partition\n    _check_conventional_ --> strip\n    _check_conventional_ --> int\n    _check_conventional_ --> bool\n    _check_conventional_ --> get\n    show_catalog --> Table\n    show_catalog --> add_column\n    policy_check --> command\n    policy_check --> Option\n    policy_check --> collect\n    policy_check --> load\n    policy_check --> evaluate\n    show_table --> load_plugins\n    show_table --> Table\n    show_table --> add_column\n    init --> command\n    init --> Option\n    init --> repo_root\n    init --> install_hooks\n```\n\n## Reverse Engineering Guidelines\n\n1. **Entry Points**: Start analysis from the entry points listed above\n2. **Core Logic**: Focus on classes with many methods\n3. **Data Flow**: Follow data transformation functions\n4. **Process Flows**: Use the flow diagrams for execution paths\n5. **API Surface**: Public API functions reveal the interface\n\n## Context for LLM\n\nMaintain the identified architectural patterns and public API surface when suggesting changes.", "is_subdir": false}, {"name": "calls.mmd", "rel_path": "calls.mmd", "path": "calls.mmd", "size": "8.1KB", "icon": "📈", "type": "mermaid", "type_name": "Mermaid", "content": "flowchart LR\n%% generated in 0.00s\n    subgraph examples__advanced\n        examples__advanced__main__demonstrate_trigger_sequence[&quot;demonstrate_trigger_sequence&quot;]\n        examples__advanced__main__demonstrate_hooks[&quot;demonstrate_hooks&quot;]\n        examples__advanced__main__main[&quot;main&quot;]\n        examples__advanced__main__demonstrate_catalog[&quot;demonstrate_catalog&quot;]\n        examples__advanced__main__demonstrate_plugin_management[&quot;demonstrate_plugin_management&quot;]\n    end\n    subgraph examples__basic\n        examples__basic__main__test_basic_giton_usage[&quot;test_basic_giton_usage&quot;]\n        examples__basic__main__main[&quot;main&quot;]\n    end\n    subgraph src__giton\n        src__giton__cli__history_log[&quot;history_log&quot;]\n        src__giton__cli__policy_check[&quot;policy_check&quot;]\n        src__giton__history__list_log[&quot;list_log&quot;]\n        src__giton__cli__uninit[&quot;uninit&quot;]\n        src__giton__shell___cmd_init[&quot;_cmd_init&quot;]\n        src__giton__history__create_fixup[&quot;create_fixup&quot;]\n        src__giton__hooks__install[&quot;install&quot;]\n        src__giton__history__make_backup_ref[&quot;make_backup_ref&quot;]\n        src__giton__shell___cmd_policy[&quot;_cmd_policy&quot;]\n        src__giton__plugins__install_category[&quot;install_category&quot;]\n        src__giton__cli__fixup[&quot;fixup&quot;]\n        src__giton__cli__hook_pre_commit[&quot;hook_pre_commit&quot;]\n        src__giton__cli__status[&quot;status&quot;]\n        src__giton__plugins__show_table[&quot;show_table&quot;]\n        src__giton__history___git[&quot;_git&quot;]\n        src__giton__interactive__confirm[&quot;confirm&quot;]\n        src__giton__shell__dispatch[&quot;dispatch&quot;]\n        src__giton__plugins___pip_install[&quot;_pip_install&quot;]\n        src__giton__interactive__choose[&quot;choose&quot;]\n        src__giton__config__remove_plugin[&quot;remove_plugin&quot;]\n        src__giton__config__upsert_plugin[&quot;upsert_plugin&quot;]\n        src__giton__config__save_plugins[&quot;save_plugins&quot;]\n        src__giton__cli__policy_init[&quot;policy_init&quot;]\n        src__giton__runner___print_findings[&quot;_print_findings&quot;]\n        src__giton__cli__policy_list[&quot;policy_list&quot;]\n        src__giton__context__collect[&quot;collect&quot;]\n        src__giton__context___run[&quot;_run&quot;]\n        src__giton__cli__history_clean[&quot;history_clean&quot;]\n        src__giton__repo_config__load[&quot;load&quot;]\n        src__giton__cli__doctor[&quot;doctor&quot;]\n        src__giton__history__has_staged_changes[&quot;has_staged_changes&quot;]\n        src__giton__runner___format_command[&quot;_format_command&quot;]\n        src__giton__cli__init[&quot;init&quot;]\n        src__giton__hooks__uninstall[&quot;uninstall&quot;]\n        src__giton__config__ensure_user_dirs[&quot;ensure_user_dirs&quot;]\n        src__giton__history__upstream_range[&quot;upstream_range&quot;]\n        src__giton__shell___set_enabled[&quot;_set_enabled&quot;]\n        src__giton__repo_config___deep_merge[&quot;_deep_merge&quot;]\n        src__giton__plugins__install_defaults[&quot;install_defaults&quot;]\n        src__giton__hooks__hooks_dir[&quot;hooks_dir&quot;]\n        src__giton__plugins__install_from_catalog[&quot;install_from_catalog&quot;]\n        src__giton__history__head_sha[&quot;head_sha&quot;]\n        src__giton__interactive__is_tty[&quot;is_tty&quot;]\n        src__giton__shell___cmd_status[&quot;_cmd_status&quot;]\n        src__giton__cli__hook_pre_push[&quot;hook_pre_push&quot;]\n        src__giton__history__autosquash[&quot;autosquash&quot;]\n        src__giton__shell__run[&quot;run&quot;]\n        src__giton__context__repo_root[&quot;repo_root&quot;]\n        src__giton__runner___run_plugin[&quot;_run_plugin&quot;]\n        src__giton__config__load_plugins[&quot;load_plugins&quot;]\n        src__giton__cli__hook_post_commit[&quot;hook_post_commit&quot;]\n        src__giton__plugins__uninstall[&quot;uninstall&quot;]\n        src__giton__cli__hook_commit_msg[&quot;hook_commit_msg&quot;]\n        src__giton__runner__run_trigger[&quot;run_trigger&quot;]\n    end\n    examples__advanced__main__demonstrate_plugin_management --&gt; src__giton__config__load_plugins\n    examples__advanced__main__demonstrate_hooks --&gt; src__giton__context__repo_root\n    examples__advanced__main__demonstrate_trigger_sequence --&gt; src__giton__context__repo_root\n    examples__advanced__main__demonstrate_trigger_sequence --&gt; src__giton__runner__run_trigger\n    examples__advanced__main__main --&gt; examples__advanced__main__demonstrate_catalog\n    examples__advanced__main__main --&gt; examples__advanced__main__demonstrate_plugin_management\n    examples__advanced__main__main --&gt; examples__advanced__main__demonstrate_hooks\n    examples__advanced__main__main --&gt; examples__advanced__main__demonstrate_trigger_sequence\n    examples__basic__main__test_basic_giton_usage --&gt; src__giton__context__collect\n    examples__basic__main__test_basic_giton_usage --&gt; src__giton__runner__run_trigger\n    examples__basic__main__main --&gt; examples__basic__main__test_basic_giton_usage\n    src__giton__config__load_plugins --&gt; src__giton__config__ensure_user_dirs\n    src__giton__config__save_plugins --&gt; src__giton__config__ensure_user_dirs\n    src__giton__config__upsert_plugin --&gt; src__giton__config__load_plugins\n    src__giton__config__upsert_plugin --&gt; src__giton__config__save_plugins\n    src__giton__config__remove_plugin --&gt; src__giton__config__load_plugins\n    src__giton__config__remove_plugin --&gt; src__giton__config__save_plugins\n    src__giton__cli__init --&gt; src__giton__context__repo_root\n    src__giton__cli__uninit --&gt; src__giton__context__repo_root\n    src__giton__cli__status --&gt; src__giton__context__collect\n    src__giton__cli__doctor --&gt; src__giton__context__repo_root\n    src__giton__cli__hook_pre_commit --&gt; src__giton__runner__run_trigger\n    src__giton__cli__hook_commit_msg --&gt; src__giton__context__collect\n    src__giton__cli__hook_post_commit --&gt; src__giton__runner__run_trigger\n    src__giton__cli__hook_pre_push --&gt; src__giton__runner__run_trigger\n    src__giton__cli__policy_check --&gt; src__giton__context__collect\n    src__giton__cli__policy_init --&gt; src__giton__context__repo_root\n    src__giton__cli__policy_list --&gt; src__giton__context__repo_root\n    src__giton__cli__fixup --&gt; src__giton__context__repo_root\n    src__giton__cli__history_log --&gt; src__giton__context__repo_root\n    src__giton__cli__history_clean --&gt; src__giton__context__repo_root\n    src__giton__plugins__install_from_catalog --&gt; src__giton__plugins___pip_install\n    src__giton__plugins__install_from_catalog --&gt; src__giton__config__upsert_plugin\n    src__giton__plugins__install_defaults --&gt; src__giton__plugins__install_from_catalog\n    src__giton__plugins__install_category --&gt; src__giton__plugins__install_from_catalog\n    src__giton__plugins__uninstall --&gt; src__giton__config__remove_plugin\n    src__giton__plugins__show_table --&gt; src__giton__config__load_plugins\n    src__giton__runner__run_trigger --&gt; src__giton__context__collect\n    src__giton__runner__run_trigger --&gt; src__giton__runner___print_findings\n    src__giton__runner__run_trigger --&gt; src__giton__config__load_plugins\n    src__giton__runner__run_trigger --&gt; src__giton__runner___run_plugin\n    src__giton__runner___run_plugin --&gt; src__giton__runner___format_command\n    src__giton__interactive__confirm --&gt; src__giton__interactive__is_tty\n    src__giton__interactive__choose --&gt; src__giton__interactive__is_tty\n    src__giton__context__repo_root --&gt; src__giton__context___run\n    src__giton__context__collect --&gt; src__giton__context__repo_root\n    src__giton__context__collect --&gt; src__giton__context___run\n    src__giton__hooks__install --&gt; src__giton__hooks__hooks_dir\n    src__giton__hooks__uninstall --&gt; src__giton__hooks__hooks_dir\n    src__giton__history__head_sha --&gt; src__giton__history___git\n    src__giton__history__make_backup_ref --&gt; src__giton__history__head_sha\n    src__giton__history__make_backup_ref --&gt; src__giton__history___git\n    src__giton__history__list_log --&gt; src__giton__history___git\n    src__giton__history__upstream_range --&gt; src__giton__history___git\n    src__giton__history__create_fixup --&gt; src__giton__history___git\n    src__giton__history__has_staged_changes --&gt; src__giton__history___git\n    src__giton__history__autosquash --&gt; src__giton__history___git\n    src__giton__shell___set_enabled --&gt; src__giton__config__load_plugins\n    src__giton__shell___set_enabled --&gt; src__giton__config__save_plugins\n    src__giton__shell___cmd_status --&gt; src__giton__context__collect\n    src__giton__shell___cmd_policy --&gt; src__giton__context__collect\n    src__giton__shell___cmd_init --&gt; src__giton__context__repo_root\n    src__giton__shell__run --&gt; src__giton__shell__dispatch\n    src__giton__repo_config__load --&gt; src__giton__repo_config___deep_merge\n", "is_subdir": false}, {"name": "compact_flow.mmd", "rel_path": "compact_flow.mmd", "path": "compact_flow.mmd", "size": "261B", "icon": "📈", "type": "mermaid", "type_name": "Mermaid", "content": "flowchart TD\n%% generated in 0.00s\n    examples__advanced[&quot;examples.advanced&lt;br/&gt;5 funcs&quot;]\n    examples__basic[&quot;examples.basic&lt;br/&gt;2 funcs&quot;]\n    src__giton[&quot;src.giton&lt;br/&gt;82 funcs&quot;]\n    examples__advanced ==&gt;|6| src__giton\n    examples__basic --&gt;|2| src__giton\n", "is_subdir": false}, {"name": "flow.mmd", "rel_path": "flow.mmd", "path": "flow.mmd", "size": "1.3KB", "icon": "📈", "type": "mermaid", "type_name": "Mermaid", "content": "flowchart TD\n%% generated in 0.00s\n\n    %% Entry points (blue)\n    classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff\n\n    subgraph Core\n        src__giton__config___xdg_config_home[&quot;_xdg_config_home&quot;]\n        src__giton__config__PluginRecord__to_dict[&quot;to_dict&quot;]\n        src__giton__config__PluginRecord__from_dict[&quot;from_dict&quot;]\n        src__giton__cli___root[&quot;_root&quot;]\n        src__giton__cli__init[&quot;init&quot;]\n        src__giton__cli__uninit[&quot;uninit&quot;]\n        src__giton__cli__status[&quot;status&quot;]\n        src__giton__cli__shell[&quot;shell&quot;]\n        src__giton__cli__doctor[&quot;doctor&quot;]\n        src__giton__cli__plugin_list[&quot;plugin_list&quot;]\n        src__giton__cli__plugin_catalog[&quot;plugin_catalog&quot;]\n        src__giton__cli__plugin_install[&quot;plugin_install&quot;]\n        src__giton__cli__plugin_install_defaults[&quot;plugin_install_defaults&quot;]\n        src__giton__cli__plugin_install_category[&quot;plugin_install_category&quot;]\n        src__giton__cli__plugin_remove[&quot;plugin_remove&quot;]\n        ...[&quot;+48 more&quot;]\n    end\n\n    class src__giton__config___xdg_config_home,src__giton__config__PluginRecord__to_dict,src__giton__config__PluginRecord__from_dict,src__giton__cli___root,src__giton__cli__init,src__giton__cli__uninit,src__giton__cli__status,src__giton__cli__shell,src__giton__cli__doctor,src__giton__cli__plugin_list entry\n", "is_subdir": false}, {"name": "prompt.txt", "rel_path": "prompt.txt", "path": "prompt.txt", "size": "2.9KB", "icon": "📄", "type": "text", "type_name": "Text", "content": "You are an AI assistant helping me understand and improve a codebase.\n# generated in 0.00s\nUse the attached/generated files as the authoritative context.\nYour goal is to refactor the project based on these files, not just summarize it.\n\nwe are in project path: gix\n\nFiles for analysis:\n\nNote: project/validation.toon.yaml and project/duplication.toon.yaml are generated by external tools (vallm and redup)\n- analysis.toon.yaml  (Health diagnostics - complexity metrics, god modules, coupling issues, refactoring priorities) [6KB]\n- map.toon.yaml  (Structural map - files, sizes, imports, exports, signatures, project header) [5KB]\n- evolution.toon.yaml  (Refactoring queue - ranked actions by impact/effort, risks, metrics targets, history) [1KB]\n- project.toon.yaml  (Compact project overview - generated from project.yaml data) [2KB]\n- context.md  (LLM narrative - architecture summary and project context) [13KB]\n\nMissing files (not generated in this run):\n- README.md\n\nTask:\n- Treat this prompt as a refactoring brief: identify the highest-priority changes and prepare concrete edits.\n- Use the file set to decide whether the first pass should focus on correctness, duplication, complexity reduction, or architecture cleanup.\n- If you can safely implement the refactor, do it; otherwise give an exact file-by-file change plan and test plan.\n- Use analysis.toon.yaml to locate high-CC functions and god modules that should be split first.\n- Keep module boundaries intact and update imports/exports according to map.toon.yaml.\n- Use evolution.toon.yaml as the execution backlog and work from the top-ranked items.\n- Keep project.toon.yaml aligned with the refactored architecture.\n\nPriority Order:\nP1 — Split or simplify the highest-CC / god modules identified in analysis.toon.yaml.\nP1 — Preserve module boundaries and update imports/exports according to map.toon.yaml.\nP2 — Keep the compact project overview in project.toon.yaml aligned with the refactor.\nP2 — Execute the highest-impact items from evolution.toon.yaml in order of benefit/risk.\n\nFocus Areas for Analysis:\n1. **Code Health Analysis** - Review complexity metrics, god modules, coupling issues from analysis.toon.yaml\n2. **Structural Map** - Use map.toon.yaml to inspect imports, exports, signatures, and the project header\n3. **Refactoring Priorities** - Examine ranked refactoring actions and risk assessment from evolution.toon.yaml\n4. **Project Overview** - Review the compact project overview from project.toon.yaml\n\nAnalysis Strategy:\n- Start with analysis.toon.yaml for health metrics, then map.toon.yaml for structure and signatures\n- Review evolution.toon.yaml for action priorities and next steps\n- Compare the compact project overview in project.toon.yaml with the main analysis files\n\nConstraints:\n- Prefer minimal, incremental changes.\n- Maintain full backward compatibility.\n- Base recommendations on concrete metrics from the provided files.\n- If uncertain, ask clarifying questions.\n", "is_subdir": false}, {"name": "mermaid.export", "rel_path": "mermaid.export", "path": "mermaid.export", "size": "9.6KB", "icon": "📄", "type": "unknown", "type_name": "EXPORT", "content": "[Binary file]", "is_subdir": false}, {"name": "analysis.toon.yaml", "rel_path": "analysis.toon.yaml", "path": "analysis.toon.yaml", "size": "6.7KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "# code2llm | 30f 2930L | python:17,txt:3,yaml:2,toml:2,shell:2,yml:1 | 2026-05-27\n# generated in 0.01s\n# CC̅=3.8 | critical:1/92 | dups:0 | cycles:1\n\nHEALTH[1]:\n  🟡 CC    dispatch CC=23 (limit:15)\n\nREFACTOR[2]:\n  1. split 1 high-CC methods  (CC&gt;15)\n  2. break 1 circular dependencies\n\nPIPELINES[60]:\n  [1] Src [main]: main → demonstrate_catalog\n      PURITY: 100% pure\n  [2] Src [main]: main → test_basic_giton_usage → collect → repo_root → ...(1 more)\n      PURITY: 100% pure\n  [3] Src [divide]: divide\n      PURITY: 100% pure\n  [4] Src [_xdg_config_home]: _xdg_config_home\n      PURITY: 100% pure\n  [5] Src [to_dict]: to_dict\n      PURITY: 100% pure\n  [6] Src [from_dict]: from_dict\n      PURITY: 100% pure\n  [7] Src [_root]: _root\n      PURITY: 100% pure\n  [8] Src [init]: init → repo_root → _run\n      PURITY: 100% pure\n  [9] Src [uninit]: uninit → repo_root → _run\n      PURITY: 100% pure\n  [10] Src [status]: status → collect → repo_root → _run\n      PURITY: 100% pure\n  [11] Src [shell]: shell\n      PURITY: 100% pure\n  [12] Src [doctor]: doctor → repo_root → _run\n      PURITY: 100% pure\n  [13] Src [plugin_list]: plugin_list\n      PURITY: 100% pure\n  [14] Src [plugin_catalog]: plugin_catalog\n      PURITY: 100% pure\n  [15] Src [plugin_install]: plugin_install\n      PURITY: 100% pure\n  [16] Src [plugin_install_defaults]: plugin_install_defaults\n      PURITY: 100% pure\n  [17] Src [plugin_install_category]: plugin_install_category\n      PURITY: 100% pure\n  [18] Src [plugin_remove]: plugin_remove\n      PURITY: 100% pure\n  [19] Src [hook_pre_commit]: hook_pre_commit → run_trigger → collect → repo_root → ...(1 more)\n      PURITY: 100% pure\n  [20] Src [hook_commit_msg]: hook_commit_msg → collect → repo_root → _run\n      PURITY: 100% pure\n  [21] Src [hook_post_commit]: hook_post_commit → run_trigger → collect → repo_root → ...(1 more)\n      PURITY: 100% pure\n  [22] Src [hook_pre_push]: hook_pre_push → run_trigger → collect → repo_root → ...(1 more)\n      PURITY: 100% pure\n  [23] Src [policy_check]: policy_check → collect → repo_root → _run\n      PURITY: 100% pure\n  [24] Src [policy_init]: policy_init → repo_root → _run\n      PURITY: 100% pure\n  [25] Src [policy_list]: policy_list → repo_root → _run\n      PURITY: 100% pure\n  [26] Src [fixup]: fixup → repo_root → _run\n      PURITY: 100% pure\n  [27] Src [history_log]: history_log → repo_root → _run\n      PURITY: 100% pure\n  [28] Src [history_clean]: history_clean → repo_root → _run\n      PURITY: 100% pure\n  [29] Src [install_defaults]: install_defaults → install_from_catalog → _pip_install\n      PURITY: 100% pure\n  [30] Src [install_category]: install_category → install_from_catalog → _pip_install\n      PURITY: 100% pure\n  [31] Src [uninstall]: uninstall → remove_plugin → load_plugins → ensure_user_dirs\n      PURITY: 100% pure\n  [32] Src [show_table]: show_table → load_plugins → ensure_user_dirs\n      PURITY: 100% pure\n  [33] Src [show_catalog]: show_catalog\n      PURITY: 100% pure\n  [34] Src [_entry]: _entry\n      PURITY: 100% pure\n  [35] Src [list_categories]: list_categories\n      PURITY: 100% pure\n  [36] Src [find]: find\n      PURITY: 100% pure\n  [37] Src [confirm]: confirm → is_tty\n      PURITY: 100% pure\n  [38] Src [choose]: choose → is_tty\n      PURITY: 100% pure\n  [39] Src [diff_file]: diff_file\n      PURITY: 100% pure\n  [40] Src [paths_arg]: paths_arg\n      PURITY: 100% pure\n  [41] Src [install]: install → hooks_dir\n      PURITY: 100% pure\n  [42] Src [uninstall]: uninstall → hooks_dir\n      PURITY: 100% pure\n  [43] Src [make_backup_ref]: make_backup_ref → head_sha → _git\n      PURITY: 100% pure\n  [44] Src [list_log]: list_log → _git\n      PURITY: 100% pure\n  [45] Src [upstream_range]: upstream_range → _git\n      PURITY: 100% pure\n  [46] Src [create_fixup]: create_fixup → _git\n      PURITY: 100% pure\n  [47] Src [has_staged_changes]: has_staged_changes → _git\n      PURITY: 100% pure\n  [48] Src [autosquash]: autosquash → _git\n      PURITY: 100% pure\n  [49] Src [_check_conventional_commits]: _check_conventional_commits\n      PURITY: 100% pure\n  [50] Src [_check_no_wip]: _check_no_wip\n      PURITY: 100% pure\n\nLAYERS:\n  src/                            CC̄=3.9    ←in:0  →out:0\n  │ cli                        421L  0C   22m  CC=12     ←0\n  │ !! shell                      205L  0C    6m  CC=23     ←0\n  │ catalog                    173L  1C    4m  CC=3      ←0\n  │ policies                   165L  1C    6m  CC=10     ←0\n  │ history                    140L  1C    8m  CC=4      ←0\n  │ runner                     122L  2C    4m  CC=8      ←4\n  │ plugins                    120L  0C    7m  CC=9      ←0\n  │ repo_config                101L  1C    6m  CC=4      ←0\n  │ config                      74L  1C    8m  CC=4      ←4\n  │ context                     66L  1C    5m  CC=5      ←5\n  │ interactive                 58L  0C    3m  CC=8      ←0\n  │ hooks                       48L  0C    3m  CC=5      ←0\n  │ __main__                     4L  0C    0m  CC=0.0    ←0\n  │ __init__                     3L  0C    0m  CC=0.0    ←0\n  │\n  examples/                       CC̄=3.3    ←in:0  →out:0\n  │ main                       156L  0C    5m  CC=9      ←0\n  │ main                        67L  0C    2m  CC=8      ←0\n  │ log.txt                     64L  0C    0m  CC=0.0    ←0\n  │ Dockerfile                  37L  0C    0m  CC=0.0    ←0\n  │ Dockerfile                  33L  0C    0m  CC=0.0    ←0\n  │ Dockerfile                  33L  0C    0m  CC=0.0    ←0\n  │ example                     20L  0C    3m  CC=2      ←0\n  │ log.txt                     17L  0C    0m  CC=0.0    ←0\n  │ log.txt                     13L  0C    0m  CC=0.0    ←0\n  │ pyproject.toml              12L  0C    0m  CC=0.0    ←0\n  │ docker-compose.yml          11L  0C    0m  CC=0.0    ←0\n  │\n  ./                              CC̄=0.0    ←in:0  →out:0\n  │ !! goal.yaml                  512L  0C    0m  CC=0.0    ←0\n  │ koru.yaml                  133L  0C    0m  CC=0.0    ←0\n  │ pyproject.toml              62L  0C    0m  CC=0.0    ←0\n  │ project.sh                  59L  0C    0m  CC=0.0    ←0\n  │ tree.sh                      1L  0C    0m  CC=0.0    ←0\n  │\n\nCOUPLING:\n                             src.giton  examples.advanced     examples.basic\n          src.giton                 ──                 ←6                 ←2  hub\n  examples.advanced                  6                 ──                   \n     examples.basic                  2                                    ──\n  CYCLES: 1\n  HUB: src.giton/ (fan-in=8)\n\nEXTERNAL:\n  validation: run `vallm batch .` → validation.toon\n  duplication: run `redup scan .` → duplication.toon\n", "is_subdir": false}, {"name": "calls.toon.yaml", "rel_path": "calls.toon.yaml", "path": "calls.toon.yaml", "size": "6.8KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "# code2llm call graph | /home/tom/github/semcod/gix\n# generated in 0.02s\n# nodes: 61 | edges: 64 | modules: 12\n# CC̄=3.8\n\nHUBS[20]:\n  src.giton.cli.history_clean\n    CC=12  in:0  out:30  total:30\n  src.giton.cli.fixup\n    CC=9  in:0  out:28  total:28\n  src.giton.shell.dispatch\n    CC=23  in:1  out:25  total:26\n  src.giton.cli.hook_commit_msg\n    CC=9  in:0  out:24  total:24\n  examples.basic.main.test_basic_giton_usage\n    CC=8  in:1  out:20  total:21\n  src.giton.context.collect\n    CC=5  in:7  out:13  total:20\n  examples.advanced.main.demonstrate_plugin_management\n    CC=3  in:1  out:19  total:20\n  src.giton.runner.run_trigger\n    CC=8  in:6  out:11  total:17\n  src.giton.shell._cmd_policy\n    CC=12  in:1  out:15  total:16\n  src.giton.runner._run_plugin\n    CC=6  in:1  out:15  total:16\n  src.giton.context.repo_root\n    CC=2  in:12  out:3  total:15\n  src.giton.plugins.install_from_catalog\n    CC=9  in:2  out:12  total:14\n  examples.advanced.main.demonstrate_catalog\n    CC=2  in:1  out:13  total:14\n  src.giton.cli.policy_check\n    CC=7  in:0  out:13  total:13\n  src.giton.plugins.show_table\n    CC=5  in:0  out:13  total:13\n  examples.advanced.main.demonstrate_trigger_sequence\n    CC=9  in:1  out:12  total:13\n  src.giton.cli.history_log\n    CC=9  in:0  out:12  total:12\n  src.giton.hooks.install\n    CC=5  in:0  out:12  total:12\n  src.giton.cli.init\n    CC=4  in:0  out:12  total:12\n  src.giton.config.load_plugins\n    CC=4  in:6  out:6  total:12\n\nMODULES:\n  examples.advanced.main  [5 funcs]\n    demonstrate_catalog  CC=2  out:13\n    demonstrate_hooks  CC=4  out:9\n    demonstrate_plugin_management  CC=3  out:19\n    demonstrate_trigger_sequence  CC=9  out:12\n    main  CC=2  out:9\n  examples.basic.main  [2 funcs]\n    main  CC=1  out:1\n    test_basic_giton_usage  CC=8  out:20\n  src.giton.cli  [14 funcs]\n    doctor  CC=3  out:6\n    fixup  CC=9  out:28\n    history_clean  CC=12  out:30\n    history_log  CC=9  out:12\n    hook_commit_msg  CC=9  out:24\n    hook_post_commit  CC=1  out:2\n    hook_pre_commit  CC=2  out:3\n    hook_pre_push  CC=2  out:3\n    init  CC=4  out:12\n    policy_check  CC=7  out:13\n  src.giton.config  [5 funcs]\n    ensure_user_dirs  CC=1  out:1\n    load_plugins  CC=4  out:6\n    remove_plugin  CC=4  out:4\n    save_plugins  CC=2  out:4\n    upsert_plugin  CC=3  out:3\n  src.giton.context  [3 funcs]\n    _run  CC=1  out:1\n    collect  CC=5  out:13\n    repo_root  CC=2  out:3\n  src.giton.history  [8 funcs]\n    _git  CC=1  out:2\n    autosquash  CC=2  out:7\n    create_fixup  CC=2  out:2\n    has_staged_changes  CC=1  out:1\n    head_sha  CC=1  out:2\n    list_log  CC=4  out:7\n    make_backup_ref  CC=2  out:4\n    upstream_range  CC=2  out:2\n  src.giton.hooks  [3 funcs]\n    hooks_dir  CC=1  out:0\n    install  CC=5  out:12\n    uninstall  CC=5  out:8\n  src.giton.interactive  [3 funcs]\n    choose  CC=8  out:10\n    confirm  CC=5  out:5\n    is_tty  CC=3  out:3\n  src.giton.plugins  [6 funcs]\n    _pip_install  CC=1  out:3\n    install_category  CC=6  out:3\n    install_defaults  CC=2  out:2\n    install_from_catalog  CC=9  out:12\n    show_table  CC=5  out:13\n    uninstall  CC=2  out:3\n  src.giton.repo_config  [2 funcs]\n    _deep_merge  CC=4  out:6\n    load  CC=4  out:6\n  src.giton.runner  [4 funcs]\n    _format_command  CC=1  out:5\n    _print_findings  CC=4  out:3\n    _run_plugin  CC=6  out:15\n    run_trigger  CC=8  out:11\n  src.giton.shell  [6 funcs]\n    _cmd_init  CC=3  out:6\n    _cmd_policy  CC=12  out:15\n    _cmd_status  CC=4  out:6\n    _set_enabled  CC=5  out:4\n    dispatch  CC=23  out:25\n    run  CC=5  out:7\n\nEDGES:\n  examples.advanced.main.demonstrate_plugin_management → src.giton.config.load_plugins\n  examples.advanced.main.demonstrate_hooks → src.giton.context.repo_root\n  examples.advanced.main.demonstrate_trigger_sequence → src.giton.context.repo_root\n  examples.advanced.main.demonstrate_trigger_sequence → src.giton.runner.run_trigger\n  examples.advanced.main.main → examples.advanced.main.demonstrate_catalog\n  examples.advanced.main.main → examples.advanced.main.demonstrate_plugin_management\n  examples.advanced.main.main → examples.advanced.main.demonstrate_hooks\n  examples.advanced.main.main → examples.advanced.main.demonstrate_trigger_sequence\n  examples.basic.main.test_basic_giton_usage → src.giton.context.collect\n  examples.basic.main.test_basic_giton_usage → src.giton.runner.run_trigger\n  examples.basic.main.main → examples.basic.main.test_basic_giton_usage\n  src.giton.config.load_plugins → src.giton.config.ensure_user_dirs\n  src.giton.config.save_plugins → src.giton.config.ensure_user_dirs\n  src.giton.config.upsert_plugin → src.giton.config.load_plugins\n  src.giton.config.upsert_plugin → src.giton.config.save_plugins\n  src.giton.config.remove_plugin → src.giton.config.load_plugins\n  src.giton.config.remove_plugin → src.giton.config.save_plugins\n  src.giton.cli.init → src.giton.context.repo_root\n  src.giton.cli.uninit → src.giton.context.repo_root\n  src.giton.cli.status → src.giton.context.collect\n  src.giton.cli.doctor → src.giton.context.repo_root\n  src.giton.cli.hook_pre_commit → src.giton.runner.run_trigger\n  src.giton.cli.hook_commit_msg → src.giton.context.collect\n  src.giton.cli.hook_post_commit → src.giton.runner.run_trigger\n  src.giton.cli.hook_pre_push → src.giton.runner.run_trigger\n  src.giton.cli.policy_check → src.giton.context.collect\n  src.giton.cli.policy_init → src.giton.context.repo_root\n  src.giton.cli.policy_list → src.giton.context.repo_root\n  src.giton.cli.fixup → src.giton.context.repo_root\n  src.giton.cli.history_log → src.giton.context.repo_root\n  src.giton.cli.history_clean → src.giton.context.repo_root\n  src.giton.plugins.install_from_catalog → src.giton.plugins._pip_install\n  src.giton.plugins.install_from_catalog → src.giton.config.upsert_plugin\n  src.giton.plugins.install_defaults → src.giton.plugins.install_from_catalog\n  src.giton.plugins.install_category → src.giton.plugins.install_from_catalog\n  src.giton.plugins.uninstall → src.giton.config.remove_plugin\n  src.giton.plugins.show_table → src.giton.config.load_plugins\n  src.giton.runner.run_trigger → src.giton.context.collect\n  src.giton.runner.run_trigger → src.giton.runner._print_findings\n  src.giton.runner.run_trigger → src.giton.config.load_plugins\n  src.giton.runner.run_trigger → src.giton.runner._run_plugin\n  src.giton.runner._run_plugin → src.giton.runner._format_command\n  src.giton.interactive.confirm → src.giton.interactive.is_tty\n  src.giton.interactive.choose → src.giton.interactive.is_tty\n  src.giton.context.repo_root → src.giton.context._run\n  src.giton.context.collect → src.giton.context.repo_root\n  src.giton.context.collect → src.giton.context._run\n  src.giton.hooks.install → src.giton.hooks.hooks_dir\n  src.giton.hooks.uninstall → src.giton.hooks.hooks_dir\n  src.giton.history.head_sha → src.giton.history._git\n", "is_subdir": false}, {"name": "calls.yaml", "rel_path": "calls.yaml", "path": "calls.yaml", "size": "20.4KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "project: /home/tom/github/semcod/gix\ngenerated_from: code2llm call graph analysis\nstats:\n  total_nodes: 61\n  total_edges: 64\n  modules_count: 12\nnodes:\n  src.giton.cli.history_log:\n    name: history_log\n    module: src.giton.cli\n    line: 337\n    cyclomatic_complexity: 9\n    calls_out: 12\n    calls_in: 0\n  src.giton.cli.policy_check:\n    name: policy_check\n    module: src.giton.cli\n    line: 229\n    cyclomatic_complexity: 7\n    calls_out: 13\n    calls_in: 0\n  src.giton.history.list_log:\n    name: list_log\n    module: src.giton.history\n    line: 49\n    cyclomatic_complexity: 4\n    calls_out: 7\n    calls_in: 0\n  src.giton.cli.uninit:\n    name: uninit\n    module: src.giton.cli\n    line: 78\n    cyclomatic_complexity: 2\n    calls_out: 7\n    calls_in: 0\n  src.giton.shell._cmd_init:\n    name: _cmd_init\n    module: src.giton.shell\n    line: 114\n    cyclomatic_complexity: 3\n    calls_out: 6\n    calls_in: 1\n  src.giton.history.create_fixup:\n    name: create_fixup\n    module: src.giton.history\n    line: 74\n    cyclomatic_complexity: 2\n    calls_out: 2\n    calls_in: 0\n  src.giton.hooks.install:\n    name: install\n    module: src.giton.hooks\n    line: 20\n    cyclomatic_complexity: 5\n    calls_out: 12\n    calls_in: 0\n  src.giton.history.make_backup_ref:\n    name: make_backup_ref\n    module: src.giton.history\n    line: 38\n    cyclomatic_complexity: 2\n    calls_out: 4\n    calls_in: 0\n  src.giton.shell._cmd_policy:\n    name: _cmd_policy\n    module: src.giton.shell\n    line: 84\n    cyclomatic_complexity: 12\n    calls_out: 15\n    calls_in: 1\n  src.giton.plugins.install_category:\n    name: install_category\n    module: src.giton.plugins\n    line: 59\n    cyclomatic_complexity: 6\n    calls_out: 3\n    calls_in: 0\n  src.giton.cli.fixup:\n    name: fixup\n    module: src.giton.cli\n    line: 287\n    cyclomatic_complexity: 9\n    calls_out: 28\n    calls_in: 0\n  src.giton.cli.hook_pre_commit:\n    name: hook_pre_commit\n    module: src.giton.cli\n    line: 161\n    cyclomatic_complexity: 2\n    calls_out: 3\n    calls_in: 0\n  src.giton.cli.status:\n    name: status\n    module: src.giton.cli\n    line: 89\n    cyclomatic_complexity: 4\n    calls_out: 9\n    calls_in: 0\n  src.giton.plugins.show_table:\n    name: show_table\n    module: src.giton.plugins\n    line: 79\n    cyclomatic_complexity: 5\n    calls_out: 13\n    calls_in: 0\n  src.giton.history._git:\n    name: _git\n    module: src.giton.history\n    line: 26\n    cyclomatic_complexity: 1\n    calls_out: 2\n    calls_in: 8\n  src.giton.interactive.confirm:\n    name: confirm\n    module: src.giton.interactive\n    line: 22\n    cyclomatic_complexity: 5\n    calls_out: 5\n    calls_in: 0\n  src.giton.shell.dispatch:\n    name: dispatch\n    module: src.giton.shell\n    line: 132\n    cyclomatic_complexity: 23\n    calls_out: 25\n    calls_in: 1\n  examples.advanced.main.demonstrate_trigger_sequence:\n    name: demonstrate_trigger_sequence\n    module: examples.advanced.main\n    line: 109\n    cyclomatic_complexity: 9\n    calls_out: 12\n    calls_in: 1\n  src.giton.plugins._pip_install:\n    name: _pip_install\n    module: src.giton.plugins\n    line: 23\n    cyclomatic_complexity: 1\n    calls_out: 3\n    calls_in: 1\n  src.giton.interactive.choose:\n    name: choose\n    module: src.giton.interactive\n    line: 37\n    cyclomatic_complexity: 8\n    calls_out: 10\n    calls_in: 0\n  src.giton.config.remove_plugin:\n    name: remove_plugin\n    module: src.giton.config\n    line: 68\n    cyclomatic_complexity: 4\n    calls_out: 4\n    calls_in: 2\n  examples.basic.main.test_basic_giton_usage:\n    name: test_basic_giton_usage\n    module: examples.basic.main\n    line: 21\n    cyclomatic_complexity: 8\n    calls_out: 20\n    calls_in: 1\n  src.giton.config.upsert_plugin:\n    name: upsert_plugin\n    module: src.giton.config\n    line: 61\n    cyclomatic_complexity: 3\n    calls_out: 3\n    calls_in: 2\n  src.giton.config.save_plugins:\n    name: save_plugins\n    module: src.giton.config\n    line: 55\n    cyclomatic_complexity: 2\n    calls_out: 4\n    calls_in: 3\n  src.giton.cli.policy_init:\n    name: policy_init\n    module: src.giton.cli\n    line: 256\n    cyclomatic_complexity: 2\n    calls_out: 8\n    calls_in: 0\n  src.giton.runner._print_findings:\n    name: _print_findings\n    module: src.giton.runner\n    line: 30\n    cyclomatic_complexity: 4\n    calls_out: 3\n    calls_in: 1\n  src.giton.cli.policy_list:\n    name: policy_list\n    module: src.giton.cli\n    line: 269\n    cyclomatic_complexity: 5\n    calls_out: 9\n    calls_in: 0\n  examples.advanced.main.demonstrate_hooks:\n    name: demonstrate_hooks\n    module: examples.advanced.main\n    line: 88\n    cyclomatic_complexity: 4\n    calls_out: 9\n    calls_in: 1\n  src.giton.context.collect:\n    name: collect\n    module: src.giton.context\n    line: 40\n    cyclomatic_complexity: 5\n    calls_out: 13\n    calls_in: 7\n  src.giton.context._run:\n    name: _run\n    module: src.giton.context\n    line: 9\n    cyclomatic_complexity: 1\n    calls_out: 1\n    calls_in: 6\n  src.giton.cli.history_clean:\n    name: history_clean\n    module: src.giton.cli\n    line: 361\n    cyclomatic_complexity: 12\n    calls_out: 30\n    calls_in: 0\n  src.giton.repo_config.load:\n    name: load\n    module: src.giton.repo_config\n    line: 83\n    cyclomatic_complexity: 4\n    calls_out: 6\n    calls_in: 0\n  src.giton.cli.doctor:\n    name: doctor\n    module: src.giton.cli\n    line: 109\n    cyclomatic_complexity: 3\n    calls_out: 6\n    calls_in: 0\n  examples.advanced.main.main:\n    name: main\n    module: examples.advanced.main\n    line: 138\n    cyclomatic_complexity: 2\n    calls_out: 9\n    calls_in: 0\n  src.giton.history.has_staged_changes:\n    name: has_staged_changes\n    module: src.giton.history\n    line: 87\n    cyclomatic_complexity: 1\n    calls_out: 1\n    calls_in: 0\n  src.giton.runner._format_command:\n    name: _format_command\n    module: src.giton.runner\n    line: 45\n    cyclomatic_complexity: 1\n    calls_out: 5\n    calls_in: 1\n  examples.basic.main.main:\n    name: main\n    module: examples.basic.main\n    line: 61\n    cyclomatic_complexity: 1\n    calls_out: 1\n    calls_in: 0\n  src.giton.cli.init:\n    name: init\n    module: src.giton.cli\n    line: 54\n    cyclomatic_complexity: 4\n    calls_out: 12\n    calls_in: 0\n  src.giton.hooks.uninstall:\n    name: uninstall\n    module: src.giton.hooks\n    line: 37\n    cyclomatic_complexity: 5\n    calls_out: 8\n    calls_in: 0\n  src.giton.config.ensure_user_dirs:\n    name: ensure_user_dirs\n    module: src.giton.config\n    line: 40\n    cyclomatic_complexity: 1\n    calls_out: 1\n    calls_in: 2\n  src.giton.history.upstream_range:\n    name: upstream_range\n    module: src.giton.history\n    line: 63\n    cyclomatic_complexity: 2\n    calls_out: 2\n    calls_in: 0\n  src.giton.shell._set_enabled:\n    name: _set_enabled\n    module: src.giton.shell\n    line: 53\n    cyclomatic_complexity: 5\n    calls_out: 4\n    calls_in: 2\n  src.giton.repo_config._deep_merge:\n    name: _deep_merge\n    module: src.giton.repo_config\n    line: 73\n    cyclomatic_complexity: 4\n    calls_out: 6\n    calls_in: 2\n  src.giton.plugins.install_defaults:\n    name: install_defaults\n    module: src.giton.plugins\n    line: 54\n    cyclomatic_complexity: 2\n    calls_out: 2\n    calls_in: 0\n  src.giton.hooks.hooks_dir:\n    name: hooks_dir\n    module: src.giton.hooks\n    line: 16\n    cyclomatic_complexity: 1\n    calls_out: 0\n    calls_in: 2\n  src.giton.plugins.install_from_catalog:\n    name: install_from_catalog\n    module: src.giton.plugins\n    line: 29\n    cyclomatic_complexity: 9\n    calls_out: 12\n    calls_in: 2\n  src.giton.history.head_sha:\n    name: head_sha\n    module: src.giton.history\n    line: 34\n    cyclomatic_complexity: 1\n    calls_out: 2\n    calls_in: 1\n  src.giton.interactive.is_tty:\n    name: is_tty\n    module: src.giton.interactive\n    line: 16\n    cyclomatic_complexity: 3\n    calls_out: 3\n    calls_in: 2\n  src.giton.shell._cmd_status:\n    name: _cmd_status\n    module: src.giton.shell\n    line: 68\n    cyclomatic_complexity: 4\n    calls_out: 6\n    calls_in: 1\n  src.giton.cli.hook_pre_push:\n    name: hook_pre_push\n    module: src.giton.cli\n    line: 219\n    cyclomatic_complexity: 2\n    calls_out: 3\n    calls_in: 0\n  src.giton.history.autosquash:\n    name: autosquash\n    module: src.giton.history\n    line: 93\n    cyclomatic_complexity: 2\n    calls_out: 7\n    calls_in: 0\n  src.giton.shell.run:\n    name: run\n    module: src.giton.shell\n    line: 192\n    cyclomatic_complexity: 5\n    calls_out: 7\n    calls_in: 0\n  examples.advanced.main.demonstrate_catalog:\n    name: demonstrate_catalog\n    module: examples.advanced.main\n    line: 69\n    cyclomatic_complexity: 2\n    calls_out: 13\n    calls_in: 1\n  src.giton.context.repo_root:\n    name: repo_root\n    module: src.giton.context\n    line: 16\n    cyclomatic_complexity: 2\n    calls_out: 3\n    calls_in: 12\n  src.giton.runner._run_plugin:\n    name: _run_plugin\n    module: src.giton.runner\n    line: 91\n    cyclomatic_complexity: 6\n    calls_out: 15\n    calls_in: 1\n  src.giton.config.load_plugins:\n    name: load_plugins\n    module: src.giton.config\n    line: 44\n    cyclomatic_complexity: 4\n    calls_out: 6\n    calls_in: 6\n  src.giton.cli.hook_post_commit:\n    name: hook_post_commit\n    module: src.giton.cli\n    line: 213\n    cyclomatic_complexity: 1\n    calls_out: 2\n    calls_in: 0\n  src.giton.plugins.uninstall:\n    name: uninstall\n    module: src.giton.plugins\n    line: 71\n    cyclomatic_complexity: 2\n    calls_out: 3\n    calls_in: 0\n  src.giton.cli.hook_commit_msg:\n    name: hook_commit_msg\n    module: src.giton.cli\n    line: 169\n    cyclomatic_complexity: 9\n    calls_out: 24\n    calls_in: 0\n  src.giton.runner.run_trigger:\n    name: run_trigger\n    module: src.giton.runner\n    line: 66\n    cyclomatic_complexity: 8\n    calls_out: 11\n    calls_in: 6\n  examples.advanced.main.demonstrate_plugin_management:\n    name: demonstrate_plugin_management\n    module: examples.advanced.main\n    line: 24\n    cyclomatic_complexity: 3\n    calls_out: 19\n    calls_in: 1\nedges:\n- caller: examples.advanced.main.demonstrate_plugin_management\n  callee: src.giton.config.load_plugins\n  call_type: resolved\n- caller: examples.advanced.main.demonstrate_hooks\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: examples.advanced.main.demonstrate_trigger_sequence\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: examples.advanced.main.demonstrate_trigger_sequence\n  callee: src.giton.runner.run_trigger\n  call_type: resolved\n- caller: examples.advanced.main.main\n  callee: examples.advanced.main.demonstrate_catalog\n  call_type: resolved\n- caller: examples.advanced.main.main\n  callee: examples.advanced.main.demonstrate_plugin_management\n  call_type: resolved\n- caller: examples.advanced.main.main\n  callee: examples.advanced.main.demonstrate_hooks\n  call_type: resolved\n- caller: examples.advanced.main.main\n  callee: examples.advanced.main.demonstrate_trigger_sequence\n  call_type: resolved\n- caller: examples.basic.main.test_basic_giton_usage\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: examples.basic.main.test_basic_giton_usage\n  callee: src.giton.runner.run_trigger\n  call_type: resolved\n- caller: examples.basic.main.main\n  callee: examples.basic.main.test_basic_giton_usage\n  call_type: resolved\n- caller: src.giton.config.load_plugins\n  callee: src.giton.config.ensure_user_dirs\n  call_type: resolved\n- caller: src.giton.config.save_plugins\n  callee: src.giton.config.ensure_user_dirs\n  call_type: resolved\n- caller: src.giton.config.upsert_plugin\n  callee: src.giton.config.load_plugins\n  call_type: resolved\n- caller: src.giton.config.upsert_plugin\n  callee: src.giton.config.save_plugins\n  call_type: resolved\n- caller: src.giton.config.remove_plugin\n  callee: src.giton.config.load_plugins\n  call_type: resolved\n- caller: src.giton.config.remove_plugin\n  callee: src.giton.config.save_plugins\n  call_type: resolved\n- caller: src.giton.cli.init\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.uninit\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.status\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: src.giton.cli.doctor\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.hook_pre_commit\n  callee: src.giton.runner.run_trigger\n  call_type: resolved\n- caller: src.giton.cli.hook_commit_msg\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: src.giton.cli.hook_post_commit\n  callee: src.giton.runner.run_trigger\n  call_type: resolved\n- caller: src.giton.cli.hook_pre_push\n  callee: src.giton.runner.run_trigger\n  call_type: resolved\n- caller: src.giton.cli.policy_check\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: src.giton.cli.policy_init\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.policy_list\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.fixup\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.history_log\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.cli.history_clean\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.plugins.install_from_catalog\n  callee: src.giton.plugins._pip_install\n  call_type: resolved\n- caller: src.giton.plugins.install_from_catalog\n  callee: src.giton.config.upsert_plugin\n  call_type: resolved\n- caller: src.giton.plugins.install_defaults\n  callee: src.giton.plugins.install_from_catalog\n  call_type: resolved\n- caller: src.giton.plugins.install_category\n  callee: src.giton.plugins.install_from_catalog\n  call_type: resolved\n- caller: src.giton.plugins.uninstall\n  callee: src.giton.config.remove_plugin\n  call_type: resolved\n- caller: src.giton.plugins.show_table\n  callee: src.giton.config.load_plugins\n  call_type: resolved\n- caller: src.giton.runner.run_trigger\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: src.giton.runner.run_trigger\n  callee: src.giton.runner._print_findings\n  call_type: resolved\n- caller: src.giton.runner.run_trigger\n  callee: src.giton.config.load_plugins\n  call_type: resolved\n- caller: src.giton.runner.run_trigger\n  callee: src.giton.runner._run_plugin\n  call_type: resolved\n- caller: src.giton.runner._run_plugin\n  callee: src.giton.runner._format_command\n  call_type: resolved\n- caller: src.giton.interactive.confirm\n  callee: src.giton.interactive.is_tty\n  call_type: resolved\n- caller: src.giton.interactive.choose\n  callee: src.giton.interactive.is_tty\n  call_type: resolved\n- caller: src.giton.context.repo_root\n  callee: src.giton.context._run\n  call_type: resolved\n- caller: src.giton.context.collect\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.context.collect\n  callee: src.giton.context._run\n  call_type: resolved\n- caller: src.giton.hooks.install\n  callee: src.giton.hooks.hooks_dir\n  call_type: resolved\n- caller: src.giton.hooks.uninstall\n  callee: src.giton.hooks.hooks_dir\n  call_type: resolved\n- caller: src.giton.history.head_sha\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.history.make_backup_ref\n  callee: src.giton.history.head_sha\n  call_type: resolved\n- caller: src.giton.history.make_backup_ref\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.history.list_log\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.history.upstream_range\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.history.create_fixup\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.history.has_staged_changes\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.history.autosquash\n  callee: src.giton.history._git\n  call_type: resolved\n- caller: src.giton.shell._set_enabled\n  callee: src.giton.config.load_plugins\n  call_type: resolved\n- caller: src.giton.shell._set_enabled\n  callee: src.giton.config.save_plugins\n  call_type: resolved\n- caller: src.giton.shell._cmd_status\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: src.giton.shell._cmd_policy\n  callee: src.giton.context.collect\n  call_type: resolved\n- caller: src.giton.shell._cmd_init\n  callee: src.giton.context.repo_root\n  call_type: resolved\n- caller: src.giton.shell.run\n  callee: src.giton.shell.dispatch\n  call_type: resolved\n- caller: src.giton.repo_config.load\n  callee: src.giton.repo_config._deep_merge\n  call_type: resolved\nmodules:\n  examples.advanced.main:\n  - examples.advanced.main.demonstrate_catalog\n  - examples.advanced.main.demonstrate_hooks\n  - examples.advanced.main.demonstrate_plugin_management\n  - examples.advanced.main.demonstrate_trigger_sequence\n  - examples.advanced.main.main\n  examples.basic.main:\n  - examples.basic.main.main\n  - examples.basic.main.test_basic_giton_usage\n  src.giton.cli:\n  - src.giton.cli.doctor\n  - src.giton.cli.fixup\n  - src.giton.cli.history_clean\n  - src.giton.cli.history_log\n  - src.giton.cli.hook_commit_msg\n  - src.giton.cli.hook_post_commit\n  - src.giton.cli.hook_pre_commit\n  - src.giton.cli.hook_pre_push\n  - src.giton.cli.init\n  - src.giton.cli.policy_check\n  - src.giton.cli.policy_init\n  - src.giton.cli.policy_list\n  - src.giton.cli.status\n  - src.giton.cli.uninit\n  src.giton.config:\n  - src.giton.config.ensure_user_dirs\n  - src.giton.config.load_plugins\n  - src.giton.config.remove_plugin\n  - src.giton.config.save_plugins\n  - src.giton.config.upsert_plugin\n  src.giton.context:\n  - src.giton.context._run\n  - src.giton.context.collect\n  - src.giton.context.repo_root\n  src.giton.history:\n  - src.giton.history._git\n  - src.giton.history.autosquash\n  - src.giton.history.create_fixup\n  - src.giton.history.has_staged_changes\n  - src.giton.history.head_sha\n  - src.giton.history.list_log\n  - src.giton.history.make_backup_ref\n  - src.giton.history.upstream_range\n  src.giton.hooks:\n  - src.giton.hooks.hooks_dir\n  - src.giton.hooks.install\n  - src.giton.hooks.uninstall\n  src.giton.interactive:\n  - src.giton.interactive.choose\n  - src.giton.interactive.confirm\n  - src.giton.interactive.is_tty\n  src.giton.plugins:\n  - src.giton.plugins._pip_install\n  - src.giton.plugins.install_category\n  - src.giton.plugins.install_defaults\n  - src.giton.plugins.install_from_catalog\n  - src.giton.plugins.show_table\n  - src.giton.plugins.uninstall\n  src.giton.repo_config:\n  - src.giton.repo_config._deep_merge\n  - src.giton.repo_config.load\n  src.giton.runner:\n  - src.giton.runner._format_command\n  - src.giton.runner._print_findings\n  - src.giton.runner._run_plugin\n  - src.giton.runner.run_trigger\n  src.giton.shell:\n  - src.giton.shell._cmd_init\n  - src.giton.shell._cmd_policy\n  - src.giton.shell._cmd_status\n  - src.giton.shell._set_enabled\n  - src.giton.shell.dispatch\n  - src.giton.shell.run\nentry_points:\n- examples.advanced.main.main\n- examples.basic.main.main\n- examples.testing.sample_project.src.example.add\n- examples.testing.sample_project.src.example.divide\n- examples.testing.sample_project.src.example.multiply\n- src.giton.catalog._entry\n- src.giton.catalog.defaults\n- src.giton.catalog.find\n- src.giton.catalog.list_categories\n- src.giton.cli._root\n- src.giton.cli.doctor\n- src.giton.cli.fixup\n- src.giton.cli.history_clean\n- src.giton.cli.history_log\n- src.giton.cli.hook_commit_msg\n- src.giton.cli.hook_post_commit\n- src.giton.cli.hook_pre_commit\n- src.giton.cli.hook_pre_push\n- src.giton.cli.init\n- src.giton.cli.plugin_catalog\n- src.giton.cli.plugin_install\n- src.giton.cli.plugin_install_category\n- src.giton.cli.plugin_install_defaults\n- src.giton.cli.plugin_list\n- src.giton.cli.plugin_remove\n- src.giton.cli.policy_check\n- src.giton.cli.policy_init\n- src.giton.cli.policy_list\n- src.giton.cli.shell\n- src.giton.cli.status\n- src.giton.cli.uninit\n- src.giton.config.PluginRecord.from_dict\n- src.giton.config.PluginRecord.to_dict\n- src.giton.config._xdg_config_home\n- src.giton.context.GitContext.diff_file\n- src.giton.context.GitContext.paths_arg\n- src.giton.history.autosquash\n- src.giton.history.create_fixup\n- src.giton.history.has_staged_changes\n- src.giton.history.list_log\n- src.giton.history.make_backup_ref\n- src.giton.history.upstream_range\n- src.giton.hooks.install\n- src.giton.hooks.uninstall\n- src.giton.interactive.choose\n- src.giton.interactive.confirm\n- src.giton.plugins.install_category\n- src.giton.plugins.install_defaults\n- src.giton.plugins.show_catalog\n- src.giton.plugins.show_table\n- src.giton.plugins.uninstall\n- src.giton.policies._check_conventional_commits\n- src.giton.policies._check_max_file_size\n- src.giton.policies._check_no_secrets\n- src.giton.policies._check_no_wip\n- src.giton.policies.evaluate\n- src.giton.policies.has_errors\n- src.giton.repo_config.RepoConfig.fail_on_policy\n- src.giton.repo_config.RepoConfig.hook\n- src.giton.repo_config.RepoConfig.policy\n- src.giton.repo_config.load\n- src.giton.repo_config.write_default\n- src.giton.shell.run\n", "is_subdir": false}, {"name": "evolution.toon.yaml", "rel_path": "evolution.toon.yaml", "path": "evolution.toon.yaml", "size": "1.6KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "# code2llm/evolution | 82 func | 12f | 2026-05-27\n# generated in 0.00s\n\nNEXT[2] (ranked by impact):\n  [1] !  SPLIT-FUNC      dispatch  CC=23  fan=16\n      WHY: CC=23 exceeds 15\n      EFFORT: ~1h  IMPACT: 368\n\n  [2] !! SPLIT           goal.yaml\n      WHY: 512L, 0 classes, max CC=0\n      EFFORT: ~4h  IMPACT: 0\n\n\nRISKS[1]:\n  ⚠ Splitting goal.yaml may break 0 import paths\n\nMETRICS-TARGET:\n  CC̄:          3.9 → ≤2.7\n  max-CC:      23 → ≤11\n  god-modules: 1 → 0\n  high-CC(≥15): 1 → ≤0\n  hub-types:   0 → ≤0\n\nPATTERNS (language parser shared logic):\n  _extract_declarations() in base.py — unified extraction for:\n    - TypeScript: interfaces, types, classes, functions, arrow funcs\n    - PHP: namespaces, traits, classes, functions, includes\n    - Ruby: modules, classes, methods, requires\n    - C++: classes, structs, functions, #includes\n    - C#: classes, interfaces, methods, usings\n    - Java: classes, interfaces, methods, imports\n    - Go: packages, functions, structs\n    - Rust: modules, functions, traits, use statements\n\n  Shared regex patterns per language:\n    - import: language-specific import/require/using patterns\n    - class: class/struct/trait declarations with inheritance\n    - function: function/method signatures with visibility\n    - brace_tracking: for C-family languages ({ })\n    - end_keyword_tracking: for Ruby (module/class/def...end)\n\n  Benefits:\n    - Consistent extraction logic across all languages\n    - Reduced code duplication (~70% reduction in parser LOC)\n    - Easier maintenance: fix once, apply everywhere\n    - Standardized FunctionInfo/ClassInfo models\n\nHISTORY:\n  (first run — no previous data)\n", "is_subdir": false}, {"name": "map.toon.yaml", "rel_path": "map.toon.yaml", "path": "map.toon.yaml", "size": "5.6KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "# gix | 30f 2930L | yaml:2,toml:2,shell:2,python:17,txt:3,yml:1 | 2026-05-27\n# generated in 0.00s\n# stats: 92 func | 0 cls | 30 mod | CC̄=3.8 | critical:1 | cycles:0\n# alerts[5]: CC dispatch=23; fan-out hook_commit_msg=19; fan-out dispatch=16; fan-out history_clean=15; fan-out fixup=13\n# hotspots[5]: hook_commit_msg fan=19; dispatch fan=16; history_clean fan=15; fixup fan=13; install fan=12\n# evolution: baseline\n# Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods\nM[30]:\n  examples/advanced/Dockerfile,33\n  examples/advanced/logs/log.txt,64\n  examples/advanced/main.py,156\n  examples/basic/Dockerfile,33\n  examples/basic/logs/log.txt,13\n  examples/basic/main.py,67\n  examples/testing/Dockerfile,37\n  examples/testing/docker-compose.yml,11\n  examples/testing/logs/log.txt,17\n  examples/testing/sample_project/pyproject.toml,12\n  examples/testing/sample_project/src/example.py,20\n  goal.yaml,512\n  koru.yaml,133\n  project.sh,59\n  pyproject.toml,62\n  src/giton/__init__.py,3\n  src/giton/__main__.py,4\n  src/giton/catalog.py,173\n  src/giton/cli.py,421\n  src/giton/config.py,74\n  src/giton/context.py,66\n  src/giton/history.py,140\n  src/giton/hooks.py,48\n  src/giton/interactive.py,58\n  src/giton/plugins.py,120\n  src/giton/policies.py,165\n  src/giton/repo_config.py,101\n  src/giton/runner.py,122\n  src/giton/shell.py,205\n  tree.sh,1\nD:\n  src/giton/shell.py:\n    e: _set_enabled,_cmd_status,_cmd_policy,_cmd_init,dispatch,run\n    _set_enabled(name;value)\n    _cmd_status()\n    _cmd_policy(args)\n    _cmd_init()\n    dispatch(line)\n    run()\n  src/giton/cli.py:\n    e: _root,init,uninit,status,shell,doctor,plugin_list,plugin_catalog,plugin_install,plugin_install_defaults,plugin_install_category,plugin_remove,hook_pre_commit,hook_commit_msg,hook_post_commit,hook_pre_push,policy_check,policy_init,policy_list,fixup,history_log,history_clean\n    _root(ctx;version)\n    init(install_default_plugins)\n    uninit()\n    status()\n    shell()\n    doctor()\n    plugin_list()\n    plugin_catalog()\n    plugin_install(name)\n    plugin_install_defaults()\n    plugin_install_category(category)\n    plugin_remove(name)\n    hook_pre_commit()\n    hook_commit_msg(message_file)\n    hook_post_commit()\n    hook_pre_push()\n    policy_check(trigger)\n    policy_init(overwrite)\n    policy_list()\n    fixup(target;yes)\n    history_log(limit;range_)\n    history_clean(base;yes;interactive_rebase)\n  src/giton/policies.py:\n    e: Finding,_check_conventional_commits,_check_no_wip,_check_no_secrets,_check_max_file_size,evaluate,has_errors\n    Finding:\n    _check_conventional_commits(ctx;opts;trigger)\n    _check_no_wip(ctx;opts;trigger)\n    _check_no_secrets(ctx;opts;trigger)\n    _check_max_file_size(ctx;opts;trigger)\n    evaluate(ctx;repo_cfg;trigger)\n    has_errors(findings)\n  examples/advanced/main.py:\n    e: demonstrate_plugin_management,demonstrate_catalog,demonstrate_hooks,demonstrate_trigger_sequence,main\n    demonstrate_plugin_management()\n    demonstrate_catalog()\n    demonstrate_hooks()\n    demonstrate_trigger_sequence()\n    main()\n  src/giton/plugins.py:\n    e: _pip_install,install_from_catalog,install_defaults,install_category,uninstall,show_table,show_catalog\n    _pip_install(target)\n    install_from_catalog(name)\n    install_defaults()\n    install_category(category)\n    uninstall(name)\n    show_table()\n    show_catalog()\n  examples/basic/main.py:\n    e: test_basic_giton_usage,main\n    test_basic_giton_usage()\n    main()\n  src/giton/runner.py:\n    e: PluginResult,TriggerOutcome,_print_findings,_format_command,run_trigger,_run_plugin\n    PluginResult:\n    TriggerOutcome:\n    _print_findings(findings)\n    _format_command(cmd;ctx)\n    run_trigger(trigger;cwd)\n    _run_plugin(plugin;ctx)\n  src/giton/interactive.py:\n    e: is_tty,confirm,choose\n    is_tty()\n    confirm(question)\n    choose(question;options)\n  src/giton/context.py:\n    e: GitContext,_run,repo_root,collect\n    GitContext: diff_file(0),paths_arg(0)\n    _run(cmd;cwd)\n    repo_root(cwd)\n    collect(cwd)\n  src/giton/hooks.py:\n    e: hooks_dir,install,uninstall\n    hooks_dir(repo_root)\n    install(repo_root)\n    uninstall(repo_root)\n  src/giton/config.py:\n    e: PluginRecord,_xdg_config_home,ensure_user_dirs,load_plugins,save_plugins,upsert_plugin,remove_plugin\n    PluginRecord: to_dict(0),from_dict(1)\n    _xdg_config_home()\n    ensure_user_dirs()\n    load_plugins()\n    save_plugins(plugins)\n    upsert_plugin(plugin)\n    remove_plugin(name)\n  src/giton/history.py:\n    e: GitResult,_git,head_sha,make_backup_ref,list_log,upstream_range,create_fixup,has_staged_changes,autosquash\n    GitResult:\n    _git(args;cwd)\n    head_sha(cwd)\n    make_backup_ref(cwd;prefix)\n    list_log(cwd;range_;limit)\n    upstream_range(cwd)\n    create_fixup(cwd;target_sha)\n    has_staged_changes(cwd)\n    autosquash(cwd;base)\n  src/giton/repo_config.py:\n    e: RepoConfig,_deep_merge,load,write_default\n    RepoConfig: policy(1),hook(1),fail_on_policy(1)\n    _deep_merge(base;over)\n    load(repo_root)\n    write_default(repo_root)\n  src/giton/catalog.py:\n    e: CatalogEntry,_entry,list_categories,find,defaults\n    CatalogEntry:\n    _entry(name;desc)\n    list_categories()\n    find(name)\n    defaults()\n  examples/testing/sample_project/src/example.py:\n    e: add,multiply,divide\n    add(a;b)\n    multiply(a;b)\n    divide(a;b)\n  goal.yaml:\n  koru.yaml:\n  pyproject.toml:\n  tree.sh:\n  project.sh:\n  examples/advanced/Dockerfile:\n  examples/advanced/logs/log.txt:\n  examples/basic/Dockerfile:\n  examples/basic/logs/log.txt:\n  examples/testing/docker-compose.yml:\n  examples/testing/Dockerfile:\n  examples/testing/logs/log.txt:\n  examples/testing/sample_project/pyproject.toml:\n  src/giton/__init__.py:\n  src/giton/__main__.py:\n", "is_subdir": false}, {"name": "planfile-tickets.yaml", "rel_path": "planfile-tickets.yaml", "path": "planfile-tickets.yaml", "size": "13.6KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "source: code2llm\n# generated in 0.01s\nschema: code2llm.planfile_tickets.v1\nproject_root: /home/tom/github/semcod/gix\ntickets:\n- signal: code2llm_smell_shotgun_surgery\n  title: 'Address code smell: Shotgun Surgery: cfg'\n  description: 'code2llm reports `Shotgun Surgery: cfg` in `src/giton/cli.py:229`.\n\n\n    Mutation of variable ''cfg'' spans 5 functions. Changing this logic requires work\n    in many places.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: high\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - shotgun-surgery\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:229:Shotgun Surgery:\n    cfg'\n- signal: code2llm_smell_shotgun_surgery\n  title: 'Address code smell: Shotgun Surgery: ctx'\n  description: 'code2llm reports `Shotgun Surgery: ctx` in `src/giton/cli.py:89`.\n\n\n    Mutation of variable ''ctx'' spans 5 functions. Changing this logic requires work\n    in many places.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: high\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - shotgun-surgery\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:89:Shotgun Surgery:\n    ctx'\n- signal: code2llm_smell_shotgun_surgery\n  title: 'Address code smell: Shotgun Surgery: findings'\n  description: 'code2llm reports `Shotgun Surgery: findings` in `src/giton/cli.py:229`.\n\n\n    Mutation of variable ''findings'' spans 7 functions. Changing this logic requires\n    work in many places.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: high\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - shotgun-surgery\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:229:Shotgun Surgery:\n    findings'\n- signal: code2llm_smell_shotgun_surgery\n  title: 'Address code smell: Shotgun Surgery: out'\n  description: 'code2llm reports `Shotgun Surgery: out` in `src/giton/cli.py:219`.\n\n\n    Mutation of variable ''out'' spans 8 functions. Changing this logic requires work\n    in many places.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: high\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - shotgun-surgery\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:219:Shotgun Surgery:\n    out'\n- signal: code2llm_smell_shotgun_surgery\n  title: 'Address code smell: Shotgun Surgery: plugins'\n  description: 'code2llm reports `Shotgun Surgery: plugins` in `src/giton/plugins.py:79`.\n\n\n    Mutation of variable ''plugins'' spans 6 functions. Changing this logic requires\n    work in many places.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: high\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - shotgun-surgery\n  files:\n  - src/giton/plugins.py\n  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/plugins.py:79:Shotgun Surgery:\n    plugins'\n- signal: code2llm_smell_shotgun_surgery\n  title: 'Address code smell: Shotgun Surgery: root'\n  description: 'code2llm reports `Shotgun Surgery: root` in `src/giton/cli.py:256`.\n\n\n    Mutation of variable ''root'' spans 12 functions. Changing this logic requires\n    work in many places.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: high\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - shotgun-surgery\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:256:Shotgun Surgery:\n    root'\n- signal: code2llm_cc\n  title: 'Reduce cyclomatic complexity: src.giton.shell.dispatch (CC=23)'\n  description: 'code2llm reports `src.giton.shell.dispatch` at `src/giton/shell.py:132`\n    with cyclomatic complexity 23 (limit 15).\n\n\n    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run\n    code2llm after the change and keep tests green.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - complexity\n  - refactor\n  files:\n  - src/giton/shell.py\n  dedupe_key: code2llm:cc:src/giton/shell.py:src.giton.shell.dispatch\n- signal: code2llm_smell_data_clump\n  title: 'Address code smell: Data Clump: opts, trigger, ctx'\n  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:36`.\n\n\n    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,\n    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - data-clump\n  files:\n  - src/giton/policies.py\n  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:36:Data Clump: opts,\n    trigger, ctx'\n- signal: code2llm_smell_data_clump\n  title: 'Address code smell: Data Clump: opts, trigger, ctx'\n  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:71`.\n\n\n    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,\n    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - data-clump\n  files:\n  - src/giton/policies.py\n  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:71:Data Clump: opts,\n    trigger, ctx'\n- signal: code2llm_smell_data_clump\n  title: 'Address code smell: Data Clump: opts, trigger, ctx'\n  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:90`.\n\n\n    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,\n    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - data-clump\n  files:\n  - src/giton/policies.py\n  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:90:Data Clump: opts,\n    trigger, ctx'\n- signal: code2llm_smell_data_clump\n  title: 'Address code smell: Data Clump: opts, trigger, ctx'\n  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:116`.\n\n\n    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,\n    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - data-clump\n  files:\n  - src/giton/policies.py\n  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:116:Data Clump: opts,\n    trigger, ctx'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: _check_conventional_commits'\n  description: 'code2llm reports `God Function: _check_conventional_commits` in `src/giton/policies.py:36`.\n\n\n    Function ''_check_conventional_commits'' is oversized: CC=10, fan-out=10, mutations=9.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/policies.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/policies.py:36:God Function:\n    _check_conventional_commits'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: _cmd_policy'\n  description: 'code2llm reports `God Function: _cmd_policy` in `src/giton/shell.py:84`.\n\n\n    Function ''_cmd_policy'' is oversized: CC=12, fan-out=9, mutations=10.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/shell.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/shell.py:84:God Function: _cmd_policy'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: autosquash'\n  description: 'code2llm reports `God Function: autosquash` in `src/giton/history.py:93`.\n\n\n    Function ''autosquash'' is oversized: CC=2, fan-out=6, mutations=7.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/history.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/history.py:93:God Function: autosquash'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: collect'\n  description: 'code2llm reports `God Function: collect` in `src/giton/context.py:40`.\n\n\n    Function ''collect'' is oversized: CC=5, fan-out=6, mutations=7.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/context.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/context.py:40:God Function: collect'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: demonstrate_plugin_management'\n  description: 'code2llm reports `God Function: demonstrate_plugin_management` in\n    `examples/advanced/main.py:24`.\n\n\n    Function ''demonstrate_plugin_management'' is oversized: CC=3, fan-out=10, mutations=8.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - examples/advanced/main.py\n  dedupe_key: 'code2llm:smell:god_function:examples/advanced/main.py:24:God Function:\n    demonstrate_plugin_management'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: fixup'\n  description: 'code2llm reports `God Function: fixup` in `src/giton/cli.py:287`.\n\n\n    Function ''fixup'' is oversized: CC=9, fan-out=13, mutations=5.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/cli.py:287:God Function: fixup'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: history_clean'\n  description: 'code2llm reports `God Function: history_clean` in `src/giton/cli.py:361`.\n\n\n    Function ''history_clean'' is oversized: CC=12, fan-out=15, mutations=7.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/cli.py:361:God Function: history_clean'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: hook_commit_msg'\n  description: 'code2llm reports `God Function: hook_commit_msg` in `src/giton/cli.py:169`.\n\n\n    Function ''hook_commit_msg'' is oversized: CC=9, fan-out=19, mutations=15.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/cli.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/cli.py:169:God Function: hook_commit_msg'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: install'\n  description: 'code2llm reports `God Function: install` in `src/giton/hooks.py:20`.\n\n\n    Function ''install'' is oversized: CC=5, fan-out=12, mutations=4.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/hooks.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/hooks.py:20:God Function: install'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: list_log'\n  description: 'code2llm reports `God Function: list_log` in `src/giton/history.py:49`.\n\n\n    Function ''list_log'' is oversized: CC=4, fan-out=7, mutations=10.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/history.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/history.py:49:God Function: list_log'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: show_catalog'\n  description: 'code2llm reports `God Function: show_catalog` in `src/giton/plugins.py:103`.\n\n\n    Function ''show_catalog'' is oversized: CC=4, fan-out=9, mutations=7.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/plugins.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/plugins.py:103:God Function:\n    show_catalog'\n- signal: code2llm_smell_god_function\n  title: 'Address code smell: God Function: show_table'\n  description: 'code2llm reports `God Function: show_table` in `src/giton/plugins.py:79`.\n\n\n    Function ''show_table'' is oversized: CC=5, fan-out=8, mutations=10.\n\n\n    Make the smallest refactor that removes the smell and run local tests.'\n  priority: normal\n  labels:\n  - llm-ready\n  - code2llm\n  - code-smell\n  - god-function\n  files:\n  - src/giton/plugins.py\n  dedupe_key: 'code2llm:smell:god_function:src/giton/plugins.py:79:God Function: show_table'\napplied: []\nskipped: []\n", "is_subdir": false}, {"name": "project.toon.yaml", "rel_path": "project.toon.yaml", "path": "project.toon.yaml", "size": "2.3KB", "icon": "⚙️", "type": "yaml", "type_name": "YAML", "content": "# gix | 92 func | 15f | 2930L | python | 2026-05-27\n# generated in 0.00s\n\nHEALTH:\n  CC̄=3.8  critical=5 (limit:10)  dup=0  cycles=1\n\nALERTS[9]:\n  !!  cc_exceeded      dispatch = 23 (limit:15)\n  !!  high_fan_out     hook_commit_msg = 19 (limit:10)\n  !!  high_fan_out     dispatch = 16 (limit:10)\n  !!  high_fan_out     history_clean = 15 (limit:10)\n  !   high_fan_out     fixup = 13 (limit:10)\n  !   high_fan_out     install = 12 (limit:10)\n  !   high_fan_out     demonstrate_plugin_management = 10 (limit:10)\n  !   high_fan_out     policy_check = 10 (limit:10)\n  !   high_fan_out     _check_conventional_commits = 10 (limit:10)\n\nMODULES[30] (top by size):\n  M[goal.yaml] 512L C:0 F:0 CC↑0 D:0 (yaml)\n  M[src/giton/cli.py] 421L C:0 F:22 CC↑12 D:0 (python)\n  M[src/giton/shell.py] 205L C:0 F:6 CC↑23 D:0 (python)\n  M[src/giton/catalog.py] 173L C:1 F:4 CC↑3 D:0 (python)\n  M[src/giton/policies.py] 165L C:1 F:6 CC↑10 D:0 (python)\n  M[examples/advanced/main.py] 156L C:0 F:5 CC↑9 D:0 (python)\n  M[src/giton/history.py] 140L C:1 F:8 CC↑4 D:0 (python)\n  M[koru.yaml] 133L C:0 F:0 CC↑0 D:0 (yaml)\n  M[src/giton/runner.py] 122L C:2 F:4 CC↑8 D:4 (python)\n  M[src/giton/plugins.py] 120L C:0 F:7 CC↑9 D:0 (python)\n  M[src/giton/repo_config.py] 101L C:1 F:6 CC↑4 D:0 (python)\n  M[src/giton/config.py] 74L C:1 F:8 CC↑4 D:4 (python)\n  M[examples/basic/main.py] 67L C:0 F:2 CC↑8 D:0 (python)\n  M[src/giton/context.py] 66L C:1 F:5 CC↑5 D:5 (python)\n  M[examples/advanced/logs/log.txt] 64L C:0 F:0 CC↑0 D:0 (txt)\n  LANGS: python:17/other:3/txt:3/toml:2/yaml:2/shell:2/yml:1\n\nHOTSPOTS[8]:\n  ★ hook_commit_msg fan=19  // Validate the commit message before the commit completes.\n\nGit invokes this hook \n  ★ dispatch fan=16  // 16-way dispatch\n  ★ history_clean fan=15  // Run `git rebase -i --autosquash` safely with a backup ref.\n\nDefault base is the \n  ★ fixup fan=13  // Create a `fixup!` commit from currently staged changes.\n\nRecords a backup ref un\n  ★ install fan=12  // Orchestrates 12 calls\n\nREFACTOR[6]:\n  [1] H/H Split god module goal.yaml (512L, 0 classes)\n  [2] M/L Split dispatch (CC=23)\n  [3] M/L Break circular dependency: src.giton.repo_config._deep_merge\n  [4] M/M Reduce hook_commit_msg fan-out (currently 19)\n  [5] M/M Reduce dispatch fan-out (currently 16)\n\nEVOLUTION:\n  2026-05-27 CC̄=3.8 crit=5 2930L // Automated analysis\n", "is_subdir": false}];
+        let currentFile = null;
+
+        function renderFileList(filter = '') {
+            const list = document.getElementById('fileList');
+            const filtered = files.filter(f =>
+                f.name.toLowerCase().includes(filter.toLowerCase()) ||
+                f.path.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state">No files found</div>';
+                return;
+            }
+
+            // Group by type
+            const groups = {};
+            for (const file of filtered) {
+                const type = file.type_name;
+                if (!groups[type]) groups[type] = [];
+                groups[type].push(file);
+            }
+
+            let html = '';
+            for (const [typeName, groupFiles] of Object.entries(groups)) {
+                html += `
+                    <div class="file-group">
+                        <div class="file-group-title">${typeName} Files (${groupFiles.length})</div>
+                        ${groupFiles.map(f => `
+                            <div class="file-item ${currentFile?.name === f.name ? 'active' : ''}"
+                                 onclick="selectFile('${f.name}')">
+                                <span class="file-icon">${f.icon}</span>
+                                <div class="file-info">
+                                    <div class="file-name">${f.name}</div>
+                                    <div class="file-meta">${f.path}</div>
+                                </div>
+                                <span class="file-size">${f.size}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            list.innerHTML = html;
+        }
+
+        function selectFile(name) {
+            const file = files.find(f => f.name === name);
+            if (!file) return;
+
+            currentFile = file;
+
+            document.getElementById('contentIcon').textContent = file.icon;
+            document.getElementById('contentTitle').textContent = file.name;
+
+            // Actions
+            const actions = document.getElementById('contentActions');
+            actions.innerHTML = `
+                <a href="${file.rel_path}" download class="btn">⬇ Download</a>
+                <a href="${file.rel_path}" target="_blank" class="btn btn-primary">↗ Open Raw</a>
+            `;
+
+            // Content
+            const body = document.getElementById('contentBody');
+            if (file.type === 'markdown') {
+                // Render markdown as HTML using marked.js
+                body.innerHTML = `<div class="markdown-content">${marked.parse(file.content)}</div>`;
+            } else if (file.type === 'html') {
+                // For HTML files, show in iframe for safety
+                body.innerHTML = `<iframe src="${file.rel_path}" style="width:100%;height:100%;border:none;border-radius:0.5rem;"></iframe>`;  # noqa: E501
+            } else if (file.type === 'image') {
+                // For images, display the actual image
+                body.innerHTML = `<div class="image-preview"><img src="${file.rel_path}" alt="${file.name}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:0.5rem;"></div>`;  # noqa: E501
+            } else if (file.type === 'mermaid') {
+                // Render mermaid diagram
+                const diagramId = 'mermaid-diagram-' + Date.now();
+                body.innerHTML = `<div class="mermaid-content"><pre class="mermaid" id="${diagramId}">${file.content}</pre></div>`;  # noqa: E501
+                // Initialize mermaid on the new element
+                setTimeout(() => {
+                    mermaid.init(undefined, document.getElementById(diagramId));
+                }, 0);
+            } else if (file.type === 'json') {
+                try {
+                    const json = JSON.parse(file.content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'));  # noqa: E501
+                    const formatted = JSON.stringify(json, null, 2);
+                    body.innerHTML = `<pre><code class="language-json">${formatted.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;  # noqa: E501
+                    hljs.highlightElement(body.querySelector('code'));
+                } catch {
+                    body.innerHTML = `<pre>${file.content}</pre>`;
+                }
+            } else if (file.type === 'yaml') {
+                // YAML with syntax highlighting
+                body.innerHTML = `<pre><code class="language-yaml">${file.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;  # noqa: E501
+                hljs.highlightElement(body.querySelector('code'));
+            } else if (file.type === 'toon') {
+                // TOON with simple highlighting (use ini as closest match for key: value format)
+                body.innerHTML = `<pre><code class="language-ini">${file.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;  # noqa: E501
+                hljs.highlightElement(body.querySelector('code'));
+            } else if (file.type === 'code') {
+                // Code files with auto-highlighting
+                body.innerHTML = `<pre><code>${file.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;  # noqa: E501
+                hljs.highlightElement(body.querySelector('code'));
+            } else {
+                body.innerHTML = `<pre>${file.content}</pre>`;
+            }
+
+            renderFileList(document.getElementById('search').value);
+        }
+
+        function filterFiles(query) {
+            renderFileList(query);
+        }
+
+        function renderStats() {
+            const stats = {};
+            for (const f of files) {
+                stats[f.type_name] = (stats[f.type_name] || 0) + 1;
+            }
+
+            const grid = document.getElementById('statsGrid');
+            grid.innerHTML = Object.entries(stats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([type, count]) => `
+                    <div class="stat-card">
+                        <div class="stat-value">${count}</div>
+                        <div class="stat-label">${type}</div>
+                    </div>
+                `).join('');
+        }
+
+        // Initialize
+        renderStats();
+        renderFileList();
+
+        // Select first file if available
+        if (files.length > 0) {
+            selectFile(files[0].name);
+        }
+    </script>
+</body>
+</html>

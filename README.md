@@ -3,11 +3,11 @@
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.5-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.6-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
 ![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.61-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.2h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $0.6123 (8 commits)
-- 👤 **Human dev:** ~$318 (3.2h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $0.6135 (9 commits)
+- 👤 **Human dev:** ~$319 (3.2h @ $100/h, 30min dedup)
 
 Generated on 2026-05-27 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
@@ -78,6 +78,97 @@ giton: Apply patch and add commit "fixup! ..."? [Y/n]
 
 ```bash
 pip install giton
+```
+
+## Development
+
+### Setup
+
+```bash
+# Clone the repository
+git clone <repo-url>
+cd gix
+
+# Install in development mode
+pip install -e .[dev]
+```
+
+### Dependencies
+
+**Runtime:**
+- `typer>=0.12`
+- `rich>=13.7`
+- `PyYAML>=6.0`
+
+**Development:**
+- `pytest>=8.0`
+- `goal>=2.1.0`
+- `costs>=0.1.20`
+- `pfix>=0.1.60`
+
+### Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test file
+pytest tests/test_history.py
+
+# Run with coverage
+pytest --cov=src/giton
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root (see `.env.example`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `OPENROUTER_API_KEY` | *(not set)* | Required: OpenRouter API key (https://openrouter.ai/keys) |
+| `LLM_MODEL` | `openrouter/qwen/qwen3-coder-next` | Model to use for AI operations |
+| `PFIX_AUTO_APPLY` | `true` | Automatically apply fixes without asking |
+| `PFIX_AUTO_INSTALL_DEPS` | `true` | Automatically pip/uv install dependencies |
+| `PFIX_AUTO_RESTART` | `false` | Restart process after fix using os.execv |
+| `PFIX_MAX_RETRIES` | `3` | Maximum retry attempts |
+| `PFIX_DRY_RUN` | `false` | Run in dry-run mode without making changes |
+| `PFIX_ENABLED` | `true` | Enable automatic fixing |
+| `PFIX_GIT_COMMIT` | `false` | Automatically commit fixes |
+| `PFIX_GIT_PREFIX` | `pfix:` | Commit message prefix for fixes |
+| `PFIX_CREATE_BACKUPS` | `false` | Create backups in `.pfix_backups/` directory |
+
+### Project Structure
+
+```
+gix/
+├── src/giton/           # Main source code
+│   ├── __init__.py      # Package initialization
+│   ├── __main__.py      # Entry point for `python -m giton`
+│   ├── catalog.py       # Plugin catalog management
+│   ├── cli.py           # Command-line interface (Typer)
+│   ├── config.py        # User plugin configuration
+│   ├── context.py       # Git context collection
+│   ├── history.py       # Safe history operations (fixup, autosquash)
+│   ├── hooks.py         # Git hook installation
+│   ├── interactive.py   # Interactive prompts
+│   ├── plugins.py       # Plugin installation/management
+│   ├── policies.py      # Built-in policy engine
+│   ├── repo_config.py   # Repository configuration
+│   ├── runner.py        # Plugin execution runner
+│   └── shell.py         # Interactive REPL shell
+├── tests/               # Test suite
+│   ├── test_basic.py    # Basic functionality tests
+│   ├── test_history.py  # History operations tests
+│   └── test_policies.py # Policy engine tests
+├── examples/            # Usage examples
+│   ├── basic/           # Basic library usage
+│   ├── advanced/        # Advanced features demo
+│   └── testing/         # CI/CD integration example
+├── pyproject.toml       # Project configuration
+├── README.md            # This file
+├── SUMD.md              # System documentation (SUMD)
+├── TODO.md              # Auto-generated TODO list
+└── CHANGELOG.md         # Version history
 ```
 
 ## Quick start

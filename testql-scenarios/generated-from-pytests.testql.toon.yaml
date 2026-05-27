@@ -1,0 +1,13 @@
+# SCENARIO: Auto-generated from Python Tests
+# TYPE: integration
+# GENERATED: true
+
+CONFIG[2]{key, value}:
+  base_url, ${api_url:-http://localhost:8101}
+  timeout_ms, 10000
+
+# Converted 3 assertions from pytest
+ASSERT[3]{field, operator, expected}:
+  hello(), ==, "world"
+  policy_result.returncode, ==, 0
+  test_result.returncode, ==, 0

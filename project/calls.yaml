@@ -1,0 +1,765 @@
+project: /home/tom/github/semcod/gix
+generated_from: code2llm call graph analysis
+stats:
+  total_nodes: 61
+  total_edges: 64
+  modules_count: 12
+nodes:
+  src.giton.cli.history_log:
+    name: history_log
+    module: src.giton.cli
+    line: 337
+    cyclomatic_complexity: 9
+    calls_out: 12
+    calls_in: 0
+  src.giton.cli.policy_check:
+    name: policy_check
+    module: src.giton.cli
+    line: 229
+    cyclomatic_complexity: 7
+    calls_out: 13
+    calls_in: 0
+  src.giton.history.list_log:
+    name: list_log
+    module: src.giton.history
+    line: 49
+    cyclomatic_complexity: 4
+    calls_out: 7
+    calls_in: 0
+  src.giton.cli.uninit:
+    name: uninit
+    module: src.giton.cli
+    line: 78
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  src.giton.shell._cmd_init:
+    name: _cmd_init
+    module: src.giton.shell
+    line: 114
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 1
+  src.giton.history.create_fixup:
+    name: create_fixup
+    module: src.giton.history
+    line: 74
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.giton.hooks.install:
+    name: install
+    module: src.giton.hooks
+    line: 20
+    cyclomatic_complexity: 5
+    calls_out: 12
+    calls_in: 0
+  src.giton.history.make_backup_ref:
+    name: make_backup_ref
+    module: src.giton.history
+    line: 38
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 0
+  src.giton.shell._cmd_policy:
+    name: _cmd_policy
+    module: src.giton.shell
+    line: 84
+    cyclomatic_complexity: 12
+    calls_out: 15
+    calls_in: 1
+  src.giton.plugins.install_category:
+    name: install_category
+    module: src.giton.plugins
+    line: 59
+    cyclomatic_complexity: 6
+    calls_out: 3
+    calls_in: 0
+  src.giton.cli.fixup:
+    name: fixup
+    module: src.giton.cli
+    line: 287
+    cyclomatic_complexity: 9
+    calls_out: 28
+    calls_in: 0
+  src.giton.cli.hook_pre_commit:
+    name: hook_pre_commit
+    module: src.giton.cli
+    line: 161
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  src.giton.cli.status:
+    name: status
+    module: src.giton.cli
+    line: 89
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 0
+  src.giton.plugins.show_table:
+    name: show_table
+    module: src.giton.plugins
+    line: 79
+    cyclomatic_complexity: 5
+    calls_out: 13
+    calls_in: 0
+  src.giton.history._git:
+    name: _git
+    module: src.giton.history
+    line: 26
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 8
+  src.giton.interactive.confirm:
+    name: confirm
+    module: src.giton.interactive
+    line: 22
+    cyclomatic_complexity: 5
+    calls_out: 5
+    calls_in: 0
+  src.giton.shell.dispatch:
+    name: dispatch
+    module: src.giton.shell
+    line: 132
+    cyclomatic_complexity: 23
+    calls_out: 25
+    calls_in: 1
+  examples.advanced.main.demonstrate_trigger_sequence:
+    name: demonstrate_trigger_sequence
+    module: examples.advanced.main
+    line: 109
+    cyclomatic_complexity: 9
+    calls_out: 12
+    calls_in: 1
+  src.giton.plugins._pip_install:
+    name: _pip_install
+    module: src.giton.plugins
+    line: 23
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  src.giton.interactive.choose:
+    name: choose
+    module: src.giton.interactive
+    line: 37
+    cyclomatic_complexity: 8
+    calls_out: 10
+    calls_in: 0
+  src.giton.config.remove_plugin:
+    name: remove_plugin
+    module: src.giton.config
+    line: 68
+    cyclomatic_complexity: 4
+    calls_out: 4
+    calls_in: 2
+  examples.basic.main.test_basic_giton_usage:
+    name: test_basic_giton_usage
+    module: examples.basic.main
+    line: 21
+    cyclomatic_complexity: 8
+    calls_out: 20
+    calls_in: 1
+  src.giton.config.upsert_plugin:
+    name: upsert_plugin
+    module: src.giton.config
+    line: 61
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 2
+  src.giton.config.save_plugins:
+    name: save_plugins
+    module: src.giton.config
+    line: 55
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 3
+  src.giton.cli.policy_init:
+    name: policy_init
+    module: src.giton.cli
+    line: 256
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  src.giton.runner._print_findings:
+    name: _print_findings
+    module: src.giton.runner
+    line: 30
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 1
+  src.giton.cli.policy_list:
+    name: policy_list
+    module: src.giton.cli
+    line: 269
+    cyclomatic_complexity: 5
+    calls_out: 9
+    calls_in: 0
+  examples.advanced.main.demonstrate_hooks:
+    name: demonstrate_hooks
+    module: examples.advanced.main
+    line: 88
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 1
+  src.giton.context.collect:
+    name: collect
+    module: src.giton.context
+    line: 40
+    cyclomatic_complexity: 5
+    calls_out: 13
+    calls_in: 7
+  src.giton.context._run:
+    name: _run
+    module: src.giton.context
+    line: 9
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 6
+  src.giton.cli.history_clean:
+    name: history_clean
+    module: src.giton.cli
+    line: 361
+    cyclomatic_complexity: 12
+    calls_out: 30
+    calls_in: 0
+  src.giton.repo_config.load:
+    name: load
+    module: src.giton.repo_config
+    line: 83
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 0
+  src.giton.cli.doctor:
+    name: doctor
+    module: src.giton.cli
+    line: 109
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 0
+  examples.advanced.main.main:
+    name: main
+    module: examples.advanced.main
+    line: 138
+    cyclomatic_complexity: 2
+    calls_out: 9
+    calls_in: 0
+  src.giton.history.has_staged_changes:
+    name: has_staged_changes
+    module: src.giton.history
+    line: 87
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.giton.runner._format_command:
+    name: _format_command
+    module: src.giton.runner
+    line: 45
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 1
+  examples.basic.main.main:
+    name: main
+    module: examples.basic.main
+    line: 61
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.giton.cli.init:
+    name: init
+    module: src.giton.cli
+    line: 54
+    cyclomatic_complexity: 4
+    calls_out: 12
+    calls_in: 0
+  src.giton.hooks.uninstall:
+    name: uninstall
+    module: src.giton.hooks
+    line: 37
+    cyclomatic_complexity: 5
+    calls_out: 8
+    calls_in: 0
+  src.giton.config.ensure_user_dirs:
+    name: ensure_user_dirs
+    module: src.giton.config
+    line: 40
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
+  src.giton.history.upstream_range:
+    name: upstream_range
+    module: src.giton.history
+    line: 63
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.giton.shell._set_enabled:
+    name: _set_enabled
+    module: src.giton.shell
+    line: 53
+    cyclomatic_complexity: 5
+    calls_out: 4
+    calls_in: 2
+  src.giton.repo_config._deep_merge:
+    name: _deep_merge
+    module: src.giton.repo_config
+    line: 73
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 2
+  src.giton.plugins.install_defaults:
+    name: install_defaults
+    module: src.giton.plugins
+    line: 54
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 0
+  src.giton.hooks.hooks_dir:
+    name: hooks_dir
+    module: src.giton.hooks
+    line: 16
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 2
+  src.giton.plugins.install_from_catalog:
+    name: install_from_catalog
+    module: src.giton.plugins
+    line: 29
+    cyclomatic_complexity: 9
+    calls_out: 12
+    calls_in: 2
+  src.giton.history.head_sha:
+    name: head_sha
+    module: src.giton.history
+    line: 34
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  src.giton.interactive.is_tty:
+    name: is_tty
+    module: src.giton.interactive
+    line: 16
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 2
+  src.giton.shell._cmd_status:
+    name: _cmd_status
+    module: src.giton.shell
+    line: 68
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 1
+  src.giton.cli.hook_pre_push:
+    name: hook_pre_push
+    module: src.giton.cli
+    line: 219
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  src.giton.history.autosquash:
+    name: autosquash
+    module: src.giton.history
+    line: 93
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 0
+  src.giton.shell.run:
+    name: run
+    module: src.giton.shell
+    line: 192
+    cyclomatic_complexity: 5
+    calls_out: 7
+    calls_in: 0
+  examples.advanced.main.demonstrate_catalog:
+    name: demonstrate_catalog
+    module: examples.advanced.main
+    line: 69
+    cyclomatic_complexity: 2
+    calls_out: 13
+    calls_in: 1
+  src.giton.context.repo_root:
+    name: repo_root
+    module: src.giton.context
+    line: 16
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 12
+  src.giton.runner._run_plugin:
+    name: _run_plugin
+    module: src.giton.runner
+    line: 91
+    cyclomatic_complexity: 6
+    calls_out: 15
+    calls_in: 1
+  src.giton.config.load_plugins:
+    name: load_plugins
+    module: src.giton.config
+    line: 44
+    cyclomatic_complexity: 4
+    calls_out: 6
+    calls_in: 6
+  src.giton.cli.hook_post_commit:
+    name: hook_post_commit
+    module: src.giton.cli
+    line: 213
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.giton.plugins.uninstall:
+    name: uninstall
+    module: src.giton.plugins
+    line: 71
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 0
+  src.giton.cli.hook_commit_msg:
+    name: hook_commit_msg
+    module: src.giton.cli
+    line: 169
+    cyclomatic_complexity: 9
+    calls_out: 24
+    calls_in: 0
+  src.giton.runner.run_trigger:
+    name: run_trigger
+    module: src.giton.runner
+    line: 66
+    cyclomatic_complexity: 8
+    calls_out: 11
+    calls_in: 6
+  examples.advanced.main.demonstrate_plugin_management:
+    name: demonstrate_plugin_management
+    module: examples.advanced.main
+    line: 24
+    cyclomatic_complexity: 3
+    calls_out: 19
+    calls_in: 1
+edges:
+- caller: examples.advanced.main.demonstrate_plugin_management
+  callee: src.giton.config.load_plugins
+  call_type: resolved
+- caller: examples.advanced.main.demonstrate_hooks
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: examples.advanced.main.demonstrate_trigger_sequence
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: examples.advanced.main.demonstrate_trigger_sequence
+  callee: src.giton.runner.run_trigger
+  call_type: resolved
+- caller: examples.advanced.main.main
+  callee: examples.advanced.main.demonstrate_catalog
+  call_type: resolved
+- caller: examples.advanced.main.main
+  callee: examples.advanced.main.demonstrate_plugin_management
+  call_type: resolved
+- caller: examples.advanced.main.main
+  callee: examples.advanced.main.demonstrate_hooks
+  call_type: resolved
+- caller: examples.advanced.main.main
+  callee: examples.advanced.main.demonstrate_trigger_sequence
+  call_type: resolved
+- caller: examples.basic.main.test_basic_giton_usage
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: examples.basic.main.test_basic_giton_usage
+  callee: src.giton.runner.run_trigger
+  call_type: resolved
+- caller: examples.basic.main.main
+  callee: examples.basic.main.test_basic_giton_usage
+  call_type: resolved
+- caller: src.giton.config.load_plugins
+  callee: src.giton.config.ensure_user_dirs
+  call_type: resolved
+- caller: src.giton.config.save_plugins
+  callee: src.giton.config.ensure_user_dirs
+  call_type: resolved
+- caller: src.giton.config.upsert_plugin
+  callee: src.giton.config.load_plugins
+  call_type: resolved
+- caller: src.giton.config.upsert_plugin
+  callee: src.giton.config.save_plugins
+  call_type: resolved
+- caller: src.giton.config.remove_plugin
+  callee: src.giton.config.load_plugins
+  call_type: resolved
+- caller: src.giton.config.remove_plugin
+  callee: src.giton.config.save_plugins
+  call_type: resolved
+- caller: src.giton.cli.init
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.uninit
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.status
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: src.giton.cli.doctor
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.hook_pre_commit
+  callee: src.giton.runner.run_trigger
+  call_type: resolved
+- caller: src.giton.cli.hook_commit_msg
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: src.giton.cli.hook_post_commit
+  callee: src.giton.runner.run_trigger
+  call_type: resolved
+- caller: src.giton.cli.hook_pre_push
+  callee: src.giton.runner.run_trigger
+  call_type: resolved
+- caller: src.giton.cli.policy_check
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: src.giton.cli.policy_init
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.policy_list
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.fixup
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.history_log
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.cli.history_clean
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.plugins.install_from_catalog
+  callee: src.giton.plugins._pip_install
+  call_type: resolved
+- caller: src.giton.plugins.install_from_catalog
+  callee: src.giton.config.upsert_plugin
+  call_type: resolved
+- caller: src.giton.plugins.install_defaults
+  callee: src.giton.plugins.install_from_catalog
+  call_type: resolved
+- caller: src.giton.plugins.install_category
+  callee: src.giton.plugins.install_from_catalog
+  call_type: resolved
+- caller: src.giton.plugins.uninstall
+  callee: src.giton.config.remove_plugin
+  call_type: resolved
+- caller: src.giton.plugins.show_table
+  callee: src.giton.config.load_plugins
+  call_type: resolved
+- caller: src.giton.runner.run_trigger
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: src.giton.runner.run_trigger
+  callee: src.giton.runner._print_findings
+  call_type: resolved
+- caller: src.giton.runner.run_trigger
+  callee: src.giton.config.load_plugins
+  call_type: resolved
+- caller: src.giton.runner.run_trigger
+  callee: src.giton.runner._run_plugin
+  call_type: resolved
+- caller: src.giton.runner._run_plugin
+  callee: src.giton.runner._format_command
+  call_type: resolved
+- caller: src.giton.interactive.confirm
+  callee: src.giton.interactive.is_tty
+  call_type: resolved
+- caller: src.giton.interactive.choose
+  callee: src.giton.interactive.is_tty
+  call_type: resolved
+- caller: src.giton.context.repo_root
+  callee: src.giton.context._run
+  call_type: resolved
+- caller: src.giton.context.collect
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.context.collect
+  callee: src.giton.context._run
+  call_type: resolved
+- caller: src.giton.hooks.install
+  callee: src.giton.hooks.hooks_dir
+  call_type: resolved
+- caller: src.giton.hooks.uninstall
+  callee: src.giton.hooks.hooks_dir
+  call_type: resolved
+- caller: src.giton.history.head_sha
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.history.make_backup_ref
+  callee: src.giton.history.head_sha
+  call_type: resolved
+- caller: src.giton.history.make_backup_ref
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.history.list_log
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.history.upstream_range
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.history.create_fixup
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.history.has_staged_changes
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.history.autosquash
+  callee: src.giton.history._git
+  call_type: resolved
+- caller: src.giton.shell._set_enabled
+  callee: src.giton.config.load_plugins
+  call_type: resolved
+- caller: src.giton.shell._set_enabled
+  callee: src.giton.config.save_plugins
+  call_type: resolved
+- caller: src.giton.shell._cmd_status
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: src.giton.shell._cmd_policy
+  callee: src.giton.context.collect
+  call_type: resolved
+- caller: src.giton.shell._cmd_init
+  callee: src.giton.context.repo_root
+  call_type: resolved
+- caller: src.giton.shell.run
+  callee: src.giton.shell.dispatch
+  call_type: resolved
+- caller: src.giton.repo_config.load
+  callee: src.giton.repo_config._deep_merge
+  call_type: resolved
+modules:
+  examples.advanced.main:
+  - examples.advanced.main.demonstrate_catalog
+  - examples.advanced.main.demonstrate_hooks
+  - examples.advanced.main.demonstrate_plugin_management
+  - examples.advanced.main.demonstrate_trigger_sequence
+  - examples.advanced.main.main
+  examples.basic.main:
+  - examples.basic.main.main
+  - examples.basic.main.test_basic_giton_usage
+  src.giton.cli:
+  - src.giton.cli.doctor
+  - src.giton.cli.fixup
+  - src.giton.cli.history_clean
+  - src.giton.cli.history_log
+  - src.giton.cli.hook_commit_msg
+  - src.giton.cli.hook_post_commit
+  - src.giton.cli.hook_pre_commit
+  - src.giton.cli.hook_pre_push
+  - src.giton.cli.init
+  - src.giton.cli.policy_check
+  - src.giton.cli.policy_init
+  - src.giton.cli.policy_list
+  - src.giton.cli.status
+  - src.giton.cli.uninit
+  src.giton.config:
+  - src.giton.config.ensure_user_dirs
+  - src.giton.config.load_plugins
+  - src.giton.config.remove_plugin
+  - src.giton.config.save_plugins
+  - src.giton.config.upsert_plugin
+  src.giton.context:
+  - src.giton.context._run
+  - src.giton.context.collect
+  - src.giton.context.repo_root
+  src.giton.history:
+  - src.giton.history._git
+  - src.giton.history.autosquash
+  - src.giton.history.create_fixup
+  - src.giton.history.has_staged_changes
+  - src.giton.history.head_sha
+  - src.giton.history.list_log
+  - src.giton.history.make_backup_ref
+  - src.giton.history.upstream_range
+  src.giton.hooks:
+  - src.giton.hooks.hooks_dir
+  - src.giton.hooks.install
+  - src.giton.hooks.uninstall
+  src.giton.interactive:
+  - src.giton.interactive.choose
+  - src.giton.interactive.confirm
+  - src.giton.interactive.is_tty
+  src.giton.plugins:
+  - src.giton.plugins._pip_install
+  - src.giton.plugins.install_category
+  - src.giton.plugins.install_defaults
+  - src.giton.plugins.install_from_catalog
+  - src.giton.plugins.show_table
+  - src.giton.plugins.uninstall
+  src.giton.repo_config:
+  - src.giton.repo_config._deep_merge
+  - src.giton.repo_config.load
+  src.giton.runner:
+  - src.giton.runner._format_command
+  - src.giton.runner._print_findings
+  - src.giton.runner._run_plugin
+  - src.giton.runner.run_trigger
+  src.giton.shell:
+  - src.giton.shell._cmd_init
+  - src.giton.shell._cmd_policy
+  - src.giton.shell._cmd_status
+  - src.giton.shell._set_enabled
+  - src.giton.shell.dispatch
+  - src.giton.shell.run
+entry_points:
+- examples.advanced.main.main
+- examples.basic.main.main
+- examples.testing.sample_project.src.example.add
+- examples.testing.sample_project.src.example.divide
+- examples.testing.sample_project.src.example.multiply
+- src.giton.catalog._entry
+- src.giton.catalog.defaults
+- src.giton.catalog.find
+- src.giton.catalog.list_categories
+- src.giton.cli._root
+- src.giton.cli.doctor
+- src.giton.cli.fixup
+- src.giton.cli.history_clean
+- src.giton.cli.history_log
+- src.giton.cli.hook_commit_msg
+- src.giton.cli.hook_post_commit
+- src.giton.cli.hook_pre_commit
+- src.giton.cli.hook_pre_push
+- src.giton.cli.init
+- src.giton.cli.plugin_catalog
+- src.giton.cli.plugin_install
+- src.giton.cli.plugin_install_category
+- src.giton.cli.plugin_install_defaults
+- src.giton.cli.plugin_list
+- src.giton.cli.plugin_remove
+- src.giton.cli.policy_check
+- src.giton.cli.policy_init
+- src.giton.cli.policy_list
+- src.giton.cli.shell
+- src.giton.cli.status
+- src.giton.cli.uninit
+- src.giton.config.PluginRecord.from_dict
+- src.giton.config.PluginRecord.to_dict
+- src.giton.config._xdg_config_home
+- src.giton.context.GitContext.diff_file
+- src.giton.context.GitContext.paths_arg
+- src.giton.history.autosquash
+- src.giton.history.create_fixup
+- src.giton.history.has_staged_changes
+- src.giton.history.list_log
+- src.giton.history.make_backup_ref
+- src.giton.history.upstream_range
+- src.giton.hooks.install
+- src.giton.hooks.uninstall
+- src.giton.interactive.choose
+- src.giton.interactive.confirm
+- src.giton.plugins.install_category
+- src.giton.plugins.install_defaults
+- src.giton.plugins.show_catalog
+- src.giton.plugins.show_table
+- src.giton.plugins.uninstall
+- src.giton.policies._check_conventional_commits
+- src.giton.policies._check_max_file_size
+- src.giton.policies._check_no_secrets
+- src.giton.policies._check_no_wip
+- src.giton.policies.evaluate
+- src.giton.policies.has_errors
+- src.giton.repo_config.RepoConfig.fail_on_policy
+- src.giton.repo_config.RepoConfig.hook
+- src.giton.repo_config.RepoConfig.policy
+- src.giton.repo_config.load
+- src.giton.repo_config.write_default
+- src.giton.shell.run

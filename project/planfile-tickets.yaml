@@ -1,0 +1,444 @@
+source: code2llm
+# generated in 0.01s
+schema: code2llm.planfile_tickets.v1
+project_root: /home/tom/github/semcod/gix
+tickets:
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: cfg'
+  description: 'code2llm reports `Shotgun Surgery: cfg` in `src/giton/cli.py:229`.
+
+
+    Mutation of variable ''cfg'' spans 5 functions. Changing this logic requires work
+    in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:229:Shotgun Surgery:
+    cfg'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: ctx'
+  description: 'code2llm reports `Shotgun Surgery: ctx` in `src/giton/cli.py:89`.
+
+
+    Mutation of variable ''ctx'' spans 5 functions. Changing this logic requires work
+    in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:89:Shotgun Surgery:
+    ctx'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: findings'
+  description: 'code2llm reports `Shotgun Surgery: findings` in `src/giton/cli.py:229`.
+
+
+    Mutation of variable ''findings'' spans 7 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:229:Shotgun Surgery:
+    findings'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: out'
+  description: 'code2llm reports `Shotgun Surgery: out` in `src/giton/cli.py:219`.
+
+
+    Mutation of variable ''out'' spans 8 functions. Changing this logic requires work
+    in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:219:Shotgun Surgery:
+    out'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: plugins'
+  description: 'code2llm reports `Shotgun Surgery: plugins` in `src/giton/plugins.py:79`.
+
+
+    Mutation of variable ''plugins'' spans 6 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/giton/plugins.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/plugins.py:79:Shotgun Surgery:
+    plugins'
+- signal: code2llm_smell_shotgun_surgery
+  title: 'Address code smell: Shotgun Surgery: root'
+  description: 'code2llm reports `Shotgun Surgery: root` in `src/giton/cli.py:256`.
+
+
+    Mutation of variable ''root'' spans 12 functions. Changing this logic requires
+    work in many places.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: high
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - shotgun-surgery
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:shotgun_surgery:src/giton/cli.py:256:Shotgun Surgery:
+    root'
+- signal: code2llm_cc
+  title: 'Reduce cyclomatic complexity: src.giton.shell.dispatch (CC=23)'
+  description: 'code2llm reports `src.giton.shell.dispatch` at `src/giton/shell.py:132`
+    with cyclomatic complexity 23 (limit 15).
+
+
+    Extract smaller functions, flatten conditionals, or split strategy branches. Re-run
+    code2llm after the change and keep tests green.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - complexity
+  - refactor
+  files:
+  - src/giton/shell.py
+  dedupe_key: code2llm:cc:src/giton/shell.py:src.giton.shell.dispatch
+- signal: code2llm_smell_data_clump
+  title: 'Address code smell: Data Clump: opts, trigger, ctx'
+  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:36`.
+
+
+    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,
+    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - data-clump
+  files:
+  - src/giton/policies.py
+  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:36:Data Clump: opts,
+    trigger, ctx'
+- signal: code2llm_smell_data_clump
+  title: 'Address code smell: Data Clump: opts, trigger, ctx'
+  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:71`.
+
+
+    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,
+    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - data-clump
+  files:
+  - src/giton/policies.py
+  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:71:Data Clump: opts,
+    trigger, ctx'
+- signal: code2llm_smell_data_clump
+  title: 'Address code smell: Data Clump: opts, trigger, ctx'
+  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:90`.
+
+
+    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,
+    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - data-clump
+  files:
+  - src/giton/policies.py
+  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:90:Data Clump: opts,
+    trigger, ctx'
+- signal: code2llm_smell_data_clump
+  title: 'Address code smell: Data Clump: opts, trigger, ctx'
+  description: 'code2llm reports `Data Clump: opts, trigger, ctx` in `src/giton/policies.py:116`.
+
+
+    Arguments (opts, trigger, ctx) are used together in multiple functions: src.giton.policies._check_conventional_commits,
+    src.giton.policies._check_no_wip, src.giton.policies._check_no_secrets, src.giton.policies._check_max_file_size.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - data-clump
+  files:
+  - src/giton/policies.py
+  dedupe_key: 'code2llm:smell:data_clump:src/giton/policies.py:116:Data Clump: opts,
+    trigger, ctx'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _check_conventional_commits'
+  description: 'code2llm reports `God Function: _check_conventional_commits` in `src/giton/policies.py:36`.
+
+
+    Function ''_check_conventional_commits'' is oversized: CC=10, fan-out=10, mutations=9.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/policies.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/policies.py:36:God Function:
+    _check_conventional_commits'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: _cmd_policy'
+  description: 'code2llm reports `God Function: _cmd_policy` in `src/giton/shell.py:84`.
+
+
+    Function ''_cmd_policy'' is oversized: CC=12, fan-out=9, mutations=10.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/shell.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/shell.py:84:God Function: _cmd_policy'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: autosquash'
+  description: 'code2llm reports `God Function: autosquash` in `src/giton/history.py:93`.
+
+
+    Function ''autosquash'' is oversized: CC=2, fan-out=6, mutations=7.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/history.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/history.py:93:God Function: autosquash'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: collect'
+  description: 'code2llm reports `God Function: collect` in `src/giton/context.py:40`.
+
+
+    Function ''collect'' is oversized: CC=5, fan-out=6, mutations=7.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/context.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/context.py:40:God Function: collect'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: demonstrate_plugin_management'
+  description: 'code2llm reports `God Function: demonstrate_plugin_management` in
+    `examples/advanced/main.py:24`.
+
+
+    Function ''demonstrate_plugin_management'' is oversized: CC=3, fan-out=10, mutations=8.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - examples/advanced/main.py
+  dedupe_key: 'code2llm:smell:god_function:examples/advanced/main.py:24:God Function:
+    demonstrate_plugin_management'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: fixup'
+  description: 'code2llm reports `God Function: fixup` in `src/giton/cli.py:287`.
+
+
+    Function ''fixup'' is oversized: CC=9, fan-out=13, mutations=5.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/cli.py:287:God Function: fixup'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: history_clean'
+  description: 'code2llm reports `God Function: history_clean` in `src/giton/cli.py:361`.
+
+
+    Function ''history_clean'' is oversized: CC=12, fan-out=15, mutations=7.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/cli.py:361:God Function: history_clean'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: hook_commit_msg'
+  description: 'code2llm reports `God Function: hook_commit_msg` in `src/giton/cli.py:169`.
+
+
+    Function ''hook_commit_msg'' is oversized: CC=9, fan-out=19, mutations=15.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/cli.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/cli.py:169:God Function: hook_commit_msg'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: install'
+  description: 'code2llm reports `God Function: install` in `src/giton/hooks.py:20`.
+
+
+    Function ''install'' is oversized: CC=5, fan-out=12, mutations=4.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/hooks.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/hooks.py:20:God Function: install'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: list_log'
+  description: 'code2llm reports `God Function: list_log` in `src/giton/history.py:49`.
+
+
+    Function ''list_log'' is oversized: CC=4, fan-out=7, mutations=10.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/history.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/history.py:49:God Function: list_log'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: show_catalog'
+  description: 'code2llm reports `God Function: show_catalog` in `src/giton/plugins.py:103`.
+
+
+    Function ''show_catalog'' is oversized: CC=4, fan-out=9, mutations=7.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/plugins.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/plugins.py:103:God Function:
+    show_catalog'
+- signal: code2llm_smell_god_function
+  title: 'Address code smell: God Function: show_table'
+  description: 'code2llm reports `God Function: show_table` in `src/giton/plugins.py:79`.
+
+
+    Function ''show_table'' is oversized: CC=5, fan-out=8, mutations=10.
+
+
+    Make the smallest refactor that removes the smell and run local tests.'
+  priority: normal
+  labels:
+  - llm-ready
+  - code2llm
+  - code-smell
+  - god-function
+  files:
+  - src/giton/plugins.py
+  dedupe_key: 'code2llm:smell:god_function:src/giton/plugins.py:79:God Function: show_table'
+applied: []
+skipped: []

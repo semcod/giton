@@ -1,0 +1,526 @@
+name: Code Quality Improvement
+project_name: ''
+project_type: prefactoring
+domain: dev-tools
+goal: Improve code quality using prefact
+goals:
+- Fix all prefact-detected issues
+- Improve code maintainability
+- Ensure consistent code style
+quality_gates:
+- metric: Prefact Issues
+  threshold: '0'
+sprints:
+- id: sprint-1
+  name: Code Quality Improvements
+  duration: 2 weeks
+  objectives:
+  - Fix code quality issues
+  task_patterns:
+  - id: ticket-520cc8b0
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in src/giton/__main__.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/__main__.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-d9ba49df
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/catalog.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/catalog.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-a078f21e
+    name: Fix smart-return-type issues
+    description: Resolve 21 smart-return-type issues in src/giton/cli.py
+    task_type: prefactor
+    priority: high
+    estimate: 3d
+    files:
+    - src/giton/cli.py
+    rule_id: smart-return-type
+    count: 21
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-6bb663ef
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/cli.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-670a4fff
+    name: Fix magic-numbers issues
+    description: Resolve 4 magic-numbers issues in src/giton/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - src/giton/cli.py
+    rule_id: magic-numbers
+    count: 4
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-7b75c64a
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in src/giton/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/cli.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-7f7595f5
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/config.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-7836e6dc
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/history.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/history.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-364cdbb4
+    name: Fix magic-numbers issues
+    description: Resolve 2 magic-numbers issues in src/giton/history.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/history.py
+    rule_id: magic-numbers
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-3df4999d
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/context.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/context.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-ddefd20d
+    name: Fix string-concat issues
+    description: Resolve 2 string-concat issues in src/giton/hooks.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/hooks.py
+    rule_id: string-concat
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-37e354ce
+    name: Fix unused-imports issues
+    description: Resolve 6 unused-imports issues in src/giton/hooks.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - src/giton/hooks.py
+    rule_id: unused-imports
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-0959072c
+    name: Fix string-concat issues
+    description: Resolve 3 string-concat issues in src/giton/interactive.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/interactive.py
+    rule_id: string-concat
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-cbff985c
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/interactive.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/interactive.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-d9544d1d
+    name: Fix unused-imports issues
+    description: Resolve 6 unused-imports issues in src/giton/policies.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - src/giton/policies.py
+    rule_id: unused-imports
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-01a9b257
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in src/giton/policies.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/policies.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-bf9e08bd
+    name: Fix unused-imports issues
+    description: Resolve 6 unused-imports issues in src/giton/plugins.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - src/giton/plugins.py
+    rule_id: unused-imports
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-dc102598
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/repo_config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/repo_config.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-0afc68c7
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in src/giton/repo_config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/repo_config.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-a5264d97
+    name: Fix smart-return-type issues
+    description: Resolve 7 smart-return-type issues in tests/test_basic.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_basic.py
+    rule_id: smart-return-type
+    count: 7
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-97fe62d8
+    name: Fix unused-imports issues
+    description: Resolve 22 unused-imports issues in tests/test_basic.py
+    task_type: prefactor
+    priority: high
+    estimate: 3d
+    files:
+    - tests/test_basic.py
+    rule_id: unused-imports
+    count: 22
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-07df1cf8
+    name: Fix string-concat issues
+    description: Resolve 3 string-concat issues in src/giton/shell.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/shell.py
+    rule_id: string-concat
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9135e71a
+    name: Fix unused-imports issues
+    description: Resolve 6 unused-imports issues in src/giton/shell.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - src/giton/shell.py
+    rule_id: unused-imports
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-580c65b2
+    name: Fix unused-imports issues
+    description: Resolve 2 unused-imports issues in src/giton/runner.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/runner.py
+    rule_id: unused-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f6e8663e
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in src/giton/runner.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - src/giton/runner.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b5dc313c
+    name: Fix smart-return-type issues
+    description: Resolve 9 smart-return-type issues in tests/test_policies.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_policies.py
+    rule_id: smart-return-type
+    count: 9
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-e85782ed
+    name: Fix unused-imports issues
+    description: Resolve 6 unused-imports issues in tests/test_policies.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_policies.py
+    rule_id: unused-imports
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-bbf11608
+    name: Fix smart-return-type issues
+    description: Resolve 9 smart-return-type issues in tests/test_history.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_history.py
+    rule_id: smart-return-type
+    count: 9
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-61cab342
+    name: Fix unused-imports issues
+    description: Resolve 6 unused-imports issues in tests/test_history.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - tests/test_history.py
+    rule_id: unused-imports
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f8e33603
+    name: Fix string-concat issues
+    description: Resolve 1 string-concat issues in examples/testing/sample_project/src/example.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - examples/testing/sample_project/src/example.py
+    rule_id: string-concat
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-5241a23f
+    name: Fix smart-return-type issues
+    description: Resolve 2 smart-return-type issues in examples/basic/main.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - examples/basic/main.py
+    rule_id: smart-return-type
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-678976ed
+    name: Fix unused-imports issues
+    description: Resolve 4 unused-imports issues in examples/basic/main.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - examples/basic/main.py
+    rule_id: unused-imports
+    count: 4
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f1340096
+    name: Fix ai-boilerplate issues
+    description: Resolve 2 ai-boilerplate issues in examples/basic/main.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - examples/basic/main.py
+    rule_id: ai-boilerplate
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-cf388d88
+    name: Fix smart-return-type issues
+    description: Resolve 5 smart-return-type issues in examples/advanced/main.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - examples/advanced/main.py
+    rule_id: smart-return-type
+    count: 5
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-ef62ed06
+    name: Fix unused-imports issues
+    description: Resolve 12 unused-imports issues in examples/advanced/main.py
+    task_type: prefactor
+    priority: high
+    estimate: 3d
+    files:
+    - examples/advanced/main.py
+    rule_id: unused-imports
+    count: 12
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-c9e99715
+    name: Fix ai-boilerplate issues
+    description: Resolve 2 ai-boilerplate issues in examples/advanced/main.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - examples/advanced/main.py
+    rule_id: ai-boilerplate
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-25895170
+    name: Fix smart-return-type issues
+    description: Resolve 7 smart-return-type issues in examples/testing/test_giton_integration.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - examples/testing/test_giton_integration.py
+    rule_id: smart-return-type
+    count: 7
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-d5864acf
+    name: Fix llm-hallucinations issues
+    description: Resolve 1 llm-hallucinations issues in examples/testing/test_giton_integration.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - examples/testing/test_giton_integration.py
+    rule_id: llm-hallucinations
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-22c7a20b
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in examples/testing/test_giton_integration.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - examples/testing/test_giton_integration.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
