@@ -30,6 +30,9 @@ What is still missing is one local operator that:
 
 ## MVP usage example
 
+After `gix init`, hooks are installed and run automatically from Git lifecycle events.
+The commands below show equivalent manual execution for demonstration/debugging.
+
 ```bash
 # 1) initialize hooks in the repository
 gix init
@@ -38,17 +41,17 @@ gix init
 git add -p
 git commit -m "update stuff"
 
-# 3) gix detects issues and proposes a fixup commit
+# 3) equivalent manual run: post-commit hook logic
 gix hook post-commit
 
-# 4) before push, gix suggests history cleanup
+# 4) equivalent manual run: pre-push hook logic
 gix hook pre-push
 ```
 
 Example interaction:
 
 ```text
-gix: Found 2 issues (null-check, commit message policy).
+gix: Found 2 issues (example: null-check, commit message policy).
 gix: Apply patch and add commit "fixup! ..."? [Y/n]
 ```
 
