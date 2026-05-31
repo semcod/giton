@@ -16,13 +16,13 @@ sprint:
           input: 'Architektura: wprowadź CQRS + Event Sourcing
 
 
-            Wprowadź separację Command/Query oraz event-store dla gix. Pierwszy krok:
+            Wprowadź separację Command/Query oraz event-store dla giton. Pierwszy krok:
             zidentyfikuj 1-2 ograniczone konteksty (np. <module>), wydziel `commands/`,
             `queries/`, `events/`, dodaj event-bus.'
       description: 'Architektura: wprowadź CQRS + Event Sourcing
 
 
-        Wprowadź separację Command/Query oraz event-store dla gix. Pierwszy krok:
+        Wprowadź separację Command/Query oraz event-store dla giton. Pierwszy krok:
         zidentyfikuj 1-2 ograniczone konteksty (np. <module>), wydziel `commands/`,
         `queries/`, `events/`, dodaj event-bus.'
       labels:
@@ -48,7 +48,7 @@ sprint:
         prompt: 'Architektura: wprowadź CQRS + Event Sourcing
 
 
-          Wprowadź separację Command/Query oraz event-store dla gix. Pierwszy krok:
+          Wprowadź separację Command/Query oraz event-store dla giton. Pierwszy krok:
           zidentyfikuj 1-2 ograniczone konteksty (np. <module>), wydziel `commands/`,
           `queries/`, `events/`, dodaj event-bus.'
         env_keys: []
@@ -66,7 +66,7 @@ sprint:
         message: 'Architektura: wprowadź CQRS + Event Sourcing
 
 
-          Wprowadź separację Command/Query oraz event-store dla gix. Pierwszy krok:
+          Wprowadź separację Command/Query oraz event-store dla giton. Pierwszy krok:
           zidentyfikuj 1-2 ograniczone konteksty (np. <module>), wydziel `commands/`,
           `queries/`, `events/`, dodaj event-bus.'
       created_at: '2026-05-27T17:14:45.953369+00:00'
@@ -158,13 +158,13 @@ sprint:
             version_mismatch=true
 
 
-            Shell: `koru self --project /home/tom/github/semcod/gix --ide jetbrains
+            Shell: `koru self --project /home/tom/github/semcod/giton --ide jetbrains
             repair --yes`'
           detail: 'self-control auto-repair ran (pip_install_editable, install_plugin);
             package_identity: source=0.1.1; installed=0.1.288; python=/home/tom/.pyenv/versions/3.12.0/bin/python3.12;
             version_mismatch=true'
           step_id: self_control
-          task_command: koru self --project /home/tom/github/semcod/gix --ide jetbrains
+          task_command: koru self --project /home/tom/github/semcod/giton --ide jetbrains
             repair --yes
           dedupe_key: koru-operator-pipeline:operator-koru-self-control-paczka-/-vsix-/-runtime-self-control-auto-repair-ran-pip_install_editable-install_p...
       description: '[OPERATOR] Koru self-control (paczka / VSIX / runtime): self-control
@@ -173,7 +173,7 @@ sprint:
         version_mismatch=true
 
 
-        Shell: `koru self --project /home/tom/github/semcod/gix --ide jetbrains repair
+        Shell: `koru self --project /home/tom/github/semcod/giton --ide jetbrains repair
         --yes`'
       labels:
       - koru
@@ -200,13 +200,13 @@ sprint:
           version_mismatch=true
 
 
-          Shell: `koru self --project /home/tom/github/semcod/gix --ide jetbrains
+          Shell: `koru self --project /home/tom/github/semcod/giton --ide jetbrains
           repair --yes`'
         env_keys: []
         api_method: GET
         api_headers: {}
         api_timeout_seconds: 30.0
-        script: koru self --project /home/tom/github/semcod/gix --ide jetbrains repair
+        script: koru self --project /home/tom/github/semcod/giton --ide jetbrains repair
           --yes
       outputs:
         artifacts: []
@@ -222,7 +222,7 @@ sprint:
           version_mismatch=true
 
 
-          Shell: `koru self --project /home/tom/github/semcod/gix --ide jetbrains
+          Shell: `koru self --project /home/tom/github/semcod/giton --ide jetbrains
           repair --yes`'
       created_at: '2026-05-27T17:14:52.182634+00:00'
       updated_at: '2026-05-27T17:14:52.182634+00:00'

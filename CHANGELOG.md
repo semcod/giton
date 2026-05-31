@@ -17,6 +17,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.12] - 2026-05-31
+
+### Docs
+- Update README.md
+
+### Test
+- Update testql-scenarios/generated-cli-tests.testql.toon.yaml
+
+### Other
+- Update .gitignore
+- Update .giton/last_check.json
+- Update .giton/last_diff.patch
+- Update .idea/sample-project.iml
+- Update .planfile/config.yaml
+- Update .planfile/sprints/current.yaml
+
 ## [0.1.11] - 2026-05-27
 
 ### Docs

@@ -3,13 +3,13 @@
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.11-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.98-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.5h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.12-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$1.53-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-4.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $0.9799 (12 commits)
-- 👤 **Human dev:** ~$345 (3.5h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $1.5328 (13 commits)
+- 👤 **Human dev:** ~$466 (4.7h @ $100/h, 30min dedup)
 
-Generated on 2026-05-27 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
+Generated on 2026-05-31 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
 ---
 
@@ -87,7 +87,7 @@ pip install giton
 ```bash
 # Clone the repository
 git clone <repo-url>
-cd gix
+cd giton
 
 # Install in development mode
 pip install -e .[dev]
@@ -140,7 +140,7 @@ Create a `.env` file in the project root (see `.env.example`):
 ### Project Structure
 
 ```
-gix/
+giton/
 ├── src/giton/           # Main source code
 │   ├── __init__.py      # Package initialization
 │   ├── __main__.py      # Entry point for `python -m giton`
