@@ -17,6 +17,244 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.25] - 2026-07-07
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .giton/last_diff.patch
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- ... and 13 more files
+
+## [0.1.24] - 2026-07-07
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.23] - 2026-07-07
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.22] - 2026-07-07
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.21] - 2026-07-07
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.20] - 2026-07-07
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.19] - 2026-07-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.18] - 2026-07-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.17] - 2026-07-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.16] - 2026-07-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.15] - 2026-07-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.14] - 2026-07-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+
+### Other
+- Update .cursor/mcp.json
+- Update .gitignore
+- Update .koru/event-store.jsonl
+- Update .koru/events/observability.jsonl
+- Update .nlp2dsl/environment.doql.less
+- Update .nlp2dsl/registry/environment.doql.less
+- Update .nojekyll
+- Update .planfile/.koru/autonomous-state.json
+- Update .planfile/.koru/autonomy-telemetry.json
+- Update .planfile/.koru/event-store.jsonl
+- ... and 12 more files
+
+## [0.1.13] - 2026-06-29
+
+### Docs
+- Update README.md
+
+### Other
+- Update .nojekyll
+- Update app.doql.less
+- Update index.html
+
 ## [0.1.12] - 2026-05-31
 
 ### Docs

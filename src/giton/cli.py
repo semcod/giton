@@ -218,9 +218,17 @@ def hook_post_commit():
     run_trigger("post-commit")
 
 
-@hook_app.command("pre-push")
-def hook_pre_push():
+@hook_app.command(
+    "pre-push",
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
+def hook_pre_push(
+    ctx: typer.Context,
+):
     """Run pre-push policies + plugins."""
+    # git invokes pre-push hooks as: pre-push <remote-name> <remote-url>,
+    # with ref updates on stdin. We don't need the positional args, but must
+    # accept them or git's hook invocation fails outright.
     out = run_trigger("pre-push")
     if not out.ok:
         raise typer.Exit(1)

@@ -819,7 +819,7 @@ wheels = [
 
 [[package]]
 name = "giton"
-version = "0.1.12"
+version = "0.1.25"
 source = { editable = "." }
 dependencies = [
     { name = "pyyaml" },
