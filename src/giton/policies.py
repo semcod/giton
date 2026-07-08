@@ -45,6 +45,7 @@ def _check_conventional_commits(
     types = opts.get("types") or []
     max_len = int(opts.get("max_subject_length") or 72)
     require_scope = bool(opts.get("require_scope", False))
+    require_description = bool(opts.get("require_description", True))
     findings: list[Finding] = []
     if len(subject) > max_len:
         findings.append(
@@ -56,8 +57,15 @@ def _check_conventional_commits(
         )
     type_alt = "|".join(map(re.escape, types)) if types else r"[a-z]+"
     scope_part = r"\([^)]+\)" if require_scope else r"(?:\([^)]+\))?"
+    # Standard Conventional Commits form: "type(scope)!: description".
     pattern = rf"^({type_alt}){scope_part}!?:\s.+"
-    if not re.match(pattern, subject):
+    matched = bool(re.match(pattern, subject))
+    if not matched and not require_description:
+        # Opt-in relaxation (non-standard): accept a bare recognized type as
+        # the whole subject, e.g. "refactor" with no ": description".
+        bare_pattern = rf"^({type_alt})$"
+        matched = bool(re.match(bare_pattern, subject))
+    if not matched:
         fix = f'git commit --amend -m "chore: {subject}"'
         findings.append(
             Finding(
