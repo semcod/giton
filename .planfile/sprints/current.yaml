@@ -1003,9 +1003,10 @@ sprint:
         repair --yes`'
       execution:
         attempt: 0
+        finished_at: '2026-07-08T01:04:51.825840Z'
         max_attempts: 1
         queue: operator
-        state: ready
+        state: done
       executor:
         kind: shell
         mode: noninteractive
@@ -1022,6 +1023,16 @@ sprint:
           repair --yes`'
         source: koru task
         timestamp: '2026-07-06T08:04:44.759427+00:00'
+      - action: update
+        changes:
+        - execution
+        - status
+        execution_state: done
+        previous_execution_state: ready
+        previous_status: open
+        source: planfile.store
+        status: done
+        timestamp: '2026-07-08T01:04:51.831455+00:00'
       id: PLF-014
       inputs:
         api_headers: {}
@@ -1071,6 +1082,6 @@ sprint:
         timestamp: '2026-07-06T08:04:44.759427+00:00'
         tool: koru-operator-pipeline
       sprint: current
-      status: open
+      status: done
       sync: {}
-      updated_at: '2026-07-06T08:04:44.759427+00:00'
+      updated_at: '2026-07-08T01:04:51.831420+00:00'

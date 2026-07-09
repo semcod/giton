@@ -297,3 +297,12 @@ __marimo__/
 .planfile/.koru/
 .koru/
 .planfile/sprints/*.bak-*
+.code2llm_cache/
+.coverage_data/
+.cursor/
+.github/
+.giton/
+.idea/
+.nlp2dsl/
+.planfile/
+.pyqual/
