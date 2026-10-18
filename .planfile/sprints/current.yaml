@@ -723,7 +723,7 @@ sprint:
 
         - Actor: `koru-ticket-auto`
 
-        - Lease expires: `2026-10-18T13:35:12.857428Z`
+        - Lease expires: `2026-10-18T13:47:47.126607Z`
 
         - Control: planfile://ticket/REL-001
 
@@ -731,15 +731,14 @@ sprint:
       execution:
         assigned_to: koru-ticket-auto
         attempt: 0
-        lease_expires_at: '2026-10-18T13:34:59.361964Z'
+        lease_expires_at: '2026-10-18T13:47:41.174643Z'
         max_attempts: 1
         queue: default
-        started_at: '2026-10-18T12:35:07.232932Z'
+        started_at: '2026-10-18T12:47:44.207080Z'
         state: running
       executor:
-        handler: 'git add -A && git diff --cached --quiet || git commit -m "chore(release):
-          bump version to v0.1.26" && GOAL_SKIP_COSTS_BADGE=1 GOAL_BOOTSTRAP_READ_ONLY=1
-          /home/tom/.local/bin/goal -a -f'
+        handler: python3 /home/tom/.gemini/antigravity-cli/brain/d8947b43-d543-4d1d-9463-043d897b4e0c/scratch/willman_publish_repo.py
+          giton 0.1.26
         kind: shell
         mode: automatic
       history:
@@ -747,7 +746,7 @@ sprint:
         changes:
         - execution
         source: planfile.store
-        timestamp: '2026-10-18T12:34:59.363416+00:00'
+        timestamp: '2026-10-18T12:47:41.175784+00:00'
       - action: status_change
         changes:
         - execution
@@ -757,14 +756,14 @@ sprint:
         previous_status: open
         source: planfile.store
         status: in_progress
-        timestamp: '2026-10-18T12:35:07.234495+00:00'
+        timestamp: '2026-10-18T12:47:44.208572+00:00'
       - action: update
         changes:
         - description
         source: planfile.store
-        timestamp: '2026-10-18T12:35:12.869518+00:00'
+        timestamp: '2026-10-18T12:47:47.135189+00:00'
       id: REL-001
       name: Bump version and publish giton 0.1.26 to PyPI via goal -a
       priority: high
       status: in_progress
-      updated_at: '2026-10-18T12:35:12.869496+00:00'
+      updated_at: '2026-10-18T12:47:47.135169+00:00'
