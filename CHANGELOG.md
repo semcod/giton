@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.26] - 2026-10-18
+
+### Docs
+- Update README.md
+
+### Other
+- Update .koru/events/observability.jsonl
+- Update .planfile/sprints/current.yaml
+- Update .planfile/sprints/current.yaml.fast.json
+- Update VERSION
+- Update uv.lock
+
 ## [0.1.25] - 2026-07-07
 
 ### Docs

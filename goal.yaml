@@ -239,7 +239,7 @@ strategies:
   python:
     test: pytest tests/ -v
     build: python -m build
-    publish: twine upload dist/giton-{version}*
+    publish: twine upload --skip-existing dist/giton-{version}*
     publish_enabled: true
     dependencies:
       file: requirements.txt
