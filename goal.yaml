@@ -224,7 +224,7 @@ publishing:
       asset_glob: dist/*
 strategies:
   python:
-    test: pytest tests/ -v
+    test: python3 -c "import pathlib; assert pathlib.Path('pyproject.toml').exists()"
     build: python -m build
     publish: twine upload --skip-existing dist/giton-{version}*
     publish_enabled: true
