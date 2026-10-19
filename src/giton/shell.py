@@ -82,6 +82,43 @@ def _cmd_status() -> None:
     )
 
 
+def _policy_list(cfg) -> None:
+    src = cfg.path or "(defaults)"
+    console.print(f"config source: {src}")
+    for name in policies.CHECKS:
+        opts = cfg.policy(name)
+        on = "[green]on [/green]" if opts.get("enabled", True) else "[dim]off[/dim]"
+        console.print(f"  {on} {name}")
+
+
+def _policy_check(ctx, cfg, args: list[str]) -> None:
+    trigger = args[1] if len(args) > 1 else "pre-commit"
+    findings = policies.evaluate(ctx, cfg, trigger)
+    if not findings:
+        console.print("[green]✓ no policy findings[/green]")
+        return
+    for f in findings:
+        color = {"error": "red", "warn": "yellow", "info": "cyan"}.get(f.severity, "white")
+        console.print(f"  [{color}]{f.severity}[/{color}] {f.policy}: {f.message}")
+
+
+def _policy_fix(ctx) -> None:
+    findings = store.load_findings(ctx.root)
+    if not findings:
+        console.print("[dim]no saved findings — run `policy check` first[/dim]")
+        return
+    applied, total = fixups.apply_all(findings, ctx.root, yes=False)
+    if applied == total and total:
+        console.print(f"[green]✓ applied {applied}/{total} fix(es)[/green]")
+    elif total:
+        console.print(f"[yellow]applied {applied}/{total} fix(es)[/yellow]")
+
+
+def _policy_init(ctx) -> None:
+    path = repo_config.write_default(ctx.root)
+    console.print(f"[green]✓ wrote {path}[/green]")
+
+
 def _cmd_policy(args: list[str]) -> None:
     sub = args[0] if args else "list"
     ctx = collect()
@@ -90,34 +127,13 @@ def _cmd_policy(args: list[str]) -> None:
         return
     cfg = repo_config.load(ctx.root)
     if sub == "list":
-        src = cfg.path or "(defaults)"
-        console.print(f"config source: {src}")
-        for name in policies.CHECKS:
-            opts = cfg.policy(name)
-            on = "[green]on [/green]" if opts.get("enabled", True) else "[dim]off[/dim]"
-            console.print(f"  {on} {name}")
+        _policy_list(cfg)
     elif sub == "check":
-        trigger = args[1] if len(args) > 1 else "pre-commit"
-        findings = policies.evaluate(ctx, cfg, trigger)
-        if not findings:
-            console.print("[green]✓ no policy findings[/green]")
-            return
-        for f in findings:
-            color = {"error": "red", "warn": "yellow", "info": "cyan"}.get(f.severity, "white")
-            console.print(f"  [{color}]{f.severity}[/{color}] {f.policy}: {f.message}")
+        _policy_check(ctx, cfg, args)
     elif sub == "fix":
-        findings = store.load_findings(ctx.root)
-        if not findings:
-            console.print("[dim]no saved findings — run `policy check` first[/dim]")
-            return
-        applied, total = fixups.apply_all(findings, ctx.root, yes=False)
-        if applied == total and total:
-            console.print(f"[green]✓ applied {applied}/{total} fix(es)[/green]")
-        elif total:
-            console.print(f"[yellow]applied {applied}/{total} fix(es)[/yellow]")
+        _policy_fix(ctx)
     elif sub == "init":
-        path = repo_config.write_default(ctx.root)
-        console.print(f"[green]✓ wrote {path}[/green]")
+        _policy_init(ctx)
     else:
         console.print("[yellow]usage: policy <list|check [trigger]|fix|init>[/yellow]")
 
@@ -133,10 +149,69 @@ def _cmd_init() -> None:
         console.print(f"  • {w.name}")
 
 
+def _cmd_install(args: list[str]) -> None:
+    if not args:
+        console.print("[yellow]usage: install <name>[/yellow]")
+    else:
+        plug.install_from_catalog(args[0])
+
+
+def _cmd_install_category(args: list[str]) -> None:
+    if not args:
+        console.print("[yellow]usage: install-category <category>[/yellow]")
+        console.print("Categories: " + ", ".join(catalog.list_categories()))
+    else:
+        plug.install_category(args[0])
+
+
+def _cmd_remove(args: list[str]) -> None:
+    if not args:
+        console.print("[yellow]usage: remove <name>[/yellow]")
+    else:
+        plug.uninstall(args[0])
+
+
+def _cmd_enable(args: list[str]) -> None:
+    if not args:
+        console.print("[yellow]usage: enable <name>[/yellow]")
+    else:
+        _set_enabled(args[0], True)
+
+
+def _cmd_disable(args: list[str]) -> None:
+    if not args:
+        console.print("[yellow]usage: disable <name>[/yellow]")
+    else:
+        _set_enabled(args[0], False)
+
+
+def _cmd_hook(args: list[str]) -> None:
+    if not args or args[0] not in {"pre-commit", "post-commit", "pre-push"}:
+        console.print("[yellow]usage: hook <pre-commit|post-commit|pre-push>[/yellow]")
+    else:
+        run_trigger(args[0])
+
+
 COMMANDS = {
     "ls", "catalog", "install", "install-defaults", "install-category",
     "remove", "enable", "disable", "init", "status", "hook",
     "help", "exit", "quit",
+}
+
+HANDLERS = {
+    "help": lambda _args: console.print(HELP),
+    "ls": lambda _args: plug.show_table(),
+    "catalog": lambda _args: plug.show_catalog(),
+    "install": _cmd_install,
+    "install-defaults": lambda _args: plug.install_defaults(),
+    "install-category": _cmd_install_category,
+    "remove": _cmd_remove,
+    "enable": _cmd_enable,
+    "disable": _cmd_disable,
+    "init": lambda _args: _cmd_init(),
+    "status": lambda _args: _cmd_status(),
+    "hook": _cmd_hook,
+    "policy": _cmd_policy,
 }
 
 
@@ -150,51 +225,9 @@ def dispatch(line: str) -> bool:
 
     if cmd in {"exit", "quit"}:
         return False
-    if cmd == "help":
-        console.print(HELP)
-    elif cmd == "ls":
-        plug.show_table()
-    elif cmd == "catalog":
-        plug.show_catalog()
-    elif cmd == "install":
-        if not args:
-            console.print("[yellow]usage: install <name>[/yellow]")
-        else:
-            plug.install_from_catalog(args[0])
-    elif cmd == "install-defaults":
-        plug.install_defaults()
-    elif cmd == "install-category":
-        if not args:
-            console.print("[yellow]usage: install-category <category>[/yellow]")
-            console.print("Categories: " + ", ".join(catalog.list_categories()))
-        else:
-            plug.install_category(args[0])
-    elif cmd == "remove":
-        if not args:
-            console.print("[yellow]usage: remove <name>[/yellow]")
-        else:
-            plug.uninstall(args[0])
-    elif cmd == "enable":
-        if not args:
-            console.print("[yellow]usage: enable <name>[/yellow]")
-        else:
-            _set_enabled(args[0], True)
-    elif cmd == "disable":
-        if not args:
-            console.print("[yellow]usage: disable <name>[/yellow]")
-        else:
-            _set_enabled(args[0], False)
-    elif cmd == "init":
-        _cmd_init()
-    elif cmd == "status":
-        _cmd_status()
-    elif cmd == "hook":
-        if not args or args[0] not in {"pre-commit", "post-commit", "pre-push"}:
-            console.print("[yellow]usage: hook <pre-commit|post-commit|pre-push>[/yellow]")
-        else:
-            run_trigger(args[0])
-    elif cmd == "policy":
-        _cmd_policy(args)
+    handler = HANDLERS.get(cmd)
+    if handler:
+        handler(args)
     else:
         console.print(f"[red]unknown command: {cmd}[/red] — try 'help'")
     return True
