@@ -9,7 +9,10 @@ These tests verify that:
 """
 from __future__ import annotations
 
+import json
 import os
+import shlex
+import sys
 import stat
 import subprocess
 from pathlib import Path
@@ -206,3 +209,46 @@ def test_default_catalog_commands_are_well_formed():
         assert formatted  # non-empty
         # and the binary name (first token) must equal the entry name
         assert formatted.split()[0] == entry.record.name
+
+
+@pytest.mark.parametrize("linked_worktree", [False, True])
+def test_hook_plugin_cannot_mutate_parent_git_context(repo, tmp_path, monkeypatch, linked_worktree):
+    parent = repo
+    if linked_worktree:
+        parent = tmp_path / "linked"
+        _git(["worktree", "add", "-q", "-b", "hook-test", str(parent)], repo)
+    git_dir = Path(_git(["rev-parse", "--absolute-git-dir"], parent).stdout.strip())
+    config = Path(_git(["rev-parse", "--path-format=absolute", "--git-path", "config"], parent).stdout.strip())
+    index = git_dir / "index"
+    expected_head = _git(["rev-parse", "HEAD"], parent).stdout
+    expected_config, expected_index = config.read_bytes(), index.read_bytes()
+    foreign = tmp_path / "foreign"
+    report = tmp_path / "plugin.json"
+    script = tmp_path / "child.py"
+    script.write_text(
+        "import json, os, pathlib, subprocess, sys\n"
+        "foreign, report = map(pathlib.Path, sys.argv[1:])\n"
+        "foreign.mkdir()\n"
+        "subprocess.run(['git', 'init', '-q', str(foreign)], check=True)\n"
+        "subprocess.run(['git', '-C', str(foreign), 'config', 'user.name', 'child-only'], check=True)\n"
+        "subprocess.run(['git', '-C', str(foreign), 'config', 'user.email', 'child@example.test'], check=True)\n"
+        "(foreign / 'child.txt').write_text('child-only\\n')\n"
+        "subprocess.run(['git', '-C', str(foreign), 'add', 'child.txt'], check=True)\n"
+        "subprocess.run(['git', '-C', str(foreign), 'commit', '-q', '-m', 'test: child'], check=True)\n"
+        "root = subprocess.check_output(['git', '-C', str(foreign), 'rev-parse', '--show-toplevel'], text=True).strip()\n"
+        "report.write_text(json.dumps({'root': root, 'runtime': os.environ.get('PLUGIN_RUNTIME'), 'git_dir': os.environ.get('GIT_DIR'), 'index': os.environ.get('GIT_INDEX_FILE')}))\n"
+    )
+    command = shlex.join([sys.executable, str(script), str(foreign), str(report)])
+    _register("foreign-git", command, "pre-push")
+    with monkeypatch.context() as hook_env:
+        hook_env.setenv("GIT_DIR", str(git_dir))
+        hook_env.setenv("GIT_INDEX_FILE", str(index))
+        hook_env.setenv("PLUGIN_RUNTIME", "preserved")
+        out = run_trigger("pre-push", cwd=parent)
+    assert out.ok, [(p.stdout, p.stderr) for p in out.plugin_results]
+    observed = json.loads(report.read_text())
+    assert observed == {"root": str(foreign), "runtime": "preserved", "git_dir": None, "index": None}
+    assert (foreign / ".git").is_dir()
+    assert _git(["rev-parse", "HEAD"], parent).stdout == expected_head
+    assert config.read_bytes() == expected_config
+    assert index.read_bytes() == expected_index

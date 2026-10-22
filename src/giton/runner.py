@@ -1,6 +1,7 @@
 """Run plugins for a given hook trigger."""
 from __future__ import annotations
 
+import os
 import shlex
 import subprocess
 from dataclasses import dataclass
@@ -102,11 +103,22 @@ def _run_plugin(plugin: PluginRecord, ctx: GitContext) -> PluginResult:
         return PluginResult(plugin.name, 0, "", "skipped")
 
     cmd_str = _format_command(plugin.command, ctx)
+    # Hook-local Git variables point at the caller's repository even when a
+    # plugin changes directory. Inherit the runtime, but let each child Git
+    # command discover its repository from cwd (including linked worktrees).
+    local_variables = subprocess.run(
+        ["git", "rev-parse", "--local-env-vars"],
+        cwd=ctx.root, check=True, capture_output=True, text=True,
+    ).stdout.splitlines()
+    plugin_env = os.environ.copy()
+    for name in local_variables:
+        plugin_env.pop(name, None)
     console.print(f"[bold cyan]› {plugin.name}[/bold cyan] [dim]{cmd_str}[/dim]")
     try:
         proc = subprocess.run(
             shlex.split(cmd_str),
             cwd=ctx.root,
+            env=plugin_env,
             check=False,
             capture_output=True,
             text=True,
